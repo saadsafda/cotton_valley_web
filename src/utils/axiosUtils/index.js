@@ -8,6 +8,13 @@ const clientForReal = axios.create({
   },
 });
 
+const client = axios.create({
+  baseURL: process.env.API_PROD_URL,
+  headers: {
+    Accept: "application/json",
+  },
+});
+
 export const requestForReal = async ({ ...options }, router) => {
   clientForReal.defaults.headers.common.Authorization = `Bearer ${getCookie("uat")}`;
   const onSuccess = (response) => response;
@@ -20,7 +27,7 @@ export const requestForReal = async ({ ...options }, router) => {
     return error;
   };
   try {
-    const response = await client(options);
+    const response = await clientForReal(options);
     return onSuccess(response);
   } catch (error) {
     return onError(error);

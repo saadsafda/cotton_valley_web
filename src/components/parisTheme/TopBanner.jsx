@@ -5,8 +5,8 @@ import WrapperComponent from "../common/WrapperComponent";
 import OfferBanner from "./OfferBanner";
 import SkeletonWrapper from "../common/SkeletonWrapper";
 
-const TopBanner = ({ dataAPI }) => {
-  const [data, setData] = useState(dataAPI || null);
+const TopBanner = () => {
+  const [data, setData] = useState(null);
   const isMounted = useRef(true);
   const base = process.env.NEXT_PUBLIC_BASE_URL || "";
   const url = `${base.replace(/\/+$/, "")}`;
@@ -48,11 +48,9 @@ const TopBanner = ({ dataAPI }) => {
             customClass: "home-contain h-100",
             customHoverClass: "h-100 b-left",
           }}
-          imgUrl={
-            data?.large_image ? `${url+data?.large_image}` : data?.home_banner?.main_banner?.image_url
-          }
+          imgUrl={`${url + data?.large_image}`}
           ratioImage={true}
-          elem={data?.name || data?.home_banner?.main_banner}
+          elem={data?.name}
         />
       </SkeletonWrapper>
 
@@ -67,11 +65,9 @@ const TopBanner = ({ dataAPI }) => {
           >
             <OfferBanner
               classes={{ customHoverClass: "home-contain" }}
-              imgUrl={
-                data?.right_top ? `${url+data?.right_top}` : data?.home_banner?.sub_banner_1?.image_url
-              }
+              imgUrl={`${url + data?.right_top}`}
               ratioImage={true}
-              elem={data?.name || data?.home_banner?.sub_banner_1}
+              elem={data?.name}
             />
           </SkeletonWrapper>
           <SkeletonWrapper
@@ -83,11 +79,9 @@ const TopBanner = ({ dataAPI }) => {
           >
             <OfferBanner
               classes={{ customHoverClass: "home-contain" }}
-              imgUrl={
-                data?.right_bottom ? `${url+data?.right_bottom}` : data?.home_banner?.sub_banner_2?.image_url
-              }
+              imgUrl={`${url + data?.right_bottom}`}
               ratioImage={true}
-              elem={data?.name || data?.home_banner?.sub_banner_2}
+              elem={data?.name}
             />
           </SkeletonWrapper>
         </Row>

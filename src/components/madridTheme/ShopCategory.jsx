@@ -17,23 +17,24 @@ const ShopCategory = ({ dataAPI }) => {
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, 'common');
   const { filterCategory } = useContext(CategoryContext);
-  const categoryData = useMemo(() => {
-    return dataAPI?.category_ids.length > 0 ? filterCategory('product')?.filter((category) => dataAPI?.category_ids?.includes(category.id)) : filterCategory('product');
-  }, [filterCategory('product')]);
+  // const categoryData = useMemo(() => {
+  //   return dataAPI?.category_ids.length > 0 ? filterCategory('product')?.filter((category) => dataAPI?.category_ids?.includes(category.id)) : filterCategory('product');
+  // }, [filterCategory('product')]);
   return (
     <WrapperComponent classes={{ sectionClass: 'category-section-3' }} noRowCol={true}>
-      <CustomHeading title={dataAPI?.title} customClass={'title'} />
+      <CustomHeading title={"Shop By Categories"} customClass={'title'} />
       <Row>
         <Col xs={12}>
           <div className='category-slider-1 arrow-slider'>
             <Slider {...madridCategorySlider}>
-              {categoryData?.map((elem) => (
-                <div key={elem.id}>
+              {dataAPI?.map((elem, i) => (
+                <div key={i}>
                   <div className='category-box-list'>
                     <Link href={`/${i18Lang}/collections?category=${elem?.slug}`} className='category-name'>
-                      <h4>{elem?.name}</h4>
+                      <h4>{elem?.title ?? elem?.name}</h4>
                       <h6>
-                        {elem?.products_count} {t('Items')}
+                        {/* {elem?.products_count} */}
+                        {i} {t('Items')}
                       </h6>
                     </Link>
                     <div className='category-box-view'>
