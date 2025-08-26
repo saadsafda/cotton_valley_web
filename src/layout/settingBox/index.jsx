@@ -15,19 +15,19 @@ const SettingBox = () => {
   const { t } = useTranslation(i18Lang, 'common');
   const [rtlValue, setRtlValue] = useState(themeOption?.general?.language_direction?themeOption?.general?.language_direction:"ltr");
   const [lightDarkMode, setLightDarkMode] = useState(themeOption?.general?.mode?themeOption?.general?.mode:"light");
-  const [themeColor, setThemeColor] = useState("#0da487");
+  const [themeColor, setThemeColor] = useState("#f6564f");
   const pathName = usePathname();
   useEffect(() => {
     const currentThemeColor = getComputedStyle(document.documentElement).getPropertyValue("--theme-color");
     if (currentThemeColor) {      
       setThemeColor(currentThemeColor.trimStart());
     } else {
-      setThemeColor("#0da487");
+      setThemeColor("#f6564f");
     }
   }, [pathName]); 
   
    useEffect(() => {
-    setThemeColor(themeOption?.general?.primary_color ?? "#0da487" )
+    setThemeColor(themeOption?.general?.primary_color ?? "#f6564f" )
     themeOption?.general?.mode === "dark"? document.documentElement.classList.add("dark") : document.documentElement.classList.remove("dark");
     themeOption?.general?.language_direction == "rtl"? document.body.setAttribute("dir", "rtl"): document.body.setAttribute("dir", "ltr");
   }, [themeOption?.general?.mode,themeOption?.general?.language_direction]);

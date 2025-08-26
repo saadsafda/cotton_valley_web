@@ -7,7 +7,7 @@ import newsLetterImage from '../../../public/assets/images/newsletter/3.jpg';
 import I18NextContext from '@/helper/i18NextContext';
 import { useTranslation } from '@/app/i18n/client';
 import Cookies from 'js-cookie';
-import Logo from '../../../public/assets/images/logo/1.png';
+import Logo from '../../../public/assets/images/logo/logo.png';
 
 const NewsLetterModal = () => {
   const [modal, setModal] = useState(true);

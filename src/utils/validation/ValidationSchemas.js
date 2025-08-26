@@ -73,6 +73,44 @@ export const attributeValues = Yup.array().of(
   })
 );
 
+export const referencesSchema = Yup.array().of(
+  Yup.object().shape({
+    company_name: Yup.string().required("Reference company name is required"),
+    address: Yup.string().required("Reference address is required"),
+    city: Yup.string().required("Reference city is required"),
+    state: Yup.string().required("Reference state is required"),
+    zip: Yup.string().required("Reference zip is required"),
+    phone: Yup.string().required("Reference phone is required"),
+    fax: Yup.string().required("Reference fax is required"),
+    email: Yup.string().email("Invalid email").required("Reference email is required"),
+  })
+);
+
+export const shipping_billing_sameSchema = Yup.boolean();
+export const shipping_addressSchema = Yup.object().shape({
+  address_line1: Yup.string().required("Shipping address line1 is required"),
+  city: Yup.string().required("Shipping city is required"),
+  state: Yup.string().required("Shipping state is required"),
+  zip: Yup.string().required("Shipping zip is required"),
+  country: Yup.string().required("Shipping country is required"),
+});
+// export const billing_addressSchema = Yup.object().when("shipping_billing_same", {
+//   is: false,
+//   then: Yup.object().shape({
+//     address_line1: Yup.string().required("Billing address line1 is required"),
+//     address_line2: Yup.string().required("Billing address line2 is required"),
+//     city: Yup.string().required("Billing city is required"),
+//     state: Yup.string().required("Billing state is required"),
+//     zip: Yup.string().required("Billing zip is required"),
+//     country: Yup.string().required("Billing country is required"),
+//   }),
+//   otherwise: Yup.mixed().notRequired() // skip if same as shipping
+// });
+
+// Additional
+export const sales_tax_certificateSchema = Yup.mixed().required("Sales tax certificate is required");
+export const terms_agreedSchema = Yup.boolean().oneOf([true], "You must agree to terms");
+
 export const variationSchema = Yup.array().of(
   Yup.object().shape({
     name: nameSchema,
@@ -80,5 +118,10 @@ export const variationSchema = Yup.array().of(
     sku: nameSchema,
     quantity: nameSchema,
     status: nameSchema,
+    reference: referencesSchema,
+    shipping_address: shipping_addressSchema,
+    // billing_address: billing_addressSchema,
+    sales_tax_certificate: sales_tax_certificateSchema,
+    terms_agreed: terms_agreedSchema,
   })
 );

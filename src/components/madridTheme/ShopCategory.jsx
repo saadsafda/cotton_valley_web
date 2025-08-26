@@ -13,6 +13,8 @@ import { useTranslation } from '@/app/i18n/client';
 import CategoryContext from '@/helper/categoryContext';
 import { RiArrowRightSLine } from 'react-icons/ri';
 
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
 const ShopCategory = ({ dataAPI }) => {
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, 'common');
@@ -30,16 +32,15 @@ const ShopCategory = ({ dataAPI }) => {
               {dataAPI?.map((elem, i) => (
                 <div key={i}>
                   <div className='category-box-list'>
-                    <Link href={`/${i18Lang}/collections?category=${elem?.slug}`} className='category-name'>
+                    <Link href={`/${i18Lang}/collections?category=${elem?.name}`} className='category-name'>
                       <h4>{elem?.title ?? elem?.name}</h4>
                       <h6>
-                        {/* {elem?.products_count} */}
-                        {i} {t('Items')}
+                        {elem?.item_count} {t('Items')}
                       </h6>
                     </Link>
                     <div className='category-box-view'>
-                      <Link href={`/${i18Lang}/collections?category=${elem?.slug}`}>
-                        <Image src={elem?.category_image?.original_url || placeHolderImage} className='img-fluid' alt='Shop Category' height={133} width={133} />
+                      <Link href={`/${i18Lang}/collections?category=${elem?.name}`}>
+                        <Image src={elem?.category_image ? `${baseUrl}${elem?.category_image}` : placeHolderImage} className='img-fluid' alt='Shop Category' height={133} width={133} />
                       </Link>
                       <Btn className='btn shop-button'>
                         <span>{t('ShopNow')}</span>

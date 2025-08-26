@@ -5,7 +5,7 @@ import CustomModal from "@/components/common/CustomModal";
 import newsLetterImage from "../../../public/assets/images/newsletter/3.jpg";
 import { useTranslation } from "@/app/i18n/client";
 import I18NextContext from "@/helper/i18NextContext";
-import Logo from "../../../public/assets/images/logo/1.png";
+import Logo from "../../../public/assets/images/logo/logo.png";
 import Cookies from "js-cookie";
 
 const ExitModal = () => {

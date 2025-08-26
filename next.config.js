@@ -33,11 +33,15 @@ module.exports = (phase) => {
         ];
     }
     const images = {
-        domains: ["react.pixelstrap.net"],
+        domains: ["react.pixelstrap.net", "156.67.27.94"],
         remotePatterns: [
             {
                 protocol: "https",
                 hostname: "react.pixelstrap.net",
+            },
+            {
+                protocol: "http",
+                hostname: "156.67.27.94", // since your link starts with http
             },
         ],
     }

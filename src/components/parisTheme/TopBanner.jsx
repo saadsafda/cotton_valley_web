@@ -14,7 +14,15 @@ const TopBanner = () => {
   const fetchHomeBanners = async () => {
     try {
       const res = await axios.get(
-        `${url}/api/method/cotton_valley.api.get_home_banners`
+        `${url}/api/method/cotton_valley.api.get_home_banners`, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        // Add CORS headers
+        crossDomain: true,
+      }
       );
       const payload = res?.data?.message ?? res?.data ?? null;
       if (isMounted.current && payload) setData(payload);

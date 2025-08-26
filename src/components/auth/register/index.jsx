@@ -9,7 +9,6 @@ import { useContext } from "react";
 import I18NextContext from "@/helper/i18NextContext";
 import { useTranslation } from "@/app/i18n/client";
 import RegisterForm from "./RegisterForm";
-import AuthHeadings from "../common/AuthHeadings";
 
 const RegisterContent = () => {
   const { i18Lang } = useContext(I18NextContext);
@@ -26,10 +25,6 @@ const RegisterContent = () => {
       >
         <Col xxl={12} xl={12} lg={12} sm={8} className="mx-auto">
           <div className="log-in-box">
-            <AuthHeadings
-              heading1={"WelcomeToFastkart"}
-              heading2={"CreateNewAccount"}
-            />
 
             <div className="input-box">
               <RegisterForm />
