@@ -26,6 +26,8 @@ import ColumnSimpleInputField from "@/components/common/inputFields/ColumnSimple
 import Btn from "@/elements/buttons/Btn";
 import ReviewStep from "./ReviewStep";
 import AuthHeadings from "../common/AuthHeadings";
+import { RiCheckFill } from "react-icons/ri";
+import { ToastNotification } from "@/utils/customFunctions/ToastNotification";
 
 const RegisterForm = () => {
   const { i18Lang } = useContext(I18NextContext);
@@ -106,7 +108,7 @@ const RegisterForm = () => {
 
     // Additional
     sales_tax_certificate: null,
-    terms_agreed: false,
+    terms_agreed: true,
   };
 
   async function getCountry() {
@@ -205,32 +207,125 @@ const RegisterForm = () => {
 
   return (
     <>
-      <AuthHeadings
+      {/* <AuthHeadings
         // heading1={"WelcomeToFastkart"}
         // heading2={"CreateNewAccount"}
         heading1={"Welcome to Cotton Valley"}
         heading2={step === 1 ? "CreateNewAccount" : step === 2 ? "Bank Information" : step === 3 ? "References" : "Review & Confirm"}
-      />
+      /> */}
+      <div className="step-indicator d-flex justify-content-between mb-4">
+        {["Basic Info", "Bank Info", "References", "Review"].map((label, index) => {
+          const stepNumber = index + 1;
+          const isCompleted = step > stepNumber;   // completed steps
+          const isActive = step === stepNumber;    // current step
+
+          return (
+            <div key={index} className="text-center flex-fill position-relative">
+              <div
+                className={`rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center 
+            ${isCompleted ? "bg-success text-white"
+                    : isActive ? "bg-primary text-white"
+                      : "bg-light border"} `}
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  fontWeight: "bold",
+                }}
+              >
+                {isCompleted ? <RiCheckFill /> : stepNumber}
+              </div>
+              <small
+                className={`d-block ${isActive ? "fw-bold text-primary" : isCompleted ? "text-success" : "text-muted"}`}
+              >
+                {label}
+              </small>
+              {/* connector line */}
+              {index < 3 && (
+                <div
+                  className={`position-absolute top-50 start-100 translate-middle-y w-100 border-top 
+              ${isCompleted ? "border-success" : "border-muted"}`}
+                  style={{ zIndex: -1 }}
+                />
+              )}
+            </div>
+          );
+        })}
+      </div>
+
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={async (values, { resetForm }) => {
-          try {
+        // onSubmit={async (values, { resetForm }) => {
+        //   try {
 
-            await requestForReal({
+        //     await requestForReal({
+        //       method: "POST",
+        //       url: "/api/method/cotton_valley.api.register_customer",
+        //       data: {
+        //         data: values,
+        //       },
+        //     });
+        //     resetForm();
+        //     // navigate to home page
+        //     window.location.href = `/`;
+        //   } catch (err) {
+        //     console.error("Customer creation failed:", err);
+        //   }
+        // }}
+        onSubmit={async (values, { resetForm, setSubmitting }) => {
+          try {
+            if (!values.sales_tax_certificate) {
+              ToastNotification("error", "Sales Tax Certificate is required");
+              setSubmitting(false);
+              return;
+            }
+
+            let response;
+
+            console.log(
+              values.sales_tax_certificate,
+              "sales_tax_certificate"
+            );
+
+
+            response = await requestForReal({
               method: "POST",
               url: "/api/method/cotton_valley.api.register_customer",
               data: {
-                data: values,
-              },
+                data: values
+              }
             });
-            resetForm();
-            // navigate to home page
-            window.location.href = `/`;
+
+            console.log(response, "response");
+
+            if (response.data?.message?.status === "success" || response.data?.status === "success") {
+              ToastNotification("success", response.data?.message?.message || response.data?.message || "Registered successfully!");
+              const fileFormData = new FormData();
+              fileFormData.append("file", values.sales_tax_certificate);
+              fileFormData.append("folder", "Home/Attachments");
+              fileFormData.append("doctype", "Customer");
+              fileFormData.append("customer", response.data?.message?.customer_id);
+              fileFormData.append("is_private", 0);
+
+              let fileResponse = await requestForReal({
+                method: "POST",
+                url: "api/method/upload_file",
+                data: fileFormData,
+              });
+              console.log(fileResponse, "fileResponse");
+              resetForm();
+              window.location.href = `/`;
+            } else {
+              ToastNotification("error", response.response?.data?.message || response.data?.message?.message || response.data?.message || "Something went wrong");
+            }
           } catch (err) {
             console.error("Customer creation failed:", err);
+            ToastNotification("error", err.response?.data?.message || err.message || "Server error");
+          } finally {
+            setSubmitting(false);
           }
         }}
+
       >
         {({ values, setFieldValue, validateForm, setFieldTouched }) => (
           <Form className="row g-md-4 g-3">
@@ -896,7 +991,13 @@ const RegisterForm = () => {
                     if (hasStepErrors) {
                       // Mark only step fields as touched
                       stepFields.forEach((field) => {
-                        return setFieldTouched(field, true, true);
+                        // if field is null or undefined, then don't show error
+                        if (values[field] === null || values[field] === undefined) {
+                          return;
+                        }
+                        return
+
+                        // return setFieldTouched(field, true, true);
                       });
                     } else {
                       // ✅ move forward
@@ -904,13 +1005,13 @@ const RegisterForm = () => {
                     }
                   }}
                 >
-                  Next
+                  {step === 3 ? "Save & Review" : "Next"}
                 </Button>
 
               )}
               {step === 4 && (
                 <FormBtn
-                  title={"Sign Up"}
+                  title={"Submit"}
                   type={"submit"}
                   classes={{ btnClass: "btn btn-animation w-100" }}
                 />
