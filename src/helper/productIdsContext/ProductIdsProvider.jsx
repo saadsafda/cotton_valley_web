@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ProductAPI } from '@/utils/axiosUtils/API';
 import request from '@/utils/axiosUtils';
 
+
 const ProductIdsProvider = (props) => {
   const [getProductIds, setGetProductIds] = useState({});
   const [filteredProduct, setFilteredProduct] = useState([]);
@@ -12,9 +13,11 @@ const ProductIdsProvider = (props) => {
     queryFn: () => request({ url: ProductAPI, params: { ...getProductIds, status: 1 } }),
     enabled: false,
     refetchOnWindowFocus: false,
-    select: (data) => data.data,
+    select: (data) => {
+      return data?.data || data?.message || [];
+    },
   });
-  
+
   useEffect(() => {
     Object.keys(getProductIds).length > 0 && refetch();
   }, [getProductIds?.ids]);

@@ -115,7 +115,7 @@ const RegisterForm = () => {
     try {
       const response = await requestForReal({
         method: "GET",
-        url: "/api/method/cotton_valley.api.get_country_list",
+        url: "/api/method/cotton_valley.api.api.get_country_list",
       });
       setCountryList(response.data?.message);
     } catch (error) {
@@ -260,7 +260,7 @@ const RegisterForm = () => {
 
         //     await requestForReal({
         //       method: "POST",
-        //       url: "/api/method/cotton_valley.api.register_customer",
+        //       url: "/api/method/cotton_valley.api.api.register_customer",
         //       data: {
         //         data: values,
         //       },
@@ -290,7 +290,7 @@ const RegisterForm = () => {
 
             response = await requestForReal({
               method: "POST",
-              url: "/api/method/cotton_valley.api.register_customer",
+              url: "/api/method/cotton_valley.api.api.register_customer",
               data: {
                 data: values
               }

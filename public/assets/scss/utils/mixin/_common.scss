@@ -53,10 +53,10 @@
 
 /*======= font awesome css start  ======= */
 @mixin line($line: 1) {
-    -webkit-line-clamp: $line;
-    -webkit-box-orient: vertical;
-    display: -webkit-box;
-    overflow: hidden;
+    // -webkit-line-clamp: $line;
+    // -webkit-box-orient: vertical;
+    // display: -webkit-box;
+    // overflow: hidden;
 }
 
 /*======= font awesome css ends  ======= */

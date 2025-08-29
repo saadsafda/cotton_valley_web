@@ -13,6 +13,7 @@ import SettingContext from '@/helper/settingContext';
 import { ModifyString } from '@/utils/customFunctions/ModifyString';
 
 const ProductBox1 = ({ imgUrl, productDetail, isClose, addAction = true, classObj, setWishlistState }) => {
+
   const { i18Lang } = useContext(I18NextContext);
   const { convertCurrency } = useContext(SettingContext);
   const handelDelete = (currObj) => {
@@ -29,26 +30,26 @@ const ProductBox1 = ({ imgUrl, productDetail, isClose, addAction = true, classOb
         </div>
       )}
       <div className='product-image'>
-        <Link href={`/${i18Lang}/product/${productDetail?.slug}`}>
-          <Avatar data={imgUrl} placeHolder={placeHolderImage} customClass={'img-fluid'} name={productDetail.title} height={500} width={500} />
+        <Link href={`/${i18Lang}/product/${productDetail?.item_code}`}>
+          <Avatar data={imgUrl} placeHolder={placeHolderImage} customClass={'img-fluid'} name={productDetail.item_name} height={500} width={500} />
         </Link>
         <ProductBoxAction productObj={productDetail} listClass='product-option' />
       </div>
       <div className='product-detail'>
-        <Link href={`/${i18Lang}/product/${productDetail?.slug}`}>
-          <h6 className='name'>{productDetail.name}</h6>
-          <p dangerouslySetInnerHTML={{ __html: productDetail?.short_description }} />
+        <Link href={`/${i18Lang}/product/${productDetail?.item_code}`}>
+          <h6 className='name' style={{ "textAlign": "center" }} >{productDetail.item_name}</h6>
+          {/* <p dangerouslySetInnerHTML={{ __html: productDetail?.description }} /> */}
         </Link>
-        {productDetail?.unit && <h6 className='unit mt-1'>{productDetail?.unit}</h6>}
-        <h5 className='sold text-content'>
-          <span className='theme-color price'>{convertCurrency(productDetail?.sale_price)}</span>
-          <del>{convertCurrency(productDetail?.price)}</del>
+        <h6 className='unit mt-1' style={{ "textAlign": "center" }}>SKU: {productDetail?.item_code} | CA{productDetail?.case_pack}</h6>
+        <h5 className='sold text-content' style={{ "textAlign": "center" }}>
+          <span className='theme-color price'>{convertCurrency((parseFloat(productDetail?.price || 0) / parseFloat(productDetail?.case_pack || 1)))} | {convertCurrency(productDetail?.price)}</span>
+          {/* <del>{convertCurrency(productDetail?.price)}</del> */}
         </h5>
 
-        <div className='product-rating mt-sm-2 mt-1'>
+        {/* <div className='product-rating mt-sm-2 mt-1'>
           <ProductBox1Rating totalRating={productDetail?.rating_count || 0} />
           <h6 className='theme-color'>{ModifyString(productDetail.stock_status, false, '_')}</h6>
-        </div>
+        </div> */}
         {addAction && <ProductBox1Cart productObj={productDetail} />}
       </div>
     </div>

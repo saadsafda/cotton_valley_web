@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ProductSection1 from '../parisTheme/productSections/ProductSection1';
 import OfferBanner from '../parisTheme/OfferBanner';
 import DetailedBanner from './DetailedBanner';
@@ -6,17 +6,29 @@ import WrapperComponent from '../common/WrapperComponent';
 import { LeafSVG } from '../common/CommonSVG';
 import ProductIdsContext from '@/helper/productIdsContext';
 import { osakaFullSlider, osakaSliderOption } from '../../data/SliderSettings';
+import axios from 'axios';
 
-const MiddleContent = ({ dataAPI }) => {
+const MiddleContent = () => {
   const { filteredProduct } = useContext(ProductIdsContext);
+  const [hotProducts, setHotProducts] = useState([]);
+
+  const fetchHotProducts = async () => {
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/method/cotton_valley.api.products.get_hot_products`);
+    setHotProducts(response.data.message);
+  };
+
+
+  useEffect(() => {
+    fetchHotProducts();
+  }, []);
   return (
     <>
-      {dataAPI?.products_list_1?.status && dataAPI?.products_list_1?.product_ids.length > 0 && (
+      {hotProducts.length > 0 && (
         <WrapperComponent noRowCol={true}>
           <ProductSection1
-            ProductData={filteredProduct}
+            ProductData={hotProducts}
             svgUrl={<LeafSVG className='icon-width' />}
-            dataAPI={dataAPI?.products_list_1}
+            dataAPI={{}}
             noCustomClass={true}
             customSliderOption={osakaFullSlider}
             classObj={{ productStyle: 'product-modern', productBoxClass: '' }}
@@ -24,7 +36,7 @@ const MiddleContent = ({ dataAPI }) => {
         </WrapperComponent>
       )}
 
-      {dataAPI?.products_list_2?.status && dataAPI?.products_list_2?.product_ids.length > 0 && (
+      {/* {dataAPI?.products_list_2?.status && dataAPI?.products_list_2?.product_ids.length > 0 && (
         <WrapperComponent noRowCol={true}>
           <ProductSection1
             ProductData={filteredProduct}
@@ -33,9 +45,10 @@ const MiddleContent = ({ dataAPI }) => {
             noCustomClass={true}
             customSliderOption={osakaFullSlider}
             classObj={{ productStyle: 'product-modern', productBoxClass: '' }}
+            isHeadingVisible={false}
           />
         </WrapperComponent>
-      )}
+      )} */}
     </>
   );
 };

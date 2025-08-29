@@ -11,19 +11,19 @@ const ProductBox2 = ({ elem, rating = true, customImageClass }) => {
   const { convertCurrency } = useContext(SettingContext);
   return (
     <div className='offer-product'>
-      <Link href={`/${i18Lang}/product/${elem.slug}`} className='offer-image'>
-        <Avatar data={elem?.product_thumbnail} placeHolder={placeHolderImage} name={elem?.name} customImageClass={customImageClass} height={500} width={500} />
+      <Link href={`/${i18Lang}/product/${elem.id}`} className='offer-image'>
+        <Avatar data={elem?.image} placeHolder={placeHolderImage} name={elem?.name} customImageClass={customImageClass} height={500} width={500} />
       </Link>
 
       <div className='offer-detail'>
         <div>
-          <Link href={`/${i18Lang}/product/${elem.slug}`} className='text-title'>
+          <Link href={`/${i18Lang}/product/${elem.id}`} className='text-title'>
             <h6 className='name'>{elem?.name}</h6>
           </Link>
-          {rating ? <ProductBox1Rating totalRating={elem?.rating_count} /> : <span>{elem?.unit}</span>}
+          <span>SKU: {elem?.id} | CA{elem?.case_pack}</span>
           <h5 className='price theme-color'>
-            {convertCurrency(elem?.sale_price)}
-            <del className='text-content'>{convertCurrency(elem?.price)}</del>
+          {convertCurrency((parseFloat(elem?.price || 0) / parseFloat(elem?.case_pack || 1)))} | {convertCurrency(elem?.price)}
+            {/* <del className='text-content'>{convertCurrency(elem?.price)}</del> */}
           </h5>
         </div>
       </div>

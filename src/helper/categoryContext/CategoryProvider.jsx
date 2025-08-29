@@ -3,7 +3,7 @@ import { CategoryAPI } from "@/utils/axiosUtils/API";
 import { useQuery } from "@tanstack/react-query";
 import request, { requestForReal } from "@/utils/axiosUtils";
 import CategoryContext from ".";
-const API_URL = "/api/method/cotton_valley.api.get_product_categories_with_count";
+const API_URL = "/api/method/cotton_valley.api.api.get_product_categories_with_count";
 const url = `${process.env.NEXT_PUBLIC_BASE_URL}${API_URL}`;
 const CategoryProvider = (props) => {
   const [categoryAPIData, setCategoryAPIData] = useState({

@@ -16,6 +16,11 @@ import ShopCategory from "../madridTheme/ShopCategory";
 import MiddleContent from "../osakaTheme/MiddleContent";
 import TopSelling from "../tokyoTheme/topSelling";
 import CategoryContext from "@/helper/categoryContext";
+import WrapperComponent from "../common/WrapperComponent";
+import { Col } from "reactstrap";
+import TwoBanners from "./TwoBanners";
+import CustomHeading from "../common/CustomHeading";
+import { LeafSVG } from "../common/CommonSVG";
 
 const ParisTheme = () => {
   const { setGetProductIds, isLoading: productLoader } =
@@ -53,8 +58,53 @@ const ParisTheme = () => {
     queryFn: () => request({ url: `${HomePageAPI}/osaka` }),
     enabled: false,
     refetchOnWindowFocus: false,
-    select: (res) => res?.data,
+    select: (res) => {
+      return res?.data?.message || res?.data || {};
+    },
   });
+
+  const [homeSettings, setHomeSettings] = useState({});
+  const isMounted = useRef(true);
+  const base = process.env.NEXT_PUBLIC_BASE_URL || "";
+  const url = `${base.replace(/\/+$/, "")}`;
+
+  const makeImageUrl = (image) => {
+    // if image is start with https then return image
+    return image ? image.startsWith("https://") ? image : `${url}${image}` : "";
+  }
+
+  const fetchHomeBanners = async () => {
+    try {
+      const res = await axios.get(
+        `${url}/api/method/cotton_valley.api.api.get_home_banners`, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      }
+      );
+      const payload = res?.data?.message ?? res?.data ?? {};
+      if (isMounted.current && payload) setHomeSettings({
+        ...payload,
+        large_image: makeImageUrl(payload?.large_image),
+        right_top: makeImageUrl(payload?.right_top),
+        right_bottom: makeImageUrl(payload?.right_bottom),
+        promotion_banner: makeImageUrl(payload?.promotion_banner),
+        promotion_subbanner: makeImageUrl(payload?.promotion_subbanner),
+      });
+    } catch (e) {
+      // keep existing data if fetch fails
+    }
+  };
+
+  useEffect(() => {
+    isMounted.current = true;
+    fetchHomeBanners();
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   useEffect(() => {
   }, [categoryAPIData]);
@@ -83,15 +133,23 @@ const ParisTheme = () => {
     }
   }, [fetchStatus == "fetching", !isLoading, !madridLoading, !osakaLoading]);
   if (isLoading || madridLoading || osakaLoading || categoryIsLoading) return <Loader />;
+
   return (
     <>
-      <TopBanner />
+      <TopBanner data={homeSettings} />
 
       {categoryAPIData.data && <ShopCategory dataAPI={categoryAPIData.data} />}
+      <WrapperComponent noRowCol={true}>
+        <CustomHeading title={homeSettings?.title} svgUrl={<LeafSVG className='icon-width' />} subTitle={homeSettings?.description} customClass={''} />
+      </WrapperComponent>
+      <MiddleContent />
 
-      <MiddleContent dataAPI={osakaData?.content} />
-
-      <ProductSection dataAPI={data?.content} />
+      {/* <ProductSection dataAPI={data?.content} /> */}
+      <WrapperComponent classes={{ sectionClass: 'product-section', row: 'g-sm-2 g-2' }} customCol={true}>
+        <Col xxl={12} xl={12}>
+          <TwoBanners dataAPI={homeSettings} />
+        </Col>
+      </WrapperComponent>
 
       {osakaData?.content?.slider_products?.status && (
         <TopSelling
