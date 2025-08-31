@@ -15,9 +15,9 @@ const FooterLogoContent = () => {
   const { i18Lang } = useContext(I18NextContext);
   const pathName = usePathname();
   useEffect(() => {
-    let logo = ParisLogo;
+    let logo = themeOption?.logo?.footer_logo;
     setLogo(logo);
-  }, [pathName, i18Lang]);
+  }, [pathName, i18Lang, themeOption?.logo?.footer_logo]);
   return (
     <Col xl={3} sm={6}>
       <div className='footer-logo'>
