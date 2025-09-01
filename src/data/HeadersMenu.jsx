@@ -58,6 +58,13 @@ export const headerMenu = [
   },
   {
     id: 2,
+    title: 'Categories',
+    styleType: 'image',
+    customChildren: true,
+    children: [],
+  },
+  {
+    id: 3,
     title: 'Collection',
     styleType: 'link',
     slider: 'product',
@@ -141,7 +148,7 @@ export const headerMenu = [
     ],
   },
   {
-    id: 3,
+    id: 4,
     title: 'Product',
     styleType: 'link',
     slider: 'banner',
@@ -360,7 +367,7 @@ export const headerMenu = [
     ],
   },
   {
-    id: 4,
+    id: 5,
     title: 'MegaMenu',
     badge: 'New',
     styleType: 'link',
@@ -510,7 +517,7 @@ export const headerMenu = [
     ],
   },
   {
-    id: 5,
+    id: 6,
     title: 'Blog',
     styleType: 'link',
     customChildren: true,
@@ -559,7 +566,7 @@ export const headerMenu = [
     ],
   },
   {
-    id: 6,
+    id: 7,
     title: 'Pages',
     customChildren: false,
     children: [
@@ -708,7 +715,7 @@ export const headerMenu = [
     ],
   },
   {
-    id: 7,
+    id: 8,
     title: 'Seller',
     children: [
       {

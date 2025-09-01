@@ -37,7 +37,7 @@ const HeaderCategory = ({ customClass, icon, dropDownClass }) => {
           </Btn>
         </div>
 
-        {/* <div className='category-dropdown'>
+        <div className='category-dropdown'>
           <div className='category-title'>
             <h5>{t('Categories')}</h5>
             <Btn type='button' className='p-0 close-button text-content'>
@@ -45,7 +45,7 @@ const HeaderCategory = ({ customClass, icon, dropDownClass }) => {
             </Btn>
           </div>
 
-          <ul className='category-list'>
+          {/* <ul className='category-list'>
             {filteredCategories?.map((elem, i) => (
               <li className='onhover-category-list' key={i}>
                 <Link href={`/${i18Lang}/collections?category=${elem?.slug}`} className='category-name'>
@@ -54,10 +54,10 @@ const HeaderCategory = ({ customClass, icon, dropDownClass }) => {
                 </Link>
               </li>
             ))}
-          </ul>
-        </div> */}
+          </ul> */}
+        </div>
       </div>
-      <ClassicHeaderMenu />
+      <ClassicHeaderMenu categories={filteredCategories} />
       <TodaysDeal />
     </div>
     </Col >

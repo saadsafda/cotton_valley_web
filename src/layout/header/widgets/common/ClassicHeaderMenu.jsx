@@ -6,7 +6,7 @@ import { useTranslation } from '@/app/i18n/client';
 import ThemeOptionContext from '@/helper/themeOptionsContext';
 import { RiCloseLine } from 'react-icons/ri';
 
-const ClassicHeaderMenu = () => {
+const ClassicHeaderMenu = ({}) => {
   const { i18Lang } = useContext(I18NextContext);
   const { mobileSideBar, setMobileSideBar } = useContext(ThemeOptionContext);
   const { t } = useTranslation(i18Lang, 'common');

@@ -2,51 +2,22 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import TopBanner from "./TopBanner";
-import HomeBanner from "./HomeBanner";
 import axios from "axios";
-import ProductSection from "./ProductSection";
 import { HomePageAPI } from "@/utils/axiosUtils/API";
 import request from "@/utils/axiosUtils";
 import NewsLetter from "./NewsLetter";
-import ThemeOptionContext from "@/helper/themeOptionsContext";
-import StickyCart from "@/layout/stickyCart";
 import ProductIdsContext from "@/helper/productIdsContext";
 import Loader from "@/layout/loader";
 import ShopCategory from "../madridTheme/ShopCategory";
 import MiddleContent from "../osakaTheme/MiddleContent";
 import TopSelling from "../tokyoTheme/topSelling";
-import CategoryContext from "@/helper/categoryContext";
 import WrapperComponent from "../common/WrapperComponent";
 import { Col } from "reactstrap";
 import TwoBanners from "./TwoBanners";
-import CustomHeading from "../common/CustomHeading";
-import { LeafSVG } from "../common/CommonSVG";
 
 const ParisTheme = () => {
   const { setGetProductIds, isLoading: productLoader } =
     useContext(ProductIdsContext);
-  const { themeOption } = useContext(ThemeOptionContext);
-  const { categoryAPIData, filterCategory, categoryIsLoading } =
-    useContext(CategoryContext);
-  const { data, isLoading, refetch, fetchStatus } = useQuery({
-    queryKey: ["paris"],
-    queryFn: () => request({ url: `${HomePageAPI}/paris` }),
-    enabled: false,
-    refetchOnWindowFocus: false,
-    select: (res) => res?.data,
-  });
-  const {
-    data: madridData,
-    isLoading: madridLoading,
-    refetch: madridRefetch,
-    fetchStatus: madridFetchStatus,
-  } = useQuery({
-    queryKey: ["madrid"],
-    queryFn: () => request({ url: `${HomePageAPI}/madrid` }),
-    enabled: false,
-    refetchOnWindowFocus: false,
-    select: (res) => res?.data,
-  });
 
   const {
     data: osakaData,
@@ -70,29 +41,35 @@ const ParisTheme = () => {
 
   const makeImageUrl = (image) => {
     // if image is start with https then return image
-    return image ? image.startsWith("https://") ? image : `${url}${image}` : "";
-  }
+    return image
+      ? image.startsWith("https://")
+        ? image
+        : `${url}${image}`
+      : "";
+  };
 
   const fetchHomeBanners = async () => {
     try {
       const res = await axios.get(
-        `${url}/api/method/cotton_valley.api.api.get_home_banners`, {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-      }
+        `${url}/api/method/cotton_valley.api.api.get_home_banners`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
       );
       const payload = res?.data?.message ?? res?.data ?? {};
-      if (isMounted.current && payload) setHomeSettings({
-        ...payload,
-        large_image: makeImageUrl(payload?.large_image),
-        right_top: makeImageUrl(payload?.right_top),
-        right_bottom: makeImageUrl(payload?.right_bottom),
-        promotion_banner: makeImageUrl(payload?.promotion_banner),
-        promotion_subbanner: makeImageUrl(payload?.promotion_subbanner),
-      });
+      if (isMounted.current && payload)
+        setHomeSettings({
+          ...payload,
+          large_image: makeImageUrl(payload?.large_image),
+          right_top: makeImageUrl(payload?.right_top),
+          right_bottom: makeImageUrl(payload?.right_bottom),
+          promotion_banner: makeImageUrl(payload?.promotion_banner),
+          promotion_subbanner: makeImageUrl(payload?.promotion_subbanner),
+        });
     } catch (e) {
       // keep existing data if fetch fails
     }
@@ -107,45 +84,38 @@ const ParisTheme = () => {
   }, []);
 
   useEffect(() => {
-  }, [categoryAPIData]);
-
-  useEffect(() => {
-    refetch();
-    madridRefetch();
     osakaRefetch();
   }, []);
 
   useEffect(() => {
-    if (
-      (!isLoading && fetchStatus == "fetching") ||
-      (!madridLoading && madridFetchStatus == "fetching") ||
-      (!osakaLoading && osakaFetchStatus == "fetching")
-    ) {
+    if (!osakaLoading && osakaFetchStatus == "fetching") {
       document.body.classList.add("skeleton-body");
     } else {
       document.body.classList.remove("skeleton-body");
     }
 
-    if (data?.content?.products_ids?.length > 0) {
+    if (osakaData?.content?.products_ids?.length > 0) {
       setGetProductIds({
-        ids: Array.from(new Set(data?.content?.products_ids))?.join(","),
+        ids: Array.from(new Set(osakaData?.content?.products_ids))?.join(","),
       });
     }
-  }, [fetchStatus == "fetching", !isLoading, !madridLoading, !osakaLoading]);
-  if (isLoading || madridLoading || osakaLoading || categoryIsLoading) return <Loader />;
+  }, [osakaFetchStatus == "fetching", !osakaLoading]);
+  if (productLoader || osakaLoading) return <Loader />;
 
   return (
     <>
       <TopBanner data={homeSettings} />
 
-      {categoryAPIData.data && <ShopCategory dataAPI={categoryAPIData.data} />}
-      <WrapperComponent noRowCol={true}>
-        <CustomHeading title={homeSettings?.title} svgUrl={<LeafSVG className='icon-width' />} subTitle={homeSettings?.description} customClass={''} />
-      </WrapperComponent>
-      <MiddleContent />
+      {osakaData?.content?.categories_image_list?.status && (
+        <ShopCategory dataAPI={osakaData?.content?.categories_image_list} />
+      )}
 
-      {/* <ProductSection dataAPI={data?.content} /> */}
-      <WrapperComponent classes={{ sectionClass: 'product-section', row: 'g-sm-2 g-2' }} customCol={true}>
+      <MiddleContent dataAPI={osakaData?.content} />
+
+      <WrapperComponent
+        classes={{ sectionClass: "product-section", row: "g-sm-2 g-2" }}
+        customCol={true}
+      >
         <Col xxl={12} xl={12}>
           <TwoBanners dataAPI={homeSettings} />
         </Col>
@@ -161,14 +131,9 @@ const ParisTheme = () => {
         />
       )}
 
-      {data?.content?.news_letter?.status && (
-        <NewsLetter dataAPI={data?.content?.news_letter} />
+      {osakaData?.content?.news_letter?.status && (
+        <NewsLetter dataAPI={osakaData?.content?.news_letter} />
       )}
-
-      {/* {data?.content?.featured_banners?.status && <HomeBanner bannersData={data?.content?.featured_banners?.banners} />} */}
-
-      {/* 
-      {themeOption?.general?.sticky_cart_enable && themeOption?.general?.cart_style !== 'cart_sidebar' && <StickyCart />} */}
     </>
   );
 };
