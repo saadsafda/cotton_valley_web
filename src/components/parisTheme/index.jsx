@@ -117,7 +117,7 @@ const ParisTheme = () => {
         customCol={true}
       >
         <Col xxl={12} xl={12}>
-          <TwoBanners dataAPI={homeSettings} />
+          <TwoBanners dataAPI={osakaData?.content} />
         </Col>
       </WrapperComponent>
 

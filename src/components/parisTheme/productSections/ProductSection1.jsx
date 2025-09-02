@@ -75,6 +75,7 @@ const ProductSection1 = ({ dataAPI, ProductData, svgUrl, noCustomClass = false, 
   const filterProduct = useMemo(() => {
     return ProductData?.filter((el) => (dataAPI?.product_ids ? dataAPI?.product_ids?.includes(el.id) : el));
   }, [ProductData, dataAPI]);
+
   return (
     <>
       {isHeadingVisible ? (

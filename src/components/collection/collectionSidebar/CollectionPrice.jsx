@@ -10,7 +10,7 @@ import SettingContext from '@/helper/settingContext';
 const CollectionPrice = ({ filter, setFilter, attributeAPIData }) => {
   const { convertCurrency } = useContext(SettingContext);
   const router = useRouter();
-  const [category, attribute, sortBy, field, rating, layout] = useCustomSearchParams(['category', 'attribute', 'sortBy', 'field', 'rating', 'layout']);
+  const [category, subcategory, attribute, sortBy, field, rating, layout] = useCustomSearchParams(['category', 'subcategory', 'attribute', 'sortBy', 'field', 'rating', 'layout']);
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, 'common');
   const pathname = usePathname();
@@ -34,10 +34,10 @@ const CollectionPrice = ({ filter, setFilter, attributeAPIData }) => {
       };
     });
     if (temp.length > 0) {
-      const queryParams = new URLSearchParams({ ...category, ...attribute, ...sortBy, ...field, ...rating, ...layout, price: temp }).toString();
+      const queryParams = new URLSearchParams({ ...category, ...subcategory, ...attribute, ...sortBy, ...field, ...rating, ...layout, price: temp }).toString();
       router.push(`${pathname}?${queryParams}`);
     } else {
-      const queryParams = new URLSearchParams({ ...category, ...attribute, ...sortBy, ...field, ...rating, ...layout }).toString();
+      const queryParams = new URLSearchParams({ ...category, ...subcategory, ...attribute, ...sortBy, ...field, ...rating, ...layout }).toString();
       router.push(`${pathname}?${queryParams}`);
     }
   };

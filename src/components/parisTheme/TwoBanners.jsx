@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import I18NextContext from '@/helper/i18NextContext';
 import ProductIdsContext from '@/helper/productIdsContext';
+const url = process.env.NEXT_PUBLIC_BASE_URL;
 
 const TwoBanners = ({ dataAPI }) => {
   const { i18Lang } = useContext(I18NextContext);
@@ -13,59 +14,62 @@ const TwoBanners = ({ dataAPI }) => {
     return 'product/' + product?.slug;
   };
 
+  console.log(dataAPI, "data api");
+  
+
   return (
     <div className='section-t-space section-b-space'>
       <Row className='g-md-4 g-3'>
         <Col xxl={8} xl={12} md={7}>
-          <div className='banner-contain hover-effect'>
+          {/* <div className='banner-contain hover-effect'>
             <Image src={dataAPI?.promotion_banner} className='img-fluid' alt='Organic Banner' height={245} width={1182} />
-          </div>
-          {/* {dataAPI?.main_content?.section6_two_column_banners?.banner_1?.redirect_link?.link_type === 'external_url' ? (
-            <Link href={dataAPI?.main_content?.section6_two_column_banners?.banner_1?.redirect_link?.link || '/'} target='_blank'>
+          </div> */}
+          {dataAPI?.promotion_banner?.banner_1?.redirect_link?.link_type === 'external_url' ? (
+            <Link href={dataAPI?.promotion_banner?.banner_1?.redirect_link?.link || '/'} target='_blank'>
               <div className='banner-contain hover-effect'>
-                <Image src={dataAPI?.main_content?.section6_two_column_banners?.banner_1?.image_url} className='img-fluid' alt='Organic Banner' height={245} width={1182} />
+                <Image src={url + dataAPI?.promotion_banner?.banner_1?.image_url} className='img-fluid' alt='Organic Banner' height={245} width={1182} />
               </div>
             </Link>
-          ) : dataAPI?.main_content?.section6_two_column_banners?.banner_1?.redirect_link?.link_type === 'collection' ? (
-            <Link href={`/${i18Lang}/collections?category=${dataAPI?.main_content?.section6_two_column_banners?.banner_1?.redirect_link?.link}` || '/'}>
+          ) : dataAPI?.promotion_banner?.banner_1?.redirect_link?.link_type === 'collection' ? (
+            <Link href={`/${i18Lang}/collections?category=${dataAPI?.promotion_banner?.banner_1?.redirect_link?.link}` || '/'}>
               <div className='banner-contain hover-effect'>
-                <Image src={dataAPI?.main_content?.section6_two_column_banners?.banner_1?.image_url} className='img-fluid' alt='Organic Banner' height={245} width={1182} />
+                <Image src={url + dataAPI?.promotion_banner?.banner_1?.image_url} className='img-fluid' alt='Organic Banner' height={245} width={1182} />
               </div>
             </Link>
-          ) : dataAPI?.main_content?.section6_two_column_banners?.banner_1?.redirect_link?.link_type === 'product' ? (
-            <Link href={`/${i18Lang}/${redirectToProduct(dataAPI?.main_content?.section6_two_column_banners?.banner_1?.redirect_link?.link)}` || '/'}>
+          ) : dataAPI?.promotion_banner?.banner_1?.redirect_link?.link_type === 'product' ? (
+            <Link href={`/${i18Lang}/${redirectToProduct(dataAPI?.promotion_banner?.banner_1?.redirect_link?.link)}` || '/'}>
               <div className='banner-contain hover-effect'>
-                <Image src={dataAPI?.main_content?.section6_two_column_banners?.banner_1?.image_url} className='img-fluid' alt='Organic Banner' height={245} width={1182} />
+                <Image src={url + dataAPI?.promotion_banner?.banner_1?.image_url} className='img-fluid' alt='Organic Banner' height={245} width={1182} />
               </div>
             </Link>
           ) : (
             <div className='banner-contain hover-effect'>
-              <Image src={dataAPI?.main_content?.section6_two_column_banners?.banner_1?.image_url} className='img-fluid' alt='Organic Banner' height={245} width={1182} />
+              {dataAPI && <Image src={url + dataAPI?.promotion_banner?.banner_1?.image_url} className='img-fluid' alt='Organic Banner' height={245} width={1182} />}
             </div>
-          )} */}
+          )}
         </Col>
 
         <Col xl={12} xxl={4} md={5}>
-          <div className='banner-contain hover-effect'>
-            <Image src={dataAPI?.promotion_subbanner} className='img-fluid' alt='Diet Soda' height={245} width={378} />
-          </div>
-          {/* {dataAPI?.main_content?.section6_two_column_banners?.banner_2?.redirect_link?.link_type === 'external_url' ? (
-            <Link href={dataAPI?.main_content?.section6_two_column_banners?.banner_2?.redirect_link?.link || '/'} target='_blank' className='banner-contain hover-effect'>
-              <Image src={dataAPI?.main_content?.section6_two_column_banners?.banner_2?.image_url} className='img-fluid' alt='Diet Soda' height={245} width={378} />
+          {/* <div className='banner-contain hover-effect'>
+            <Image src={dataAPI?.promotion_banner} className='img-fluid' alt='Diet Soda' height={245} width={378} />
+          </div> */}
+          {dataAPI?.promotion_banner?.banner_2?.redirect_link?.link_type === 'external_url' ? (
+            <Link href={dataAPI?.promotion_banner?.banner_2?.redirect_link?.link || '/'} target='_blank' className='banner-contain hover-effect'>
+              <Image src={url + dataAPI?.promotion_banner?.banner_2?.image_url} className='img-fluid' alt='Diet Soda' height={245} width={378} />
             </Link>
-          ) : dataAPI?.main_content?.section6_two_column_banners?.banner_2?.redirect_link?.link_type === 'collection' ? (
-            <Link href={`/${i18Lang}/collections?category=${dataAPI?.main_content?.section6_two_column_banners?.banner_2?.redirect_link?.link}` || '/'} className='banner-contain hover-effect'>
-              <Image src={dataAPI?.main_content?.section6_two_column_banners?.banner_2?.image_url} className='img-fluid' alt='Diet Soda' height={245} width={378} />
+          ) : dataAPI?.promotion_banner?.banner_2?.redirect_link?.link_type === 'collection' ? (
+            <Link href={`/${i18Lang}/collections?category=${dataAPI?.promotion_banner?.banner_2?.redirect_link?.link}` || '/'} className='banner-contain hover-effect'>
+              <Image src={url + dataAPI?.promotion_banner?.banner_2?.image_url} className='img-fluid' alt='Diet Soda' height={245} width={378} />
             </Link>
-          ) : dataAPI?.main_content?.section6_two_column_banners?.banner_2?.redirect_link?.link_type === 'product' ? (
-            <Link href={`/${i18Lang}/${redirectToProduct(dataAPI?.main_content?.section6_two_column_banners?.banner_2?.redirect_link?.link)}` || '/'} className='banner-contain hover-effect'>
-              <Image src={dataAPI?.main_content?.section6_two_column_banners?.banner_2?.image_url} className='img-fluid' alt='Diet Soda' height={245} width={378} />
+          ) : dataAPI?.promotion_banner?.banner_2?.redirect_link?.link_type === 'product' ? (
+            <Link href={`/${i18Lang}/${redirectToProduct(dataAPI?.promotion_banner?.banner_2?.redirect_link?.link)}` || '/'} className='banner-contain hover-effect'>
+              <Image src={url + dataAPI?.promotion_banner?.banner_2?.image_url} className='img-fluid' alt='Diet Soda' height={245} width={378} />
             </Link>
           ) : (
             <div className='banner-contain hover-effect'>
-              <Image src={dataAPI?.main_content?.section6_two_column_banners?.banner_2?.image_url} className='img-fluid' alt='Diet Soda' height={245} width={378} />
+              {dataAPI && <Image src={url + dataAPI?.promotion_banner?.banner_2?.image_url} className='img-fluid' alt='Diet Soda' height={245} width={378} />}
             </div>
-          )} */}
+          )}
         </Col>
       </Row>
     </div>

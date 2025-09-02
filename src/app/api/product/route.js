@@ -87,16 +87,23 @@ import { NextResponse } from "next/server";
 
 export async function GET(request) {
     const searchParams = request?.nextUrl?.searchParams;
+    
+    const ids = searchParams.get("ids");
     const category = searchParams.get("category");
+    const subcategory = searchParams.get("subcategory");
     const sortBy = searchParams.get("sortBy");
     const search = searchParams.get("search");
+    // console.log(product_ids, "search Params checking");
 
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/method/cotton_valley.api.products.get_products`;
-    const params = new URLSearchParams({ category, sortBy, search });
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/method/cotton_valley.api.products.get_all_products`;
+    const params = new URLSearchParams({ ids, category, subcategory, sortBy, search });
 
 
+    console.log('Checking calling url:', `${url}?${params.toString()}`);
     const response = await fetch(`${url}?${params.toString()}`);
+    // const response = await fetch(`${url}`);
+
 
     const data = await response.json();
-    return NextResponse.json(data.message || []);
+    return NextResponse.json(data?.message?.data || []);
 }

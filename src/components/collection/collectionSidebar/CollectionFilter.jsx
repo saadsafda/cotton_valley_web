@@ -18,12 +18,13 @@ const CollectionFilter = ({ filter, setFilter }) => {
   };
   const filterObj = {
     category: splitFilter('category'),
+    subcategory: splitFilter('subcategory'),
     attribute: splitFilter('attribute'),
     price: splitFilter('price'),
     rating: splitFilter('rating'),
   };
   const mergeFilter = () => {
-    setSelectedFilters([...filterObj['category'], ...filterObj['attribute'], ...filterObj['price'], ...filterObj['rating'].map((val) => (val.startsWith('rating ') ? val : `rating ${val}`))]);
+    setSelectedFilters([...filterObj['category'], ...filterObj['subcategory'], ...filterObj['attribute'], ...filterObj['price'], ...filterObj['rating'].map((val) => (val.startsWith('rating ') ? val : `rating ${val}`))]);
   };
   useEffect(() => {
     mergeFilter();
@@ -51,7 +52,7 @@ const CollectionFilter = ({ filter, setFilter }) => {
   };
   const clearParams = () => {
     setSelectedFilters([]);
-    setFilter({ category: [], attribute: [], price: [], rating: [] });
+    setFilter({ category: [], subcategory: [], attribute: [], price: [], rating: [] });
     router.push(pathname);
   };
   if (selectedFilters.length <= 0) return null;

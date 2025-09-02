@@ -26,6 +26,7 @@ const CollectionProducts = ({ filter, grid }) => {
           field: filter?.field ?? '',
           price: filter?.price.join(',') ?? '',
           category: filter?.category.join(','),
+          subcategory: filter?.subcategory.join(','),
           sort: '',
           sortBy: filter?.sortBy ?? '',
           rating: filter?.rating.join(',') ?? '',

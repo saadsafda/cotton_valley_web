@@ -13,15 +13,16 @@ import CollectionNoSidebar from './collectionNoSidebar';
 import Loader from '@/layout/loader';
 
 const CollectionContain = () => {
-  const [filter, setFilter] = useState({ category: [], price: [], attribute: [], rating: [], sortBy: '', field: '' });
+  const [filter, setFilter] = useState({ category: [], subcategory: [], price: [], attribute: [], rating: [], sortBy: '', field: '' });
   const { themeOption, isLoading } = useContext(ThemeOptionContext);
-  const [category, attribute, price, rating, sortBy, field, layout] = useCustomSearchParams(['category', 'attribute', 'price', 'rating', 'sortBy', 'field', 'layout']);
+  const [category, subcategory, attribute, price, rating, sortBy, field, layout] = useCustomSearchParams(['category', 'subcategory', 'attribute', 'price', 'rating', 'sortBy', 'field', 'layout']);
   const collectionLayout = layout?.layout ? layout?.layout : themeOption?.collection?.collection_layout;
   useEffect(() => {
     setFilter((prev) => {
       return {
         ...prev,
         category: category ? category?.category?.split(',') : [],
+        subcategory: subcategory ? subcategory?.subcategory?.split(',') : [],
         attribute: attribute ? attribute?.attribute?.split(',') : [],
         price: price ? price?.price?.split(',') : [],
         rating: rating ? rating?.rating?.split(',') : [],
@@ -29,7 +30,7 @@ const CollectionContain = () => {
         field: field ? field?.field : '',
       };
     });
-  }, [category, attribute, price, rating, sortBy, field]);
+  }, [category, subcategory, attribute, price, rating, sortBy, field]);
 
   const isCollectionMatch = {
     collection_category_slider: <MainCollectionSlider filter={filter} setFilter={setFilter} />,

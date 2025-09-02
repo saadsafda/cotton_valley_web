@@ -12,7 +12,7 @@ const ProductBox2 = ({ elem, rating = true, customImageClass }) => {
   return (
     <div className='offer-product'>
       <Link href={`/${i18Lang}/product/${elem.id}`} className='offer-image'>
-        <Avatar data={elem?.image} placeHolder={placeHolderImage} name={elem?.name} customImageClass={customImageClass} height={500} width={500} />
+        <Avatar data={elem?.product_thumbnail} placeHolder={placeHolderImage} name={elem?.name} customImageClass={customImageClass} height={500} width={500} />
       </Link>
 
       <div className='offer-detail'>

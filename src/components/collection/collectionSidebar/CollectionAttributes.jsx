@@ -4,7 +4,7 @@ import { useCustomSearchParams } from '@/utils/hooks/useCustomSearchParams';
 
 const CollectionAttributes = ({ attributeAPIData, filter, setFilter }) => {
   const router = useRouter();
-  const [category, price, rating, sortBy, field, layout] = useCustomSearchParams(['category', 'price', 'rating', 'sortBy', 'field', 'layout']);
+  const [category, subcategory, price, rating, sortBy, field, layout] = useCustomSearchParams(['category', 'subcategory', 'price', 'rating', 'sortBy', 'field', 'layout']);
   const pathname = usePathname();
   const checkAttribute = (slug) => {
     if (filter?.attribute?.indexOf(slug) != -1) {
@@ -26,10 +26,10 @@ const CollectionAttributes = ({ attributeAPIData, filter, setFilter }) => {
       };
     });
     if (temp.length > 0) {
-      const queryParams = new URLSearchParams({ ...category, ...price, ...rating, ...sortBy, ...field, ...layout, attribute: temp }).toString();
+      const queryParams = new URLSearchParams({ ...category, ...subcategory, ...price, ...rating, ...sortBy, ...field, ...layout, attribute: temp }).toString();
       router.push(`${pathname}?${queryParams}`);
     } else {
-      const queryParams = new URLSearchParams({ ...category, ...price, ...rating, ...sortBy, ...field, ...layout }).toString();
+      const queryParams = new URLSearchParams({ ...category, ...subcategory, ...price, ...rating, ...sortBy, ...field, ...layout }).toString();
       router.push(`${pathname}?${queryParams}`);
     }
   };
