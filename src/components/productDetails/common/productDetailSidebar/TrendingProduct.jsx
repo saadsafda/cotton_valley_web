@@ -18,7 +18,7 @@ const TrendingProduct = ({ productState }) => {
   const {
     data: productData,
     refetch: productRefetch,
-  } = useQuery({queryKey: [categoryId], queryFn: () => request({ url: ProductAPI, params: { status: 1, trending: 1, category_ids: categoryId?.join() } }),
+  } = useQuery({queryKey: [categoryId], queryFn: () => request({ url: ProductAPI, params: { status: 1, trending: 1, category: categoryId?.join() } }),
     enabled: false,
     refetchOnWindowFocus: false,
     select: (data) => data.data,

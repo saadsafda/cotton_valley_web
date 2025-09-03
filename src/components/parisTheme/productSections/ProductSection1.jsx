@@ -82,7 +82,7 @@ const ProductSection1 = ({ dataAPI, ProductData, svgUrl, noCustomClass = false, 
         <CustomHeading title={dataAPI?.title} svgUrl={svgUrl} subTitle={dataAPI?.description} customClass={customClass ? customClass : noCustomClass ? '' : 'section-t-space title'} />
       ) : null}
       <div className={`${classObj?.productStyle} overflow-hidden`}>
-        <div className='no-arrow'>
+        <div className='category-slider-1 arrow-slider'>
           <Slider {...customSliderOption}>
             {filterProduct?.map((elem) => (
               <div key={elem?.id}>

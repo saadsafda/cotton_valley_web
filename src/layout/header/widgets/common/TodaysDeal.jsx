@@ -18,7 +18,7 @@ const TodaysDeal = () => {
           <div className='header-nav-right'>
             <Btn className='btn deal-button' onClick={() => setModal(true)}>
               {/* <RiFlashlightLine /> */}
-              <span>Purchasing more than $1000</span>
+              <span>Purchasing more than $5000</span>
               {/* <span>{t('DealToday')}</span> */}
             </Btn>
           </div>

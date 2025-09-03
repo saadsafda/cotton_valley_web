@@ -14,14 +14,14 @@ const ProductInformation = ({ productState }) => {
       </div>
       <div className='product-info'>
         <ul className='product-info-list'>
-          <li>{t("SKU")} : {productState?.selectedVariation?.sku ?? productState?.product?.sku}</li>
-          <li>{t("Weight")} : {productState?.product?.weight}</li>
+          <li>{t("CasePack")} : {productState?.selectedVariation?.case_pack ?? productState?.product?.case_pack}</li>
+          <li>{t("CBM")} : {productState?.product?.cbm}</li>
           <li>
-            {t("StockStatus")} :
-            {productState?.selectedVariation?.stock_status ? ModifyString(productState?.selectedVariation?.stock_status, false, '_') : ModifyString(productState?.product?.stock_status, false, '_')}
+            {t("UPC Code")} :
+            {productState?.selectedVariation?.upc_code ? ModifyString(productState?.selectedVariation?.upc_code, false, '_') : ModifyString(productState?.product?.upc_code, false, '_')}
           </li>
-          <li>{t("Quantity")} : {productState?.selectedVariation?.quantity ?? productState?.product?.quantity} Items Left</li>
-          <li>{t("Date")} : {dateFormat(productState?.product?.created_at, true)}</li>
+          <li>{t("Carton UPC")} : {productState?.selectedVariation?.carton_upc ?? productState?.product?.carton_upc} </li>
+          {/* <li>{t("Date")} : {dateFormat(productState?.product?.created_at, true)}</li> */}
         </ul>
       </div>
     </div>

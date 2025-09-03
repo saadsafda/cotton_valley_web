@@ -27,7 +27,8 @@ const TopbarSlider = ({ customClass }) => {
         <Col lg={9} xxl={6} className='d-lg-block d-none'>
           <div className='header-offer'>
             <div className='notification-slider no-arrow'>
-              <Slider {...topBarContentSlider}>
+              {themeOption?.header?.top_bar_content.length > 0 &&<div style={{ color: "white" }} dangerouslySetInnerHTML={{ __html: themeOption?.header?.top_bar_content?.[0].content }} />}
+              {/* <Slider {...topBarContentSlider}>
                 {themeOption?.header?.top_bar_content.length > 0 &&
                   themeOption?.header?.top_bar_content?.map((elem, i) => (
                     <div key={i}>
@@ -38,7 +39,7 @@ const TopbarSlider = ({ customClass }) => {
                       </div>
                     </div>
                   ))}
-              </Slider>
+              </Slider> */}
             </div>
           </div>
         </Col>

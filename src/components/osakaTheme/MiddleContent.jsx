@@ -62,7 +62,7 @@ import DetailedBanner from './DetailedBanner';
 import WrapperComponent from '../common/WrapperComponent';
 import { LeafSVG } from '../common/CommonSVG';
 import ProductIdsContext from '@/helper/productIdsContext';
-import { osakaFullSlider, osakaSliderOption } from '../../data/SliderSettings';
+import { osakaFullSlider, osakaSliderOption, madridCategorySlider } from '../../data/SliderSettings';
 
 const MiddleContent = ({ dataAPI }) => {
   const { filteredProduct } = useContext(ProductIdsContext);
