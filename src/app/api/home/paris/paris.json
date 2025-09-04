@@ -3,13 +3,15 @@
   "content": {
     "home_banner": {
       "status": true,
-      "main_banner": {
-        "image_url": "https://react.pixelstrap.net/fastkart/assets/themes/paris/1.jpg",
-        "redirect_link": {
-          "link": "vegetables-fruits",
-          "link_type": "collection"
+      "main_banner": [
+        {
+          "image_url": "https://react.pixelstrap.net/fastkart/assets/themes/paris/1.jpg",
+          "redirect_link": {
+            "link": "vegetables-fruits",
+            "link_type": "collection"
+          }
         }
-      },
+      ],
       "sub_banner_1": {
         "image_url": "https://react.pixelstrap.net/fastkart/assets/themes/paris/2.jpg",
         "redirect_link": {

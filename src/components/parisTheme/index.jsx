@@ -34,8 +34,8 @@ const ParisTheme = () => {
     },
   });
 
-  const [homeSettings, setHomeSettings] = useState({});
-  const isMounted = useRef(true);
+  // const [homeSettings, setHomeSettings] = useState({});
+  // const isMounted = useRef(true);
   const base = process.env.NEXT_PUBLIC_BASE_URL || "";
   const url = `${base.replace(/\/+$/, "")}`;
 
@@ -48,40 +48,40 @@ const ParisTheme = () => {
       : "";
   };
 
-  const fetchHomeBanners = async () => {
-    try {
-      const res = await axios.get(
-        `${url}/api/method/cotton_valley.api.api.get_home_banners`,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      );
-      const payload = res?.data?.message ?? res?.data ?? {};
-      if (isMounted.current && payload)
-        setHomeSettings({
-          ...payload,
-          large_image: makeImageUrl(payload?.large_image),
-          right_top: makeImageUrl(payload?.right_top),
-          right_bottom: makeImageUrl(payload?.right_bottom),
-          promotion_banner: makeImageUrl(payload?.promotion_banner),
-          promotion_subbanner: makeImageUrl(payload?.promotion_subbanner),
-        });
-    } catch (e) {
-      // keep existing data if fetch fails
-    }
-  };
+  // const fetchHomeBanners = async () => {
+  //   try {
+  //     const res = await axios.get(
+  //       `${url}/api/method/cotton_valley.api.api.get_home_banners`,
+  //       {
+  //         withCredentials: true,
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Accept: "application/json",
+  //         },
+  //       }
+  //     );
+  //     const payload = res?.data?.message ?? res?.data ?? {};
+  //     if (isMounted.current && payload)
+  //       setHomeSettings({
+  //         ...payload,
+  //         large_image: makeImageUrl(payload?.large_image),
+  //         right_top: makeImageUrl(payload?.right_top),
+  //         right_bottom: makeImageUrl(payload?.right_bottom),
+  //         promotion_banner: makeImageUrl(payload?.promotion_banner),
+  //         promotion_subbanner: makeImageUrl(payload?.promotion_subbanner),
+  //       });
+  //   } catch (e) {
+  //     // keep existing data if fetch fails
+  //   }
+  // };
 
-  useEffect(() => {
-    isMounted.current = true;
-    fetchHomeBanners();
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
+  // useEffect(() => {
+  //   isMounted.current = true;
+  //   fetchHomeBanners();
+  //   return () => {
+  //     isMounted.current = false;
+  //   };
+  // }, []);
 
   useEffect(() => {
     osakaRefetch();
@@ -104,7 +104,7 @@ const ParisTheme = () => {
 
   return (
     <>
-      <TopBanner data={homeSettings} />
+      <TopBanner data={osakaData?.content?.home_banner} />
 
       {osakaData?.content?.categories_image_list?.status && (
         <ShopCategory dataAPI={osakaData?.content?.categories_image_list} />

@@ -1,4 +1,35 @@
 // ----------------*****************----------------******************------------
+export const themeParisBannerSlider = {
+  infinite: true,
+  speed: 500,
+  arrows: true,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  autoplay: true,
+  autoplaySpeed: 2000,
+  responsive: [
+    {
+      breakpoint: 1200,
+      settings: {
+        slidesToShow: 1,
+      },
+    },
+    {
+      breakpoint: 992,
+      settings: {
+        slidesToShow: 1,
+      },
+    },
+    {
+      breakpoint: 420,
+      settings: {
+        slidesToShow: 1,
+      },
+    },
+  ],
+};
+
+
 export const themeSec2BannerSlider = {
   infinite: true,
   speed: 500,

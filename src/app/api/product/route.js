@@ -87,16 +87,17 @@ import { NextResponse } from "next/server";
 
 export async function GET(request) {
     const searchParams = request?.nextUrl?.searchParams;
-    
+
     const ids = searchParams.get("ids");
     const category = searchParams.get("category");
     const subcategory = searchParams.get("subcategory");
     const sortBy = searchParams.get("sortBy");
     const search = searchParams.get("search");
+    const page = searchParams.get("page");
     // console.log(product_ids, "search Params checking");
 
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/method/cotton_valley.api.products.get_all_products`;
-    const params = new URLSearchParams({ ids, category, subcategory, sortBy, search });
+    const params = new URLSearchParams({ ids, category, subcategory, sortBy, search, page });
 
 
     console.log('Checking calling url:', `${url}?${params.toString()}`);
@@ -105,5 +106,11 @@ export async function GET(request) {
 
 
     const data = await response.json();
-    return NextResponse.json(data?.message?.data || []);
+    const products = data?.message?.data || [];
+
+    // Attach pagination keys directly to the array
+    products && products.length > 0 && (products[0].total = data?.message?.total);
+    products && products.length > 0 && (products[0].current_page = data?.message?.current_page || 1);
+    products && products.length > 0 && (products[0].per_page = data?.message?.per_page || 30);
+    return NextResponse.json(products);
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
 
 const RatioImage = (props) => {
   const bgImg = useRef(null);
@@ -7,7 +8,10 @@ const RatioImage = (props) => {
     const image = bgImg.current;
     if (image.classList.contains('bg-img')) {
       const parentElement = image.parentElement;
-      const src = image.getAttribute('src');
+      let src = image.getAttribute('src');
+      if (src && !src.startsWith('http')) {
+        src = baseUrl + src;
+      }
       parentElement.classList.add('bg-size');
       image.style.display = 'none';
       parentElement.setAttribute(

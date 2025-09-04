@@ -36,67 +36,89 @@ const ProductThumbnailSlider = ({ productState }) => {
                   <span>{t("Featured")}</span>
                 </div>
               ) : null}
-              <Slider
-                asNavFor={nav2}
-                ref={(slider) => (slider1.current = slider)}
-              >
-                {productState?.product?.product_galleries?.map((elem, i) => (
-                  <div key={i}>
-                    <div className="slider-image">
-                      <Image
-                        height={580}
-                        width={580}
-                        src={
-                          elem?.original_url?.startsWith("https://")
-                            ? elem?.original_url
-                            : url + elem?.original_url || placeHolderImage
-                        }
-                        className="img-fluid"
-                        alt={elem?.name}
-                      />
+              {productState?.product?.product_galleries?.length > 0 &&
+              productState?.product?.product_galleries?.length < 2 ? (
+                <Image
+                  height={580}
+                  width={580}
+                  src={
+                    productState?.product?.product_galleries?.[0]?.original_url?.startsWith(
+                      "https://"
+                    )
+                      ? productState?.product?.product_galleries?.[0]
+                          ?.original_url
+                      : url +
+                          productState?.product?.product_galleries?.[0]
+                            ?.original_url || placeHolderImage
+                  }
+                  className="img-fluid"
+                  alt={productState?.product?.product_galleries?.[0]?.file_name}
+                />
+              ) : (
+                <Slider
+                  asNavFor={nav2}
+                  ref={(slider) => (slider1.current = slider)}
+                >
+                  {productState?.product?.product_galleries?.map((elem, i) => (
+                    <div key={i}>
+                      <div className="slider-image">
+                        <Image
+                          height={580}
+                          width={580}
+                          src={
+                            elem?.original_url?.startsWith("https://")
+                              ? elem?.original_url
+                              : url + elem?.original_url || placeHolderImage
+                          }
+                          className="img-fluid"
+                          alt={elem?.file_name}
+                        />
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </Slider>
+                  ))}
+                </Slider>
+              )}
             </div>
           </Col>
-
-          <Col xs={12}>
-            <div className="bottom-slider-image left-slider slick-top no-arrow">
-              <Slider
-                {...productDetailSlider(
-                  productState?.product?.product_galleries?.length < 3
-                    ? productState?.product?.product_galleries?.length
-                    : 3
-                )}
-                slidesToShow={
-                  productState?.product?.product_galleries?.length < 3
-                    ? productState?.product?.product_galleries?.length
-                    : 3
-                }
-                asNavFor={nav1}
-                ref={(slider) => (slider2.current = slider)}
-              >
-                {productState?.product?.product_galleries?.map((elem, i) => (
-                  <div key={i}>
-                    <div className="sidebar-image">
-                      <Image
-                        height={130}
-                        width={130}
-                        src={
-                          elem?.original_url?.startsWith("https://")
-                            ? elem?.original_url
-                            : url + elem?.original_url || placeHolderImage
-                        }
-                        className="img-fluid"
-                        alt={elem?.name}
-                      />
+          {productState?.product?.product_galleries?.length > 0 &&
+          productState?.product?.product_galleries?.length < 2 ? null : (
+            <Col xs={12}>
+              <div className="bottom-slider-image left-slider slick-top no-arrow">
+                <Slider
+                  {...productDetailSlider(
+                    productState?.product?.product_galleries?.length < 3
+                      ? productState?.product?.product_galleries?.length
+                      : 3
+                  )}
+                  slidesToShow={
+                    productState?.product?.product_galleries?.length < 3
+                      ? productState?.product?.product_galleries?.length
+                      : 3
+                  }
+                  asNavFor={nav1}
+                  ref={(slider) => (slider2.current = slider)}
+                >
+                  {productState?.product?.product_galleries?.map((elem, i) => (
+                    <div key={i}>
+                      <div className="sidebar-image">
+                        <Image
+                          height={130}
+                          width={130}
+                          src={
+                            elem?.original_url?.startsWith("https://")
+                              ? elem?.original_url
+                              : url + elem?.original_url || placeHolderImage
+                          }
+                          className="img-fluid"
+                          alt={elem?.file_name}
+                        />
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </Slider>
-            </div>
-          </Col>
+                  ))}
+                </Slider>
+              </div>
+            </Col>
+          )}
         </Row>
       </div>
     </Col>

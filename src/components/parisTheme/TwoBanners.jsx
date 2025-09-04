@@ -14,9 +14,6 @@ const TwoBanners = ({ dataAPI }) => {
     return 'product/' + product?.slug;
   };
 
-  console.log(dataAPI, "data api");
-  
-
   return (
     <div className='section-t-space section-b-space'>
       <Row className='g-md-4 g-3'>

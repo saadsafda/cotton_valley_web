@@ -29,7 +29,7 @@ const ProductAttribute = ({ productState, setProductState, stickyAddToCart }) =>
       });
     } else {
       // Set First Variant Default
-      for (const attribute of productObj?.attributes) {
+      for (const attribute of productObj?.attributes || []) {
         if (productState.attributeValues?.length && attribute?.attribute_values?.length) {
           for (const value of attribute?.attribute_values) {
             if (productState?.attributeValues?.includes(value?.id)) {
