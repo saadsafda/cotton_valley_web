@@ -21,7 +21,7 @@ const MainHeaderMenu = () => {
     const base = process.env.NEXT_PUBLIC_BASE_URL || "";
     const url = `${base.replace(/\/+$/, "")}`;
     return image
-      ? image.startsWith("https://")
+      ? image.startsWith("http")
         ? image
         : `${url}${image}`
       : placeHolderImage;

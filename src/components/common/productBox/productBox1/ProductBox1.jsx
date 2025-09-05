@@ -11,8 +11,6 @@ import I18NextContext from "@/helper/i18NextContext";
 import ProductBagde from "./ProductBagde";
 import SettingContext from "@/helper/settingContext";
 import { ModifyString } from "@/utils/customFunctions/ModifyString";
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-
 const ProductBox1 = ({
   imgUrl,
   productDetail,
@@ -29,62 +27,77 @@ const ProductBox1 = ({
   // console.log(imgUrl, "Image Url");
 
   return (
-    <div className={`product-box ${classObj?.productBoxClass}`}>
-      <ProductBagde productDetail={productDetail} />
-      {isClose && (
+    <>
+      <div className={`product-box ${classObj?.productBoxClass}`}>
         <div
-          className="product-header-top"
-          onClick={() => handelDelete(productDetail)}
+          style={{
+            backgroundColor:
+              productDetail.stock_status === "out_of_stock" ? "red" : "green",
+            alignItems: "center",
+            textAlign: "center",
+            padding: "4px",
+          }}
         >
-          <Btn className="wishlist-button close_button">
-            <RiCloseLine />
-          </Btn>
+          <div className="">
+            {/* <ProductBox1Rating totalRating={productDetail?.rating_count || 0} /> */}
+            <h6 style={{ color: "white" }}>
+              {ModifyString(productDetail.stock_status, false, "_")}
+            </h6>
+          </div>
         </div>
-      )}
-      <div className="product-image">
-        <Link href={`/${i18Lang}/product/${productDetail?.id}`}>
-          <Avatar
-            data={imgUrl}
-            placeHolder={placeHolderImage}
-            customClass={"img-fluid"}
-            name={productDetail.name}
-            height={500}
-            width={500}
+        <ProductBagde productDetail={productDetail} />
+        {isClose && (
+          <div
+            className="product-header-top"
+            onClick={() => handelDelete(productDetail)}
+          >
+            <Btn className="wishlist-button close_button">
+              <RiCloseLine />
+            </Btn>
+          </div>
+        )}
+        <div className="product-image">
+          <Link href={`/${i18Lang}/product/${productDetail?.id}`}>
+            <Avatar
+              data={imgUrl}
+              placeHolder={placeHolderImage}
+              customClass={"img-fluid"}
+              name={productDetail.name}
+              height={500}
+              width={500}
+            />
+          </Link>
+          <ProductBoxAction
+            productObj={productDetail}
+            listClass="product-option"
           />
-        </Link>
-        <ProductBoxAction
-          productObj={productDetail}
-          listClass="product-option"
-        />
-      </div>
-      <div className="product-detail">
-        <Link href={`/${i18Lang}/product/${productDetail?.id}`}>
-          <h6 className="name" style={{ textAlign: "center" }}>
-            {productDetail.name}
+        </div>
+        <div className="product-detail">
+          <Link href={`/${i18Lang}/product/${productDetail?.id}`}>
+            <h6 className="name" style={{ textAlign: "center" }}>
+              {productDetail.name}
+            </h6>
+            {/* <p dangerouslySetInnerHTML={{ __html: productDetail?.description }} /> */}
+          </Link>
+          <h6 className="unit mt-1" style={{ textAlign: "center" }}>
+            SKU: {productDetail?.sku} | CA{productDetail?.case_pack}
           </h6>
-          {/* <p dangerouslySetInnerHTML={{ __html: productDetail?.description }} /> */}
-        </Link>
-        <h6 className="unit mt-1" style={{ textAlign: "center" }}>
-          SKU: {productDetail?.sku} | CA{productDetail?.case_pack}
-        </h6>
-        <h5 className="sold text-content" style={{ textAlign: "center" }}>
-          <span className="theme-color price">
-            {convertCurrency(
-              parseFloat(productDetail?.price || 0) /
-                parseFloat(productDetail?.case_pack || 1)
-            )}{" "}
-            | {convertCurrency(productDetail?.price)}
-          </span>
-          {/* <del>{convertCurrency(productDetail?.price)}</del> */}
-        </h5>
+          <h5 className="sold text-content" style={{ textAlign: "center" }}>
+            <span className="theme-color price">
+              {convertCurrency(
+                parseFloat(productDetail?.price || 0) /
+                  parseFloat(productDetail?.case_pack || 1)
+              )}{" "}
+              <sup>PCS</sup> | {convertCurrency(productDetail?.price)}{" "}
+              <sup>CA</sup>
+            </span>
+            {/* <del>{convertCurrency(productDetail?.price)}</del> */}
+          </h5>
 
-        {/* <div className='product-rating mt-sm-2 mt-1'>
-          <ProductBox1Rating totalRating={productDetail?.rating_count || 0} />
-          <h6 className='theme-color'>{ModifyString(productDetail.stock_status, false, '_')}</h6>
-        </div> */}
-        {addAction && <ProductBox1Cart productObj={productDetail} />}
+          {addAction && <ProductBox1Cart productObj={productDetail} />}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

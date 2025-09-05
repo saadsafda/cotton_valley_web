@@ -42,7 +42,7 @@ const ParisTheme = () => {
   const makeImageUrl = (image) => {
     // if image is start with https then return image
     return image
-      ? image.startsWith("https://")
+      ? image.startsWith("http")
         ? image
         : `${url}${image}`
       : "";

@@ -66,7 +66,7 @@ const ProductThumbnailSlider = ({ productState }) => {
                           height={580}
                           width={580}
                           src={
-                            elem?.original_url?.startsWith("https://")
+                            elem?.original_url?.startsWith("http")
                               ? elem?.original_url
                               : url + elem?.original_url || placeHolderImage
                           }
@@ -105,7 +105,7 @@ const ProductThumbnailSlider = ({ productState }) => {
                           height={130}
                           width={130}
                           src={
-                            elem?.original_url?.startsWith("https://")
+                            elem?.original_url?.startsWith("http")
                               ? elem?.original_url
                               : url + elem?.original_url || placeHolderImage
                           }

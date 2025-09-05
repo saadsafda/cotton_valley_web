@@ -18,7 +18,7 @@ const Avatar = ({
             className={customImageClass ? customImageClass : ""}
             src={
               data?.original_url
-                ? data?.original_url?.startsWith("https://") || data?.original_url?.startsWith("http://")
+                ? data?.original_url?.startsWith("http")
                   ? data?.original_url
                   : baseUrl + data?.original_url
                 : placeHolder

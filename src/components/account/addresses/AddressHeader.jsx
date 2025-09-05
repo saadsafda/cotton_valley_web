@@ -15,15 +15,19 @@ const AddressHeader = () => {
   const [editAddress, setEditAddress] = useState();
   const [modal, setModal] = useState('');
   const { accountData } = useContext(AccountContext);
+
+  
   useEffect(() => {
-    accountData?.address.length > 0 && setAddressState((prev) => [...accountData?.address]);
+    accountData?.address?.length > 0 && setAddressState((prev) => [...accountData?.address]);
   }, [accountData]);
+
   const addAddress = () => {
     setModal('');
   }
   const editMutate = () => {
     setModal('');
   }
+
   return (
     <>
       <div className='dashboard-address'>

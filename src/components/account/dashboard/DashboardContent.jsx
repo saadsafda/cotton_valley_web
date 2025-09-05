@@ -14,6 +14,7 @@ const DashboardContent = () => {
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, 'common');
   const { accountData } = useContext(AccountContext);
+  
   return (
     <div className='dashboard-home'>
       <AccountHeading title="MyDashboard" /> 

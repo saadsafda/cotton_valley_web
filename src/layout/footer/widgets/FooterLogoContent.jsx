@@ -16,7 +16,7 @@ const FooterLogoContent = () => {
   const pathName = usePathname();
   useEffect(() => {
     let logo = themeOption?.logo?.footer_logo;
-    if (logo && logo?.original_url.startsWith("https://"))
+    if (logo && logo?.original_url.startsWith("http"))
       setLogo({ ...logo, original_url: logo?.original_url });
     else if (logo && logo?.original_url)
       setLogo({

@@ -35,8 +35,8 @@ const ProfileInformation = () => {
                 <tr>
                   <td>{t("Address")} :</td>
                   <td>
-                    {accountData?.address[0]?.street}
-                    {accountData?.address[0]?.city}, {accountData?.address[0]?.state.name}, {accountData?.address[0]?.country.name} {accountData?.address[0]?.pincode}
+                    {accountData?.address?.[0]?.street}
+                    {accountData?.address?.[0]?.city}, {accountData?.address?.[0]?.state.name}, {accountData?.address?.[0]?.country.name} {accountData?.address?.[0]?.pincode}
                   </td>
                 </tr>
               </tbody>

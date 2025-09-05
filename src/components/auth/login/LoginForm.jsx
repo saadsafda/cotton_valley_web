@@ -15,8 +15,8 @@ const LoginForm = () => {
   return (
     <Formik
       initialValues={{
-        email: 'john.customer@example.com',
-        password: '123456789',
+        email: 'saadi@gmail.coom',
+        password: 'Cotton@1234',
       }}
       validationSchema={LogInSchema}
       onSubmit={mutate}>

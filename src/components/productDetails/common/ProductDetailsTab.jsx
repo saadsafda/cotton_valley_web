@@ -13,6 +13,7 @@ const ProductDetailsTab = ({ productState }) => {
     { id: 2, name: "Specifications" },
     // { id: 3, name: 'QA' },
   ];
+  console.log(productState?.product?.description, "Description");
   return (
     <Col xs={12}>
       <div className="product-section-box mt-0">
@@ -25,6 +26,7 @@ const ProductDetailsTab = ({ productState }) => {
 
         <TabContent className="custom-tab" activeTab={activeTab}>
           <TabPane className={activeTab == 1 ? "show active" : ""}>
+            
             <TextLimit value={productState?.product?.description} />
           </TabPane>
 

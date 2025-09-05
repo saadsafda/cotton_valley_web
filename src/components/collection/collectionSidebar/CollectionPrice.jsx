@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { AccordionBody, AccordionHeader, AccordionItem, Input, Label } from 'reactstrap';
-import { filterPrice } from '../../../data/Custom';
+import { filterPrice, filterPCSPrice } from '../../../data/Custom';
 import I18NextContext from '@/helper/i18NextContext';
 import { useCustomSearchParams } from '@/utils/hooks/useCustomSearchParams';
 import { useTranslation } from '@/app/i18n/client';
@@ -44,11 +44,37 @@ const CollectionPrice = ({ filter, setFilter, attributeAPIData }) => {
   return (
     <AccordionItem>
       <AccordionHeader targetId={(attributeAPIData?.length + 2).toString()}>
-        <span>{t('Price')}</span>
+        <span>{t('Price by Case')}</span>
       </AccordionHeader>
       <AccordionBody accordionId={(attributeAPIData?.length + 2).toString()}>
         <ul className='category-list custom-padding custom-height'>
           {filterPrice.map((price, i) => (
+            <li key={i}>
+              <div className='form-check category-list-box'>
+                <Input className='checkbox_animated' type='checkbox' id={`price-${price.id}`} value={price?.value} checked={checkPrice(price?.value)} onChange={applyPrice} />
+                <Label className='form-check-label' htmlFor={`price-${price.id}`}>
+                  {price?.price ? (
+                    <span className='name'>
+                      {price.text} {convertCurrency(price.price)}
+                    </span>
+                  ) : (
+                    <span className='name'>
+                      {convertCurrency(price.minPrice)} - {convertCurrency(price.maxPrice)}
+                    </span>
+                  )}
+                </Label>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </AccordionBody>
+      <br />
+      <AccordionHeader targetId={(attributeAPIData?.length + 2).toString()}>
+        <span>{t('Price by PCS')}</span>
+      </AccordionHeader>
+      <AccordionBody accordionId={(attributeAPIData?.length + 2).toString()}>
+        <ul className='category-list custom-padding custom-height'>
+          {filterPCSPrice.map((price, i) => (
             <li key={i}>
               <div className='form-check category-list-box'>
                 <Input className='checkbox_animated' type='checkbox' id={`price-${price.id}`} value={price?.value} checked={checkPrice(price?.value)} onChange={applyPrice} />

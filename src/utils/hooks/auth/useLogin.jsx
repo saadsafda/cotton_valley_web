@@ -15,6 +15,7 @@ export const LogInSchema = YupObject({
 });
 
 const LoginHandle = (responseData, router, i18Lang, refetch, compareRefetch) => {
+  console.log('Login response received:', responseData);
   if (responseData.status === 200 || responseData.status === 201) {
     Cookies.set('uat', responseData.data?.access_token, { path: '/', expires: new Date(Date.now() + 24 * 60 * 6000) });
     const ISSERVER = typeof window === 'undefined';

@@ -279,7 +279,8 @@
 ==========================**/
 /* Shopping Cart Box */
 .cart-table {
-  background-color: var(--light-gray);
+  background-color: var(--white);
+  border: 1px solid var(--border-color) !important;
   padding: calc(18px + (35 - 18) * ((100vw - 320px) / (1920 - 320))) calc(12px + (25 - 12) * ((100vw - 320px) / (1920 - 320)));
 
   &.cart-table-2 {
