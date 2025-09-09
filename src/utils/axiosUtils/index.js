@@ -43,13 +43,13 @@ const request = async ({ ...options }, router) => {
     }
     router && router.push('/404')
     console.log("error axios-utils", error?.response?.status);
-    return error;
+    throw error;
   };
   try {
     const response = await client(options);
     return onSuccess(response);
   } catch (error) {
-    return onError(error);
+    onError(error);
   }
 };
 

@@ -7,7 +7,7 @@ import I18NextContext from '@/helper/i18NextContext';
 import { useTranslation } from '@/app/i18n/client';
 import { RiBuildingLine, RiMailLine, RiMapPin2Line, RiPhoneLine, RiSmartphoneLine } from 'react-icons/ri';
 
-const ContactLeftSideBox = () => {
+const ContactLeftSideBox = ({data}) => {
   const { themeOption } = useContext(ThemeOptionContext);
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, 'common');
@@ -37,7 +37,7 @@ const ContactLeftSideBox = () => {
                     </div>
 
                     <div className='contact-detail-contain'>
-                      <p>{themeOption?.contact_us?.detail_1?.text}</p>
+                      <p>{data?.phone}</p>
                     </div>
                   </div>
                 </Col>
@@ -52,7 +52,7 @@ const ContactLeftSideBox = () => {
                     </div>
 
                     <div className='contact-detail-contain'>
-                      <p>{themeOption?.contact_us?.detail_2?.text}</p>
+                      <p>{data?.email}</p>
                     </div>
                   </div>
                 </Col>
@@ -63,11 +63,11 @@ const ContactLeftSideBox = () => {
                       <RiMapPin2Line />
                     </div>
                     <div className='contact-detail-title'>
-                      <h4>{themeOption?.contact_us?.detail_3?.label}</h4>
+                      <h4>{data?.location_title}</h4>
                     </div>
 
                     <div className='contact-detail-contain'>
-                      <p>{themeOption?.contact_us?.detail_3?.text}</p>
+                      <p>{data?.location_address}</p>
                     </div>
                   </div>
                 </Col>
@@ -78,11 +78,11 @@ const ContactLeftSideBox = () => {
                       <RiBuildingLine />
                     </div>
                     <div className='contact-detail-title'>
-                      <h4>{themeOption?.contact_us?.detail_4?.label}</h4>
+                      <h4>{data?.office_title}</h4>
                     </div>
 
                     <div className='contact-detail-contain'>
-                      <p>{themeOption?.contact_us?.detail_4?.text}</p>
+                      <p>{data?.office_address}</p>
                     </div>
                   </div>
                 </Col>

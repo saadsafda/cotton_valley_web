@@ -39,8 +39,6 @@ const CollectionProducts = ({ filter, grid }) => {
     select: (data) => data.data,
   });
 
-  console.log(data, "data in collection products");
-
   return (
     <>
       {fetchStatus == "fetching" ? (

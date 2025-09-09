@@ -53,13 +53,8 @@ const ShopCategory = ({ dataAPI }) => {
                       >
                         <Image
                           src={
-                            (elem?.category_image?.original_url.startsWith(
-                              "https://"
-                            )
-                              ? elem?.category_image?.original_url
-                              : elem?.category_image?.original_url
-                              ? baseUrl + elem?.category_image?.original_url
-                              : placeHolderImage) || placeHolderImage
+                            elem?.category_image?.original_url ||
+                            placeHolderImage
                           }
                           className="img-fluid"
                           alt="Shop Category"

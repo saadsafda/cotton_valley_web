@@ -30,6 +30,18 @@ export const clientSectionData = [
     imageIcon: userSvg,
     description: "HappyCustomersDescription",
   },
+  {
+    title: "HappyCustomers",
+    count: "90%",
+    imageIcon: userSvg,
+    description: "HappyCustomersDescription",
+  },
+  {
+    title: "HappyCustomers",
+    count: "90%",
+    imageIcon: userSvg,
+    description: "HappyCustomersDescription",
+  },
 ];
 
 

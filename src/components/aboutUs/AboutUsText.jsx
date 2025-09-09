@@ -4,7 +4,7 @@ import { deliveryData } from '../../data/AboutUs';
 import I18NextContext from '@/helper/i18NextContext';
 import { useTranslation } from '@/app/i18n/client';
 import { useContext } from 'react';
-const AboutUsText = () => {
+const AboutUsText = ({ data }) => {
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, 'common');
   return (
@@ -13,11 +13,11 @@ const AboutUsText = () => {
         <div>
           <div className='review-title'>
             <h4>{t('AboutUs')}</h4>
-            <h2>{t('AboutUsText')}</h2>
+            <h2>{data?.title}</h2>
           </div>
           <div className='delivery-list'>
-            <p className='text-content'>{t('AboutUsParaGraph')}</p>
-            <ul className='delivery-box'>
+            <p className='text-content' dangerouslySetInnerHTML={data?.description ? { __html: data.description } : undefined} />
+            {/* <ul className='delivery-box'>
               {deliveryData.map((data, index) => (
                 <li key={index}>
                   <div className='delivery-box'>
@@ -30,7 +30,7 @@ const AboutUsText = () => {
                   </div>
                 </li>
               ))}
-            </ul>
+            </ul> */}
           </div>
         </div>
       </div>
