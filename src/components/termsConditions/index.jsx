@@ -2,17 +2,11 @@
 import { useEffect, useState } from "react";
 import Breadcrumb from "../common/Breadcrumb";
 import WrapperComponent from "../common/WrapperComponent";
-import AboutUsImage from "./AboutUsImage";
-import AboutUsText from "./AboutUsText";
-import ClientSection from "./ClientSection";
-import CreativeTeam from "./CreativeTeam";
-import OurBlog from "./OurBlog";
-import ReviewSection from "./ReviewSection";
 import OfferBanner from "../parisTheme/OfferBanner";
 import request from "@/utils/axiosUtils";
 import Loader from "@/layout/loader";
 
-const AboutUsContent = () => {
+const TermsAndConditionsContent = () => {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -22,8 +16,8 @@ const AboutUsContent = () => {
     setError(null);
     try {
       const response = await request({
-        method: 'GET',
-        url: '/about',
+        method: "GET",
+        url: "/termsandconditions",
       });
       setData(response.data);
     } catch (err) {
@@ -39,15 +33,22 @@ const AboutUsContent = () => {
       // Cleanup if needed
     };
   }, []);
-  
 
-  if (loading) return <Loader />
+  if (loading) return <Loader />;
   if (error) {
-    return <div style={{ color: 'red' }}>Error: {error.message || 'Failed to load data.'}</div>;
+    return (
+      <div style={{ color: "red" }}>
+        Error: {error.message || "Failed to load data."}
+      </div>
+    );
   }
+
   return (
     <>
-      <Breadcrumb title={"AboutUs"} subNavigation={[{ name: "AboutUs" }]} />
+      <Breadcrumb
+        title={"Shipping & Returns"}
+        subNavigation={[{ name: "Shipping & Returns" }]}
+      />
       <WrapperComponent colProps={{ xs: 12 }}>
         <OfferBanner
           classes={{ customHoverClass: "banner-contain hover-effect" }}
@@ -61,15 +62,10 @@ const AboutUsContent = () => {
         }}
         customCol
       >
-        <AboutUsImage data={data} />
-        <AboutUsText data={data} />
+        <p dangerouslySetInnerHTML={{ __html: data?.details }} />
       </WrapperComponent>
-      {data?.clients && <ClientSection data={data} />}
-      {/* <CreativeTeam /> */}
-      <ReviewSection />
-      {/* <OurBlog /> */}
     </>
   );
 };
 
-export default AboutUsContent;
+export default TermsAndConditionsContent;

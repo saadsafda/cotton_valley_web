@@ -716,31 +716,19 @@ export const headerMenu = [
   },
   {
     id: 8,
-    title: 'Seller',
+    title: 'Information',
     children: [
       {
-        title: 'BecomeSeller',
-        path: '/seller/become-seller',
+        title: 'Privacy Policy',
+        path: '/privacy-policy',
       },
       {
-        title: 'SellerStoresBasic',
-        path: '/seller/stores',
-        params: { layout: 'basic_store' },
+        title: 'Shipping & Returns',
+        path: '/shipping-and-returns',
       },
       {
-        title: 'SellerStoresClassic',
-        path: '/seller/stores',
-        params: { layout: 'classic_store' },
-      },
-      {
-        title: 'SellerDetailsBasic',
-        path: '/seller/stores/fruits-market',
-        params: { layout: 'basic_store_details' },
-      },
-      {
-        title: 'SellerDetailsClassic',
-        path: '/seller/stores/fruits-market',
-        params: { layout: 'classic_store_details' },
+        title: 'Terms & Conditions',
+        path: '/terms-and-conditions',
       },
     ],
   },

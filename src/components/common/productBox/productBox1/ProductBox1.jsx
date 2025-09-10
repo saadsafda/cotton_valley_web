@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Link from "next/link";
 import { RiCloseLine } from "react-icons/ri";
 import ProductBoxAction from "./ProductBox1Action";
@@ -11,6 +11,8 @@ import I18NextContext from "@/helper/i18NextContext";
 import ProductBagde from "./ProductBagde";
 import SettingContext from "@/helper/settingContext";
 import { ModifyString } from "@/utils/customFunctions/ModifyString";
+import getCookie from '@/utils/customFunctions/GetCookie';
+
 const ProductBox1 = ({
   imgUrl,
   productDetail,
@@ -21,10 +23,17 @@ const ProductBox1 = ({
 }) => {
   const { i18Lang } = useContext(I18NextContext);
   const { convertCurrency } = useContext(SettingContext);
+  const [hasToken, setHasToken] = useState(false);
   const handelDelete = (currObj) => {
     setWishlistState((prev) => prev.filter((elem) => elem.id !== currObj?.id));
   };
-  // console.log(imgUrl, "Image Url");
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const token = getCookie('uat');
+      setHasToken(!!token);
+    }
+  }, []);
 
   return (
     <>
@@ -83,14 +92,25 @@ const ProductBox1 = ({
             SKU: {productDetail?.sku} | CA{productDetail?.case_pack}
           </h6>
           <h5 className="sold text-content" style={{ textAlign: "center" }}>
-            <span className="theme-color price">
-              {convertCurrency(
-                parseFloat(productDetail?.price || 0) /
-                  parseFloat(productDetail?.case_pack || 1)
-              )}{" "}
-              <sup>PCS</sup> | {convertCurrency(productDetail?.price)}{" "}
-              <sup>CA</sup>
-            </span>
+            {hasToken ? (
+              <span className="theme-color price">
+                {convertCurrency(
+                  parseFloat(productDetail?.price || 0) /
+                    parseFloat(productDetail?.case_pack || 1)
+                )}{" "}
+                <sup>PCS</sup> | {convertCurrency(productDetail?.price)}{" "}
+                <sup>CA</sup>
+              </span>
+            ) : (
+              <Link href={`/${i18Lang}/auth/login`}>
+                <div
+                  className="btn btn-outline-primary btn-sm"
+                  style={{ margin: '0 auto', display: 'block' }}
+                >
+                  Login to show price
+                </div>
+              </Link>
+            )}
             {/* <del>{convertCurrency(productDetail?.price)}</del> */}
           </h5>
 

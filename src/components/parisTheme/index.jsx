@@ -2,7 +2,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import TopBanner from "./TopBanner";
-import axios from "axios";
 import { HomePageAPI } from "@/utils/axiosUtils/API";
 import request from "@/utils/axiosUtils";
 import NewsLetter from "./NewsLetter";
@@ -33,55 +32,6 @@ const ParisTheme = () => {
       return res?.data?.message || res?.data || {};
     },
   });
-
-  // const [homeSettings, setHomeSettings] = useState({});
-  // const isMounted = useRef(true);
-  const base = process.env.NEXT_PUBLIC_BASE_URL || "";
-  const url = `${base.replace(/\/+$/, "")}`;
-
-  const makeImageUrl = (image) => {
-    // if image is start with https then return image
-    return image
-      ? image.startsWith("http")
-        ? image
-        : `${url}${image}`
-      : "";
-  };
-
-  // const fetchHomeBanners = async () => {
-  //   try {
-  //     const res = await axios.get(
-  //       `${url}/api/method/cotton_valley.api.api.get_home_banners`,
-  //       {
-  //         withCredentials: true,
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Accept: "application/json",
-  //         },
-  //       }
-  //     );
-  //     const payload = res?.data?.message ?? res?.data ?? {};
-  //     if (isMounted.current && payload)
-  //       setHomeSettings({
-  //         ...payload,
-  //         large_image: makeImageUrl(payload?.large_image),
-  //         right_top: makeImageUrl(payload?.right_top),
-  //         right_bottom: makeImageUrl(payload?.right_bottom),
-  //         promotion_banner: makeImageUrl(payload?.promotion_banner),
-  //         promotion_subbanner: makeImageUrl(payload?.promotion_subbanner),
-  //       });
-  //   } catch (e) {
-  //     // keep existing data if fetch fails
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   isMounted.current = true;
-  //   fetchHomeBanners();
-  //   return () => {
-  //     isMounted.current = false;
-  //   };
-  // }, []);
 
   useEffect(() => {
     osakaRefetch();
