@@ -52,7 +52,7 @@ const MainHeaderMenu = () => {
         <MenuList
           menu={menu}
           key={i}
-          customClass={"nav-item dropdown"}
+          customClass={menu?.children ? "nav-item dropdown" : "nav-item"}
           level={0}
           isOpen={isOpen}
           setIsOpen={setIsOpen}

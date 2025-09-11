@@ -1,4 +1,6 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
+import getCookie from '@/utils/customFunctions/GetCookie';
+import Link from 'next/link';
 import I18NextContext from "@/helper/i18NextContext";
 import { useTranslation } from "@/app/i18n/client";
 import ProductBox1Rating from "@/components/common/productBox/productBox1/ProductBox1Rating";
@@ -9,6 +11,15 @@ const ProductDetails = ({ productState }) => {
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, "common");
   const { convertCurrency } = useContext(SettingContext);
+  const [hasToken, setHasToken] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const token = getCookie('uat');
+      setHasToken(!!token);
+    }
+  }, []);
+
   return (
     <>
       <CustomerOrderCount productState={productState} />
@@ -20,33 +31,43 @@ const ProductDetails = ({ productState }) => {
       </h2>
       <div className="price-rating">
         <h3 className="theme-color price" style={{display: "flex", alignItems: "center"}} >
-          <span style={{ color: "black" }}>Price: </span> {" "}{productState?.selectedVariation?.sale_price
-            ? convertCurrency(
-                parseFloat(productState?.selectedVariation?.price || 0) /
-                  parseFloat(productState?.selectedVariation?.case_pack || 1)
-              )
-            : convertCurrency(
-                parseFloat(productState?.product?.price || 0) /
-                  parseFloat(productState?.product?.case_pack || 1)
-              )} <sup>PCS</sup> {" "}
-          <span style={{ color: "black" }}> {" "} | Price: </span> {" "} {productState?.selectedVariation?.sale_price
-            ? convertCurrency(productState?.selectedVariation?.sale_price)
-            : convertCurrency(productState?.product?.sale_price)} <sup>CA</sup>
+          {hasToken ? (
+            <>
+              <span style={{ color: "black" }}>Price: </span> {" "}{productState?.selectedVariation?.sale_price
+                ? convertCurrency(
+                    parseFloat(productState?.selectedVariation?.price || 0) /
+                      parseFloat(productState?.selectedVariation?.case_pack || 1)
+                  )
+                : convertCurrency(
+                    parseFloat(productState?.product?.price || 0) /
+                      parseFloat(productState?.product?.case_pack || 1)
+                  )} <sup>PCS</sup> {" "}
+              <span style={{ color: "black" }}> {" "} |  {" "}  Price: </span> {" "} {productState?.selectedVariation?.sale_price
+                ? convertCurrency(productState?.selectedVariation?.sale_price)
+                : convertCurrency(productState?.product?.sale_price)} <sup>CA</sup>
 
-          {/* <del className="text-content">
-            {productState?.selectedVariation
-              ? convertCurrency(productState?.selectedVariation?.price)
-              : convertCurrency(productState?.product?.price)}
-          </del> */}
-          {productState?.selectedVariation?.discount ||
-          productState?.product?.discount ? (
-            <span className="offer-top">
-              {productState?.selectedVariation
-                ? productState?.selectedVariation?.discount
-                : productState?.product?.discount}
-              % {t("Off")}
-            </span>
-          ) : null}
+              {/* <del className="text-content">
+                {productState?.selectedVariation
+                  ? convertCurrency(productState?.selectedVariation?.price)
+                  : convertCurrency(productState?.product?.price)}
+              </del> */}
+              {productState?.selectedVariation?.discount ||
+              productState?.product?.discount ? (
+                <span className="offer-top">
+                  {productState?.selectedVariation
+                    ? productState?.selectedVariation?.discount
+                    : productState?.product?.discount}
+                  % {t("Off")}
+                </span>
+              ) : null}
+            </>
+          ) : (
+            <Link href={`/${i18Lang}/auth/login`}>
+              <div className="btn btn-outline-primary btn-sm" style={{ margin: '0 auto', display: 'block' }}>
+                Login to show price
+              </div>
+            </Link>
+          )}
         </h3>
         {/* <div className="product-rating custom-rate">
           <ProductBox1Rating

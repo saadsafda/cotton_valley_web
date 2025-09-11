@@ -4,16 +4,24 @@ import { useContext } from "react";
 
 const ProductBagde = ({ productDetail }) => {
   const { i18Lang } = useContext(I18NextContext);
-  const { t } = useTranslation(i18Lang, 'common');
+  const { t } = useTranslation(i18Lang, "common");
   return (
     <>
       {productDetail?.is_sale_enable ? (
-        <div className='label-tag sale-tag'>
+        <div className="label-tag sale-tag">
           <span>{t("Sale")}</span>
         </div>
       ) : productDetail?.is_featured ? (
-        <div className='label-tag'>
+        <div className="label-tag">
           <span>{t("Featured")}</span>
+        </div>
+      ) : productDetail?.new_arrivals ? (
+        <div className="label-tag new-tag">
+          <span>{t("New Arrival")}</span>
+        </div>
+      ) : productDetail?.coming_soon ? (
+        <div className="label-tag coming-tag">
+          <span>{t("Coming Soon")}</span>
         </div>
       ) : null}
     </>

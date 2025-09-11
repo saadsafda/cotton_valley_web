@@ -207,12 +207,6 @@ const RegisterForm = () => {
 
   return (
     <>
-      {/* <AuthHeadings
-        // heading1={"WelcomeToFastkart"}
-        // heading2={"CreateNewAccount"}
-        heading1={"Welcome to Cotton Valley"}
-        heading2={step === 1 ? "CreateNewAccount" : step === 2 ? "Bank Information" : step === 3 ? "References" : "Review & Confirm"}
-      /> */}
       <div className="step-indicator d-flex justify-content-between mb-4">
         {["Basic Info", "Bank Info", "References", "Review"].map((label, index) => {
           const stepNumber = index + 1;
@@ -255,23 +249,6 @@ const RegisterForm = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        // onSubmit={async (values, { resetForm }) => {
-        //   try {
-
-        //     await requestForReal({
-        //       method: "POST",
-        //       url: "/api/method/cotton_valley.api.api.register_customer",
-        //       data: {
-        //         data: values,
-        //       },
-        //     });
-        //     resetForm();
-        //     // navigate to home page
-        //     window.location.href = `/`;
-        //   } catch (err) {
-        //     console.error("Customer creation failed:", err);
-        //   }
-        // }}
         onSubmit={async (values, { resetForm, setSubmitting }) => {
           try {
             if (!values.sales_tax_certificate) {
@@ -295,8 +272,6 @@ const RegisterForm = () => {
                 data: values
               }
             });
-
-            console.log(response, "response");
 
             if (response.data?.message?.status === "success" || response.data?.status === "success") {
               ToastNotification("success", response.data?.message?.message || response.data?.message || "Registered successfully!");
@@ -977,37 +952,29 @@ const RegisterForm = () => {
                   className="btn btn-animation"
                   onClick={async () => {
                     const errors = await validateForm();
-
                     const stepFields = stepFieldsMap[step] || [];
                     const errorKeys = getErrorKeys(errors);
-
-
                     // Check if step has errors
                     const hasStepErrors = errorKeys.some((key) =>
                       stepFields.some((field) => key.startsWith(field))
                     );
-
-
                     if (hasStepErrors) {
                       // Mark only step fields as touched
                       stepFields.forEach((field) => {
-                        // if field is null or undefined, then don't show error
-                        if (values[field] === null || values[field] === undefined) {
-                          return;
-                        }
-                        return
-
-                        // return setFieldTouched(field, true, true);
+                        // if (values[field] === null || values[field] === undefined) {
+                        //   return;
+                        // }
+                        setFieldTouched(field, true, true);
                       });
+                      // Optionally show a toast or error message
+                      ToastNotification("error", "Please fill all required fields for this step.");
                     } else {
-                      // ✅ move forward
                       nextStep();
                     }
                   }}
                 >
                   {step === 3 ? "Save & Review" : "Next"}
                 </Button>
-
               )}
               {step === 4 && (
                 <FormBtn

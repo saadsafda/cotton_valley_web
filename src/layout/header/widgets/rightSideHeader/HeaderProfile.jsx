@@ -52,7 +52,7 @@ const HeaderProfile = () => {
                   customImageClass="img-fluid"
                 />
               ) : (
-                <h3>
+                <h3 className="user-box me-2">
                   {accountData?.name?.charAt(0)?.toString()?.toUpperCase()}
                 </h3>
               )}

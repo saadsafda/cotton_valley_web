@@ -2,7 +2,6 @@ import I18NextContext from '@/helper/i18NextContext';
 import { LogoutAPI } from '@/utils/axiosUtils/API';
 import useCreate from '@/utils/hooks/useCreate';
 import { useTranslation } from '@/app/i18n/client';
-import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { useContext, useState } from 'react';
 import { RiLogoutBoxLine } from 'react-icons/ri';
@@ -21,11 +20,7 @@ const NavTabTitles = ({ classes = {}, activeTab, setActiveTab, titleList, isLogo
       return activeTab == String(index + 1);
     }
   };
-  const { mutate, isLoading } = useCreate(LogoutAPI, false, false, 'Logout Successfully', () => {
-    Cookies.remove('uat');
-    Cookies.remove('ue');
-    Cookies.remove('account');
-    Cookies.remove('CookieAccept');
+  const { mutate, isLoading } = useCreate(LogoutAPI, false, false, 'Logout Successfully', async () => {
     localStorage.removeItem('account');
     localStorage.removeItem('role');
     router.push(`/${i18Lang}/auth/login`);

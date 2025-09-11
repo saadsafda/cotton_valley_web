@@ -7,7 +7,13 @@ acceptLanguage.languages(languages)
 const cookieName = 'i18next'
 
 export async function middleware(request) {
+    // Block auth pages for logged-in users
     const path = request.nextUrl.pathname;
+    const isAuthRoute = /^\/[a-zA-Z-]+\/auth(\/|$)/.test(path);
+    const hasUat = request.cookies.has('uat');
+    if (isAuthRoute && hasUat) {
+        return NextResponse.redirect(new URL(`/`, request.url));
+    }
     let lng
     if (request.cookies.has(cookieName)) lng = acceptLanguage.get(request.cookies.get(cookieName).value)
     if (!lng) lng = acceptLanguage.get(request.headers.get('Accept-Language'))

@@ -13,7 +13,7 @@ const ProductDetailsTab = ({ productState }) => {
     { id: 2, name: "Specifications" },
     // { id: 3, name: 'QA' },
   ];
-  console.log(productState?.product?.description, "Description");
+  // console.log(productState?.product?.description, "Description");
   return (
     <Col xs={12}>
       <div className="product-section-box mt-0">
