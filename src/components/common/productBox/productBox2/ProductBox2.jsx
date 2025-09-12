@@ -38,7 +38,7 @@ const ProductBox2 = ({ elem, rating = true, customImageClass }) => {
               </>
             ) : (
               <Link href={`/${i18Lang}/auth/login`}>
-                <div className="btn btn-outline-primary btn-sm" style={{ margin: '0 auto', display: 'block' }}>
+                <div className="btn btn-outline-primary btn-sm" style={{ margin: '0 auto', display: 'block', backgroundColor: '#FEEFEF', color: '#f6564f' }}>
                   Login to show price
                 </div>
               </Link>

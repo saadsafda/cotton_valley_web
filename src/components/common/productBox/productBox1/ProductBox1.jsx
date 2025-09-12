@@ -50,7 +50,7 @@ const ProductBox1 = ({
           <div className="">
             {/* <ProductBox1Rating totalRating={productDetail?.rating_count || 0} /> */}
             <h6 style={{ color: "white" }}>
-              {ModifyString(productDetail.stock_status, false, "_")}
+              {ModifyString(productDetail.stock_status, false, "_")} {(`(${productDetail.quantity})`)}
             </h6>
           </div>
         </div>
@@ -82,7 +82,7 @@ const ProductBox1 = ({
           />
         </div>
         <div className="product-detail">
-          <Link href={`/${i18Lang}/product/${productDetail?.id}`}>
+          <Link style={{ height: "40px" }} href={`/${i18Lang}/product/${productDetail?.id}`}>
             <h6 className="name" style={{ textAlign: "center" }}>
               {productDetail.name}
             </h6>
@@ -104,8 +104,8 @@ const ProductBox1 = ({
             ) : (
               <Link href={`/${i18Lang}/auth/login`}>
                 <div
-                  className="btn btn-outline-primary btn-sm"
-                  style={{ margin: '0 auto', display: 'block' }}
+                  className="btn btn-primary btn-sm"
+                  style={{ margin: '0 auto', display: 'block', backgroundColor: '#FEEFEF', color: '#f6564f' }}
                 >
                   Login to show price
                 </div>

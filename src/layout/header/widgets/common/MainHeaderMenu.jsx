@@ -31,7 +31,7 @@ const MainHeaderMenu = () => {
     let categoryChildren = [];
     for (let i = 0; i < headerMenu.length; i++) {
       const menu = headerMenu[i];
-      if (menu.title === "Categories") {
+      if (menu.title === "SHOP") {
         for (let j = 0; j < filteredCategories.length; j++) {
           const category = filteredCategories[j];
           categoryChildren.push({

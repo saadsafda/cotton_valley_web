@@ -690,13 +690,13 @@
 
   .label-tag {
     position: absolute;
-    top: 24px;
+    top: 35px;
     left: 0;
     padding: 5px 13px;
     background-color: #ffba00;
     font-size: 14px;
     color: #fff;
-    z-index: 0;
+    z-index: 1;
     font-weight: 500;
 
     body[dir="rtl"] & {

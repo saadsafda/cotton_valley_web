@@ -3,19 +3,18 @@ import WrapperComponent from "@/components/common/WrapperComponent";
 import CollectionSidebar from "../collectionSidebar";
 import MainCollection from "../mainCollection";
 import OfferBanner from "@/components/parisTheme/OfferBanner";
-import ThemeOptionContext from "@/helper/themeOptionsContext";
-import { useContext } from "react";
 
-const MainCollectionSlider = ({ filter, setFilter }) => {
-  const { themeOption } = useContext(ThemeOptionContext);
+const MainCollectionSlider = ({ filter, setFilter, categoryItem }) => {
   return (
     <>
-      <WrapperComponent colProps={{ xs: 12 }}>
-        <OfferBanner
-          classes={{ customHoverClass: "banner-contain hover-effect" }}
-          imgUrl={themeOption?.collection?.collection_banner_image_url}
-        />
-      </WrapperComponent>
+      {categoryItem?.banner_image ? (
+        <WrapperComponent colProps={{ xs: 12 }}>
+          <OfferBanner
+            classes={{ customHoverClass: "banner-contain hover-effect" }}
+            imgUrl={categoryItem?.banner_image}
+          />
+        </WrapperComponent>
+      ) : null}
       <CollectionSlider filter={filter} setFilter={setFilter} />
       <WrapperComponent
         classes={{ sectionClass: "section-b-space shop-section" }}
