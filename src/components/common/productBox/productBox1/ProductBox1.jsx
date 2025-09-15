@@ -35,6 +35,7 @@ const ProductBox1 = ({
     }
   }, []);
 
+
   return (
     <>
       <div className={`product-box ${classObj?.productBoxClass}`}>

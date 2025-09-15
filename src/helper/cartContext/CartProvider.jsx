@@ -6,6 +6,7 @@ import { AddToCartAPI } from '@/utils/axiosUtils/API';
 import request from '@/utils/axiosUtils';
 import { useQuery } from '@tanstack/react-query';
 import ThemeOptionContext from '../themeOptionsContext';
+import axios from 'axios';
 
 const CartProvider = (props) => {
   const isCookie = Cookies.get('uat');
@@ -18,6 +19,30 @@ const CartProvider = (props) => {
     isLoading: getCartLoading,
     refetch,
   } = useQuery({queryKey:[AddToCartAPI],queryFn: () => request({ url: AddToCartAPI }), enabled: false, refetchOnWindowFocus: false, select: (res) => res?.data });  //enabled: false, // <-- disables automatic fetching
+
+  // --- Sales Order Sync ---
+  const syncSalesOrder = async (cartProducts) => {
+    try {
+      const items = cartProducts.map(item => ({
+        item_code: item?.variation?.id || item?.product?.id,
+        qty: item.quantity,
+        rate: item?.variation?.sale_price || item?.product?.sale_price,
+      }));
+
+      console.log(items, "items");
+      
+
+      
+      await request({
+        url: AddToCartAPI,
+        method: 'POST',
+        data: { items },
+      });
+      console.log("Sales Order synced successfully");
+    } catch (err) {
+      console.error("Sales Order sync failed:", err);
+    }
+  };
 
   // Refetching Cart API
   useEffect(() => {
@@ -65,6 +90,7 @@ const CartProvider = (props) => {
   const removeCart = (id, cartId) => {
     const updatedCart = cartProducts?.filter((item) => item.product_id !== id);
     setCartProducts(updatedCart);
+    syncSalesOrder(updatedCart);
   };
 
   // Common Handler for Increment and Decrement
@@ -92,7 +118,11 @@ const CartProvider = (props) => {
         quantity: cloneVariation?.selectedVariation?.productQty ? cloneVariation?.selectedVariation?.productQty : updatedQty,
         sub_total: cloneVariation?.selectedVariation?.sale_price ? updatedQty * cloneVariation?.selectedVariation?.sale_price : updatedQty * productObj?.sale_price,
       };
-      isCookie ? setCartProducts((prev) => [...prev, params]) : setCartProducts((prev) => [...prev, params]);
+      setCartProducts((prev) => {
+        const newCart = [...prev, params];
+        syncSalesOrder(newCart);
+        return newCart;
+      });
     } else {
       // Checking the Stock QTY of particular product
       const productStockQty = cart[index]?.variation?.quantity ? cart[index]?.variation?.quantity : cart[index]?.product?.quantity;
@@ -116,7 +146,8 @@ const CartProvider = (props) => {
           quantity: newQuantity,
           sub_total: newQuantity * (cart[index]?.variation ? cart[index]?.variation?.sale_price : cart[index]?.product?.sale_price),
         };
-        isCookie ? setCartProducts([...cart]) : setCartProducts([...cart]);
+        setCartProducts([...cart]);
+        syncSalesOrder([...cart]);
       }
     }
     // Update the productQty state immediately after updating the cartProducts state
@@ -158,25 +189,17 @@ const CartProvider = (props) => {
       sub_total: cloneVariation?.selectedVariation?.sale_price ? updatedQty * cloneVariation?.selectedVariation?.sale_price : updatedQty * productObj?.sale_price,
     };
 
-    isCookie
-      ? setCartProducts((prevCartProducts) =>
-          prevCartProducts.map((elem) => {
-            if (elem?.product_id === cloneVariation?.selectedVariation?.product_id) {
-              return params;
-            } else {
-              return elem;
-            }
-          }),
-        )
-      : setCartProducts((prevCartProducts) =>
-          prevCartProducts.map((elem) => {
-            if (elem?.product_id === cloneVariation?.selectedVariation?.product_id) {
-              return params;
-            } else {
-              return elem;
-            }
-          }),
-        );
+    setCartProducts((prevCartProducts) => {
+      const newCart = prevCartProducts.map((elem) => {
+        if (elem?.product_id === cloneVariation?.selectedVariation?.product_id) {
+          return params;
+        } else {
+          return elem;
+        }
+      });
+      syncSalesOrder(newCart, customer);
+      return newCart;
+    });
   };
 
   // Setting data to localstorage when UAT is not there
