@@ -29,10 +29,6 @@ const CartProvider = (props) => {
         rate: item?.variation?.sale_price || item?.product?.sale_price,
       }));
 
-      console.log(items, "items");
-      
-
-      
       await request({
         url: AddToCartAPI,
         method: 'POST',

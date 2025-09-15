@@ -60,15 +60,6 @@
                 "can_review": true,
                 "rating_count": 4,
                 "order_amount": 1084.8200000000002,
-                "review_ratings": [
-                    0,
-                    0,
-                    1,
-                    0,
-                    1
-                ],
-                "related_products": [],
-                "cross_sell_products": [],
                 "product_thumbnail": {
                     "id": 83,
                     "collection_name": "attachment",
@@ -97,48 +88,6 @@
                         "created_at": "2023-08-24T12:51:03.000000Z",
                         "updated_at": "2023-08-24T12:51:03.000000Z",
                         "original_url": "https://react.pixelstrap.net/fastkart/assets/blog.png"
-                    },
-                    {
-                        "id": 81,
-                        "collection_name": "attachment",
-                        "name": "Pear_2",
-                        "file_name": "Pear_2.png",
-                        "mime_type": "image/png",
-                        "disk": "public",
-                        "conversions_disk": "public",
-                        "size": "74336",
-                        "created_by_id": "1",
-                        "created_at": "2023-08-24T12:51:03.000000Z",
-                        "updated_at": "2023-08-24T12:51:03.000000Z",
-                        "original_url": "https://react.pixelstrap.net/fastkart/assets/blog.png"
-                    },
-                    {
-                        "id": 82,
-                        "collection_name": "attachment",
-                        "name": "Pear_3",
-                        "file_name": "Pear_3.png",
-                        "mime_type": "image/png",
-                        "disk": "public",
-                        "conversions_disk": "public",
-                        "size": "72358",
-                        "created_by_id": "1",
-                        "created_at": "2023-08-24T12:51:03.000000Z",
-                        "updated_at": "2023-08-24T12:51:03.000000Z",
-                        "original_url": "https://react.pixelstrap.net/fastkart/assets/product.png"
-                    },
-                    {
-                        "id": 83,
-                        "collection_name": "attachment",
-                        "name": "Pear_4",
-                        "file_name": "Pear_4.png",
-                        "mime_type": "image/png",
-                        "disk": "public",
-                        "conversions_disk": "public",
-                        "size": "66015",
-                        "created_by_id": "1",
-                        "created_at": "2023-08-24T12:51:03.000000Z",
-                        "updated_at": "2023-08-24T12:51:03.000000Z",
-                        "original_url": "https://react.pixelstrap.net/fastkart/assets/product.png"
                     }
                 ],
                 "product_meta_image": {

@@ -678,11 +678,11 @@ header {
             }
 
             button {
-              background-color: #ffa53b;
+              background-color: #f6564f;
               color: #ffffff;
               padding: 14px 20px;
               border-radius: 5px;
-              border: 1px solid #ffa53b;
+              border: 1px solid #f6564f;
 
               body[dir='rtl'] & {
                 border-radius: 5px 0 0 5px !important;
@@ -1461,7 +1461,7 @@ header {
           p {
             span {
               &.price {
-                color: #ffa53b;
+                color: #f6564f;
               }
             }
           }
@@ -1470,7 +1470,7 @@ header {
 
             .progress-bar,
             i {
-              background-color: #ffa53b;
+              background-color: #f6564f;
             }
           }
         }

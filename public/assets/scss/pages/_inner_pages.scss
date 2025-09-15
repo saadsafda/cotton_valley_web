@@ -4213,7 +4213,7 @@
         $height: 3px);
       bottom: calc(-7px + (6 - 7) * ((100vw - 320px) / (1920 - 320)));
       left: 0;
-      background: #ffa53b;
+      background: #f6564f;
     }
 
     &.center {
@@ -6985,7 +6985,7 @@
 .deactivate-box {
   padding: 15px 22px;
   background: rgba(255, 165, 59, 0.1);
-  border: 1px dashed #ffa53b;
+  border: 1px dashed #f6564f;
   border-radius: 7px;
   display: flex;
   flex-wrap: nowrap;

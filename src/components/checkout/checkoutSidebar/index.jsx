@@ -60,7 +60,7 @@ const CheckoutSidebar = ({ values, setFieldValue }) => {
               <h4 className='price'>{checkoutData?.total?.tax_total ? convertCurrency(checkoutData?.total?.tax_total) : t(`NotCalculatedYet`)}</h4>
             </li>
 
-            <PointWallet values={values} setFieldValue={setFieldValue} checkoutData={checkoutData} />
+            {/* <PointWallet values={values} setFieldValue={setFieldValue} checkoutData={checkoutData} /> */}
 
             <ApplyCoupon setFieldValue={setFieldValue} setStoreCoupon={setStoreCoupon} storeCoupon={storeCoupon} />
 

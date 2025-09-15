@@ -28,6 +28,7 @@ import ReviewStep from "./ReviewStep";
 import AuthHeadings from "../common/AuthHeadings";
 import { RiCheckFill } from "react-icons/ri";
 import { ToastNotification } from "@/utils/customFunctions/ToastNotification";
+import StepBasicInfo from "./StepBasicInfo";
 
 const RegisterForm = () => {
   const { i18Lang } = useContext(I18NextContext);
@@ -203,47 +204,60 @@ const RegisterForm = () => {
     return keys;
   };
 
-
-
   return (
     <>
       <div className="step-indicator d-flex justify-content-between mb-4">
-        {["Basic Info", "Bank Info", "References", "Review"].map((label, index) => {
-          const stepNumber = index + 1;
-          const isCompleted = step > stepNumber;   // completed steps
-          const isActive = step === stepNumber;    // current step
+        {["Basic Info", "Bank Info", "References", "Review"].map(
+          (label, index) => {
+            const stepNumber = index + 1;
+            const isCompleted = step > stepNumber; // completed steps
+            const isActive = step === stepNumber; // current step
 
-          return (
-            <div key={index} className="text-center flex-fill position-relative">
+            return (
               <div
-                className={`rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center 
-            ${isCompleted ? "bg-success text-white"
-                    : isActive ? "bg-primary text-white"
-                      : "bg-light border"} `}
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  fontWeight: "bold",
-                }}
+                key={index}
+                className="text-center flex-fill position-relative"
               >
-                {isCompleted ? <RiCheckFill /> : stepNumber}
-              </div>
-              <small
-                className={`d-block ${isActive ? "fw-bold text-primary" : isCompleted ? "text-success" : "text-muted"}`}
-              >
-                {label}
-              </small>
-              {/* connector line */}
-              {index < 3 && (
                 <div
-                  className={`position-absolute top-50 start-100 translate-middle-y w-100 border-top 
+                  className={`rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center 
+            ${
+              isCompleted
+                ? "bg-success text-white"
+                : isActive
+                ? "bg-primary text-white"
+                : "bg-light border"
+            } `}
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {isCompleted ? <RiCheckFill /> : stepNumber}
+                </div>
+                <small
+                  className={`d-block ${
+                    isActive
+                      ? "fw-bold text-primary"
+                      : isCompleted
+                      ? "text-success"
+                      : "text-muted"
+                  }`}
+                >
+                  {label}
+                </small>
+                {/* connector line */}
+                {index < 3 && (
+                  <div
+                    className={`position-absolute top-50 start-100 translate-middle-y w-100 border-top 
               ${isCompleted ? "border-success" : "border-muted"}`}
-                  style={{ zIndex: -1 }}
-                />
-              )}
-            </div>
-          );
-        })}
+                    style={{ zIndex: -1 }}
+                  />
+                )}
+              </div>
+            );
+          }
+        )}
       </div>
 
       <Formik
@@ -259,27 +273,34 @@ const RegisterForm = () => {
 
             let response;
 
-            console.log(
-              values.sales_tax_certificate,
-              "sales_tax_certificate"
-            );
-
+            console.log(values.sales_tax_certificate, "sales_tax_certificate");
 
             response = await requestForReal({
               method: "POST",
               url: "/api/method/cotton_valley.api.api.register_customer",
               data: {
-                data: values
-              }
+                data: values,
+              },
             });
 
-            if (response.data?.message?.status === "success" || response.data?.status === "success") {
-              ToastNotification("success", response.data?.message?.message || response.data?.message || "Registered successfully!");
+            if (
+              response.data?.message?.status === "success" ||
+              response.data?.status === "success"
+            ) {
+              ToastNotification(
+                "success",
+                response.data?.message?.message ||
+                  response.data?.message ||
+                  "Registered successfully!"
+              );
               const fileFormData = new FormData();
               fileFormData.append("file", values.sales_tax_certificate);
               fileFormData.append("folder", "Home/Attachments");
               fileFormData.append("doctype", "Customer");
-              fileFormData.append("customer", response.data?.message?.customer_id);
+              fileFormData.append(
+                "customer",
+                response.data?.message?.customer_id
+              );
               fileFormData.append("is_private", 0);
 
               let fileResponse = await requestForReal({
@@ -291,395 +312,30 @@ const RegisterForm = () => {
               resetForm();
               window.location.href = `/`;
             } else {
-              ToastNotification("error", response.response?.data?.message || response.data?.message?.message || response.data?.message || "Something went wrong");
+              ToastNotification(
+                "error",
+                response.response?.data?.message ||
+                  response.data?.message?.message ||
+                  response.data?.message ||
+                  "Something went wrong"
+              );
             }
           } catch (err) {
             console.error("Customer creation failed:", err);
-            ToastNotification("error", err.response?.data?.message || err.message || "Server error");
+            ToastNotification(
+              "error",
+              err.response?.data?.message || err.message || "Server error"
+            );
           } finally {
             setSubmitting(false);
           }
         }}
-
       >
-        {({ values, setFieldValue, validateForm, setFieldTouched }) => (
+        {({ values, setFieldValue, validateForm, setFieldTouched, formikProps }) => (
           <Form className="row g-md-4 g-3">
             {/* Name fields */}
             {step === 1 && (
-              <>
-                <Col md={6}>
-                  <SimpleInputField
-                    nameList={[
-                      {
-                        name: "first_name",
-                        placeholder: t("EnterFirstName"),
-                        title: "First Name",
-                        label: "First Name *",
-                      },
-                    ]}
-                  />
-                </Col>
-                <Col md={6}>
-                  <SimpleInputField
-                    nameList={[
-                      {
-                        name: "last_name",
-                        placeholder: t("EnterLastName"),
-                        title: "Last Name",
-                        label: "Last Name *",
-                      },
-                    ]}
-                  />
-                </Col>
-                <ColumnSimpleInputField
-                  nameList={[
-                    {
-                      name: "email",
-                      placeholder: t("EmailAddress"),
-                      title: "Email",
-                      label: "Email Address *",
-                    },
-                    {
-                      name: "cell_phone",
-                      placeholder: t("CellPhone"),
-                      title: "Cell Phone",
-                      label: "Cell Phone",
-                    },
-                  ]}
-                />
-                <Col md={4}>
-                  <div className="country-input">
-                    <SearchableSelectInput
-                      nameList={[
-                        {
-                          name: "country_code",
-                          notitle: "true",
-                          inputprops: {
-                            name: "country_code",
-                            id: "country_code",
-                            options: AllCountryCode,
-                          },
-                        },
-                      ]}
-                    />
-                    <SimpleInputField
-                      nameList={[
-                        {
-                          name: "phone",
-                          type: "number",
-                          placeholder: t("EnterPhoneNumber"),
-                          colclass: "country-input-box",
-                          title: "Phone",
-                          label: "Phone *",
-                        },
-                      ]}
-                    />
-                  </div>
-                </Col>
-                <Col md={6}>
-                  <SimpleInputField
-                    nameList={[
-                      {
-                        name: "password",
-                        placeholder: t("Password"),
-                        type: "password",
-                        title: "Password",
-                        label: "Password *",
-                      },
-                    ]}
-                  />
-                </Col>
-                <Col md={6}>
-                  <SimpleInputField
-                    nameList={[
-                      {
-                        name: "password_confirmation",
-                        type: "password",
-                        placeholder: t("ConfirmPassword"),
-                        title: "Confirm Password",
-                        label: "Confirm Password *",
-                      },
-                    ]}
-                  />
-                </Col>
-                <ColumnSimpleInputField
-                  nameList={[
-                    {
-                      name: "company_name",
-                      placeholder: t("CompanyName"),
-                      title: "Company Name",
-                      label: "Company Name *",
-                    },
-                    {
-                      name: "store_name",
-                      placeholder: t("StoreName"),
-                      title: "Store Name",
-                      label: "Store Name",
-                    },
-                    {
-                      name: "square_footage",
-                      placeholder: t("StoreArea"),
-                      title: "Square Footage",
-                      label: "Square Footage",
-                    },
-                    {
-                      name: "federal_tax_id",
-                      placeholder: t("FederalTaxID"),
-                      title: "Federal Tax ID",
-                      label: "Federal Tax ID",
-                    },
-                    {
-                      name: "website",
-                      placeholder: t("Website"),
-                      title: "Website",
-                      label: "Website",
-                    },
-                    {
-                      name: "manager_name",
-                      placeholder: t("ManagerName"),
-                      title: "Manager Name",
-                      label: "Manager Name",
-                    },
-                    {
-                      name: "manager_number",
-                      placeholder: t("ManagerNumber"),
-                      title: "Manager Number",
-                      label: "Manager Number",
-                    },
-                    {
-                      name: "years_in_business",
-                      placeholder: t("YearsInBusiness"),
-                      title: "Years in Business",
-                      label: "How long (Years)?",
-                    },
-                  ]}
-                />
-                {/* Business Type */}
-                <Col xl={6} xs={12}>
-                  <SelectField
-                    name="business_type"
-                    label="Type of Business"
-                    notitle="true"
-                    inputprops={{
-                      id: "business_type",
-                      name: "business_type",
-                      options: [
-                        { id: "", name: "Select" },
-                        { id: "Retail", name: "Retail" },
-                        { id: "Wholesale", name: "Wholesale" },
-                        { id: "Manufacturing", name: "Manufacturing" },
-                        { id: "Service", name: "Service" },
-                        { id: "E-commerce", name: "E-commerce" },
-                        { id: "Agriculture", name: "Agriculture" },
-                        { id: "Discount Store", name: "Discount Store" },
-                        { id: "Chain Store", name: "Chain Store" },
-                      ],
-                    }}
-                  />
-                </Col>
-
-                {/* How did you hear */}
-                <Col xl={6} xs={12}>
-                  <SelectField
-                    name="hear_about_us"
-                    label="How did you hear about us?"
-                    notitle="true"
-                    inputprops={{
-                      id: "hear_about_us",
-                      name: "hear_about_us",
-                      options: [
-                        { id: "", name: "Select" },
-                        { id: "Colleagues", name: "Colleagues" },
-                        { id: "Social Media", name: "Social Media" },
-                        { id: "Others", name: "Others" },
-                      ],
-                    }}
-                  />
-                </Col>
-
-                {/* Address Section */}
-                <Col xs={12}>
-                  <h4 className="mt-4 mb-3">Address Information</h4>
-                </Col>
-
-                {/* Shipping/Billing Same Checkbox */}
-                <Col xs={12}>
-                  <div className="form-check mb-3">
-                    <Input
-                      className="checkbox_animated check-box"
-                      type="checkbox"
-                      id="shipping_billing_same"
-                      name="shipping_billing_same"
-                      checked={values.shipping_billing_same}
-                      onChange={(e) => {
-                        setFieldValue("shipping_billing_same", e.target.checked);
-                        // Clear billing address when same as shipping
-                        if (e.target.checked) {
-                          setFieldValue("billing_address", {
-                            address_line1: "",
-                            address_line2: "",
-                            city: "",
-                            state: "",
-                            zip: "",
-                            country: "",
-                          });
-                        }
-                      }}
-                    />
-                    <Label
-                      className="form-check-label"
-                      htmlFor="shipping_billing_same"
-                    >
-                      Shipping and billing address are the same
-                    </Label>
-                  </div>
-                </Col>
-
-                {/* Shipping Address */}
-                <Col xs={12}>
-                  <h5 className="mb-3">
-                    {values.shipping_billing_same
-                      ? "Address"
-                      : "Shipping Address"}
-                  </h5>
-                </Col>
-                <Col md={6}>
-                  <SimpleInputField
-                    nameList={[
-                      {
-                        name: "shipping_address.address_line1",
-                        placeholder: t("EnterAddressLine1"),
-                        title: "Address Line 1",
-                        label: "Address Line 1 *",
-                      },
-                    ]}
-                  />
-                </Col>
-                <Col md={6}>
-                  <SimpleInputField
-                    nameList={[
-                      {
-                        name: "shipping_address.address_line2",
-                        placeholder: t("EnterAddressLine2"),
-                        title: "Address Line 2",
-                        label: "Address Line 2 (Optional)",
-                      },
-                    ]}
-                  />
-                </Col>
-                <ColumnSimpleInputField
-                  nameList={[
-                    {
-                      name: "shipping_address.city",
-                      placeholder: t("EnterCity"),
-                      title: "City",
-                      label: "City *",
-                    },
-                    {
-                      name: "shipping_address.state",
-                      placeholder: t("EnterState"),
-                      title: "State",
-                      label: "State *",
-                    },
-                    {
-                      name: "shipping_address.zip",
-                      placeholder: t("EnterZip"),
-                      title: "Zip Code",
-                      label: "Zip Code *",
-                    },
-                  ]}
-                />
-
-                <Col md={6}>
-                  <SelectField
-                    name="shipping_address.country"
-                    placeholder={t("EnterCountry")}
-                    notitle="true"
-                    label="Country *"
-                    inputprops={{
-                      id: "shipping_address.country",
-                      name: "shipping_address.country",
-                      options: countryList
-                        ? countryList.map((cou) => ({
-                          id: cou.name,
-                          name: cou.name,
-                        }))
-                        : [],
-                    }}
-                  />
-                </Col>
-
-                {/* Billing Address (only show if not same as shipping) */}
-                {!values.shipping_billing_same && (
-                  <>
-                    <Col xs={12}>
-                      <h5 className="mb-3 mt-4">Billing Address</h5>
-                    </Col>
-                    <Col md={6}>
-                      <SimpleInputField
-                        nameList={[
-                          {
-                            name: "billing_address.address_line1",
-                            placeholder: t("EnterAddressLine1"),
-                            title: "Address Line 1",
-                            label: "Address Line 1 *",
-                          },
-                        ]}
-                      />
-                    </Col>
-                    <Col md={6}>
-                      <SimpleInputField
-                        nameList={[
-                          {
-                            name: "billing_address.address_line2",
-                            placeholder: t("EnterAddressLine2"),
-                            title: "Address Line 2",
-                            label: "Address Line 2 (Optional)",
-                          },
-                        ]}
-                      />
-                    </Col>
-                    <ColumnSimpleInputField
-                      nameList={[
-                        {
-                          name: "billing_address.city",
-                          placeholder: t("EnterCity"),
-                          title: "City",
-                          label: "City *",
-                        },
-                        {
-                          name: "billing_address.state",
-                          placeholder: t("EnterState"),
-                          title: "State",
-                          label: "State *",
-                        },
-                        {
-                          name: "billing_address.zip",
-                          placeholder: t("EnterZip"),
-                          title: "Zip Code",
-                          label: "Zip Code *",
-                        },
-                      ]}
-                    />
-                    <SelectField
-                      name="billing_address.country"
-                      placeholder={t("EnterCountry")}
-                      notitle="true"
-                      label="Country *"
-                      inputprops={{
-                        id: "billing_address.country",
-                        name: "billing_address.country",
-                        options: countryList
-                          ? countryList.map((cou) => ({
-                            id: cou.name,
-                            name: cou.name,
-                          }))
-                          : [],
-                      }}
-                    />
-                  </>
-                )}
-              </>
+              <StepBasicInfo {...formikProps} countryList={countryList} t={t} />
             )}
 
             {/* Bank Information */}
@@ -902,7 +558,9 @@ const RegisterForm = () => {
 
                 {/* Terms */}
                 <Col xs={12} className="mb-3">
-                  <Label for="sales_tax_certificate">Sales Tax Certificate *</Label>
+                  <Label for="sales_tax_certificate">
+                    Sales Tax Certificate *
+                  </Label>
                   <Input
                     id="sales_tax_certificate"
                     name="sales_tax_certificate"
@@ -942,10 +600,12 @@ const RegisterForm = () => {
               </>
             )}
 
-            {step === 4 && (<ReviewStep values={values} />)}
+            {step === 4 && <ReviewStep values={values} />}
 
             <div className="mt-4 d-flex justify-content-between">
-              {step > 1 && step !== 4 && <Button onClick={prevStep}>Back</Button>}
+              {step > 1 && step !== 4 && (
+                <Button onClick={prevStep}>Back</Button>
+              )}
               {step < 4 && (
                 <Button
                   type="button"
@@ -967,7 +627,10 @@ const RegisterForm = () => {
                         setFieldTouched(field, true, true);
                       });
                       // Optionally show a toast or error message
-                      ToastNotification("error", "Please fill all required fields for this step.");
+                      ToastNotification(
+                        "error",
+                        "Please fill all required fields for this step."
+                      );
                     } else {
                       nextStep();
                     }

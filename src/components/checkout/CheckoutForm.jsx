@@ -32,7 +32,7 @@ const CheckoutForm = () => {
                       <DeliveryAddress key='billing' type='billing' title={'BillingAddress'} values={values} updateId={values['consumer_id']} setFieldValue={setFieldValue} address={address} modal={modal} mutate={addAddress} setModal={setModal}
                       />
                       <DeliveryOptions values={values} setFieldValue={setFieldValue} />
-                      <PaymentOptions values={values} setFieldValue={setFieldValue} />
+                      {/* <PaymentOptions values={values} setFieldValue={setFieldValue} /> */}
                     </ul>
                   </div>
                 </div>

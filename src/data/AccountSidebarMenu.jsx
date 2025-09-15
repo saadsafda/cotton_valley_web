@@ -20,18 +20,18 @@ export const sidebarMenu = [
     id: 'bank-details',
     path: '/account/bank-details',
   },
-  {
-    title: 'MyWallet',
-    icon: <RiWalletLine />,
-    id: 'wallet',
-    path: '/account/wallet',
-  },
-  {
-    title: 'EarningPoints',
-    icon: <RiCoinLine />,
-    id: 'point',
-    path: '/account/point',
-  },
+  // {
+  //   title: 'MyWallet',
+  //   icon: <RiWalletLine />,
+  //   id: 'wallet',
+  //   path: '/account/wallet',
+  // },
+  // {
+  //   title: 'EarningPoints',
+  //   icon: <RiCoinLine />,
+  //   id: 'point',
+  //   path: '/account/point',
+  // },
   {
     title: 'MyOrders',
     icon: <RiFileTextLine />,
