@@ -11,7 +11,7 @@ const MainCollectionSlider = ({ filter, setFilter, categoryItem }) => {
         <WrapperComponent colProps={{ xs: 12 }}>
           <OfferBanner
             classes={{ customHoverClass: "banner-contain hover-effect" }}
-            imgUrl={categoryItem?.banner_image}
+            imgUrl={categoryItem?.banner_image?.original_url}
           />
         </WrapperComponent>
       ) : null}
