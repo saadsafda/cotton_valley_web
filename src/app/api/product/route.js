@@ -7,6 +7,14 @@ export async function GET(request) {
     const cookieStore = await cookies();
     const authToken = cookieStore.get("uat")?.value;
 
+    let headers = {
+        "Content-Type": "application/json",
+    }
+    if (authToken) {
+        headers["Cookie"] = `sid=${authToken}`;
+        headers["Authorization"] = `token ${authToken}`;
+    }
+
     const searchParams = request?.nextUrl?.searchParams;
 
     const ids = searchParams.get("ids");
@@ -23,11 +31,7 @@ export async function GET(request) {
 
     const response = await fetch(`${url}?${params.toString()}`, {
         method: "GET",
-        headers: {
-            "Cookie": `sid=${authToken}`,
-            "Content-Type": "application/json",
-            "Authorization": `token ${authToken}`,
-        },
+        headers: headers,
     });
     // const response = await fetch(`${url}`);
 
