@@ -9,7 +9,7 @@ import NewsLetterModal from './newsLetter';
 import RecentPurchase from './recentPurchase';
 import StickyCompare from './StickyCompare';
 import TapTop from './tapTop';
-import ExitModal from './exitModal';
+// import ExitModal from './exitModal';
 import Cookies from 'js-cookie';
 
 const SubLayout = ({ children }) => {
@@ -53,7 +53,7 @@ const SubLayout = ({ children }) => {
       <StickyCompare />
       <RecentPurchase />
       {!isNewsLetter && <NewsLetterModal />}
-      <ExitModal />
+      {/* <ExitModal /> */}
     </>
   );
 };
