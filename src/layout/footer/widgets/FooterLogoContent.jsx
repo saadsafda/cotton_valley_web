@@ -45,7 +45,7 @@ const FooterLogoContent = () => {
           {themeOption?.footer?.footer_about && (
             <p>{themeOption?.footer?.footer_about}</p>
           )}
-          <ul className="address">
+          {/* <ul className="address">
             {themeOption?.footer?.about_address && (
               <li>
                 <RiHomeLine />
@@ -65,7 +65,7 @@ const FooterLogoContent = () => {
                 </Link>
               </li>
             )}
-          </ul>
+          </ul> */}
         </div>
       </div>
     </Col>
