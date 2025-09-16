@@ -483,6 +483,7 @@ const RegisterForm = () => {
                       placeholder: t("CellPhone"),
                       title: "Cell Phone",
                       label: "Cell Phone",
+                      type: "number",
                     },
                   ]}
                 />
@@ -566,6 +567,7 @@ const RegisterForm = () => {
                       placeholder: t("FederalTaxID"),
                       title: "Federal Tax ID",
                       label: "Federal Tax ID",
+                      type: "number",
                     },
                     {
                       name: "website",
@@ -728,6 +730,7 @@ const RegisterForm = () => {
                       placeholder: t("EnterZip"),
                       title: "Zip Code",
                       label: "Zip Code *",
+                      type: "number",
                     },
                   ]}
                 />
@@ -800,6 +803,7 @@ const RegisterForm = () => {
                           placeholder: t("EnterZip"),
                           title: "Zip Code",
                           label: "Zip Code *",
+                          type: "number",
                         },
                       ]}
                     />
@@ -870,12 +874,14 @@ const RegisterForm = () => {
                       placeholder: t("EnterBankPhone"),
                       title: "Bank Phone",
                       label: "Bank Phone *",
+                      type: "number",
                     },
                     {
                       name: "bank_fax",
                       placeholder: t("EnterFax"),
                       title: "Fax",
                       label: "Fax",
+                      type: "number",
                     },
                     {
                       name: "bank_city",
@@ -888,6 +894,7 @@ const RegisterForm = () => {
                       placeholder: t("EnterZip"),
                       title: "Zip Code",
                       label: "Zip Code",
+                      type: "number",
                     },
                     {
                       name: "bank_state",
@@ -986,18 +993,21 @@ const RegisterForm = () => {
                           placeholder: t("EnterZip"),
                           title: "Zip Code",
                           label: "Zip Code *",
+                          type: "number",
                         },
                         {
                           name: `references[${index}].phone`,
                           placeholder: t("EnterPhone"),
                           title: "Phone",
                           label: "Phone *",
+                          type: "number",
                         },
                         {
                           name: `references[${index}].fax`,
                           placeholder: t("EnterFax"),
                           title: "Fax",
                           label: "Fax *",
+                          type: "number",
                         },
                       ]}
                     />
