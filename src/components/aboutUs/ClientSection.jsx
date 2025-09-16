@@ -12,8 +12,8 @@ const ClientSection = ({data}) => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
   const getImageUrl = (img) => {
     if (!img?.original_url) return '';
-    if (img.original_url.startsWith('http')) return img.original_url;
-    return baseUrl + img.original_url;
+    if (img?.original_url?.startsWith('http')) return img?.original_url;
+    return baseUrl + img?.original_url;
   };
 
   return (
@@ -41,14 +41,14 @@ const ClientSection = ({data}) => {
         }
       `}</style>
       <div className='client-grid'>
-        {(data?.clients || []).map((data, index) => (
+        {(data?.clients || []).map((item, index) => (
           <div className='clint-contain' key={index}>
             <div className='client-icon' style={{ marginBottom: '1rem' }}>
-              <Image height={79.06} width={58.5} src={getImageUrl(data?.image_icon)} alt='client-icon' />
+              <Image height={79.06} width={58.5} src={getImageUrl(item?.image_icon)} alt='client-icon' />
             </div>
-            <h2 style={{ margin: 0 }}>{data?.count}</h2>
-            <h4 style={{ margin: '0.5rem 0' }}>{t(data?.title)}</h4>
-            <p style={{ margin: 0 }}>{t(data?.description)}</p>
+            <h2 style={{ margin: 0 }}>{item?.count}</h2>
+            <h4 style={{ margin: '0.5rem 0' }}>{t(item?.title)}</h4>
+            <p style={{ margin: 0 }}>{t(item?.description)}</p>
           </div>
         ))}
       </div>

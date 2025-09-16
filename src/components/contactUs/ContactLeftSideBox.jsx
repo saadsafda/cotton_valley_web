@@ -15,11 +15,11 @@ const ContactLeftSideBox = ({data}) => {
     <Col lg={6}>
       <div className='left-sidebar-box'>
         <Row>
-          <Col xl={12}>
+          {/* <Col xl={12}>
             <div className='contact-image'>
               <Image src={themeOption?.contact_us?.imageUrl || contactUsImage} className='img-fluid' alt='contact' height={461} width={386} />
             </div>
-          </Col>
+          </Col> */}
           <Col xl={12}>
             <div className='contact-title'>
               <h3>{t('GetInTouch')}</h3>

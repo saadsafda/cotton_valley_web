@@ -23,7 +23,6 @@ export const requestForReal = async ({ ...options }, router) => {
       router && router.push("/403")
     }
     router && router.push('/404')
-    console.log("error axios-utils", error?.response?.status);
     return error;
   };
   try {
@@ -42,7 +41,6 @@ const request = async ({ ...options }, router) => {
       router && router.push("/403")
     }
     router && router.push('/404')
-    console.log("error axios-utils", error?.response?.status);
     throw error;
   };
   try {

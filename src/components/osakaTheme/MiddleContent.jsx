@@ -90,6 +90,7 @@ const MiddleContent = ({ dataAPI }) => {
             noCustomClass={true}
             customSliderOption={osakaFullSlider}
             classObj={{ productStyle: 'product-modern', productBoxClass: '' }}
+            isHeadingVisible={false}
           />
         </WrapperComponent>
       )}

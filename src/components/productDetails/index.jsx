@@ -5,26 +5,26 @@ import Loader from '@/layout/loader';
 import request from '@/utils/axiosUtils';
 import { ProductAPI } from '@/utils/axiosUtils/API';
 import Breadcrumb from '../common/Breadcrumb';
-import Product4Image from './product4Image';
+// import Product4Image from './product4Image';
 import RelatedProduct from './common/RelatedProduct';
 import ProductThumbnail from './productThumbnail';
-import ProductSlider from './productSlider';
-import ProductSticky from './productSticky';
-import ThemeOptionContext from '@/helper/themeOptionsContext';
+// import ProductSlider from './productSlider';
+// import ProductSticky from './productSticky';
+// import ThemeOptionContext from '@/helper/themeOptionsContext';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ProductIdsContext from '@/helper/productIdsContext';
 import StickyCheckout from './common/stickyCheckout';
 
 const ProductDetailContent = ({ params }) => {
   const router = useRouter();
-  const { themeOption } = useContext(ThemeOptionContext);
+  // const { themeOption } = useContext(ThemeOptionContext);
   const { setGetProductIds, isLoading: productLoader } = useContext(ProductIdsContext);
   const searchParams = useSearchParams();
-  const queryProductLayout = searchParams.get('layout');
+  // const queryProductLayout = searchParams.get('layout');
   // Getting Product Layout
-  const isProductLayout = useMemo(() => {
-    return queryProductLayout ? queryProductLayout : themeOption?.product?.product_layout ?? 'product_thumbnail';
-  }, [queryProductLayout, themeOption]);
+  // const isProductLayout = useMemo(() => {
+  //   return queryProductLayout ? queryProductLayout : themeOption?.product?.product_layout ?? 'product_thumbnail';
+  // }, [queryProductLayout, themeOption]);
 
   const [productState, setProductState] = useState({ product: [], attributeValues: [], productQty: 1, selectedVariation: '', variantIds: [] });
 
@@ -73,17 +73,18 @@ const ProductDetailContent = ({ params }) => {
 
   if (isLoading) return <Loader />;
 
-  const showProductLayout = {
-    product_thumbnail: <ProductThumbnail productState={productState} setProductState={setProductState} />,
-    product_images: <Product4Image productState={productState} setProductState={setProductState} />,
-    product_sticky: <ProductSticky productState={productState} setProductState={setProductState} />,
-    product_slider: <ProductSlider productState={productState} setProductState={setProductState} />,
-    product_accordion: <ProductThumbnail productState={productState} setProductState={setProductState} customTab={true} />,
-  };
+  // const showProductLayout = {
+  //   product_thumbnail: <ProductThumbnail productState={productState} setProductState={setProductState} />,
+  //   product_images: <Product4Image productState={productState} setProductState={setProductState} />,
+  //   product_sticky: <ProductSticky productState={productState} setProductState={setProductState} />,
+  //   product_slider: <ProductSlider productState={productState} setProductState={setProductState} />,
+  //   product_accordion: <ProductThumbnail productState={productState} setProductState={setProductState} customTab={true} />,
+  // };
   return (
     <>
       <Breadcrumb title={ProductData?.name || params} subNavigation={[{ name: 'Product' }, { name: params }]} />
-      {showProductLayout[isProductLayout]}
+      {/* {showProductLayout[isProductLayout]} */}
+      <ProductThumbnail productState={productState} setProductState={setProductState} />
       {productState?.product?.related_products?.length > 0 && <RelatedProduct productState={productState} />}
       {ProductData && <StickyCheckout ProductData={ProductData} isLoading={isLoading} />}
     </>

@@ -23,10 +23,10 @@ const ProductBox1 = ({
 }) => {
   const { i18Lang } = useContext(I18NextContext);
   const { convertCurrency } = useContext(SettingContext);
-  const [hasToken, setHasToken] = useState(false);
   const handelDelete = (currObj) => {
     setWishlistState((prev) => prev.filter((elem) => elem.id !== currObj?.id));
   };
+  const [hasToken, setHasToken] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {

@@ -34,7 +34,6 @@ const CartProvider = (props) => {
         method: 'POST',
         data: { items },
       });
-      console.log("Sales Order synced successfully");
     } catch (err) {
       console.error("Sales Order sync failed:", err);
     }

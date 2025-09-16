@@ -10,8 +10,6 @@ const Pagination = ({ current_page, total, per_page, setPage }) => {
     i <= totalPages && pages.push(i);
   }
 
-  console.log("current_page, total, per_page, totalPages, pages", current_page, total, per_page, totalPages, pages);
-  
   return (
     <>
       {total / per_page > 1 ? (

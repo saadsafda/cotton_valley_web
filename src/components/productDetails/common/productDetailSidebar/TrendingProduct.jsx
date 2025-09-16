@@ -1,24 +1,37 @@
-import { useContext, useEffect, useMemo } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import I18NextContext from '@/helper/i18NextContext';
-import request from '@/utils/axiosUtils';
-import { ProductAPI } from '@/utils/axiosUtils/API';
-import { useTranslation } from '@/app/i18n/client';
-import { useQuery } from '@tanstack/react-query';
-import SettingContext from '@/helper/settingContext';
+import { useContext, useEffect, useMemo, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import I18NextContext from "@/helper/i18NextContext";
+import request from "@/utils/axiosUtils";
+import { ProductAPI } from "@/utils/axiosUtils/API";
+import { useTranslation } from "@/app/i18n/client";
+import { useQuery } from "@tanstack/react-query";
+import SettingContext from "@/helper/settingContext";
+import getCookie from "@/utils/customFunctions/GetCookie";
 
 const TrendingProduct = ({ productState }) => {
   const { i18Lang } = useContext(I18NextContext);
-  const { t } = useTranslation(i18Lang, 'common');
+  const { t } = useTranslation(i18Lang, "common");
   const { convertCurrency } = useContext(SettingContext);
+  const [hasToken, setHasToken] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const token = getCookie("uat");
+      setHasToken(!!token);
+    }
+  }, []);
+
   const categoryId = useMemo(() => {
     return productState?.product?.categories?.map((elem) => elem?.id);
   }, [productState?.product?.categories]);
-  const {
-    data: productData,
-    refetch: productRefetch,
-  } = useQuery({queryKey: [categoryId], queryFn: () => request({ url: ProductAPI, params: { status: 1, trending: 1, category: categoryId?.join() } }),
+  const { data: productData, refetch: productRefetch } = useQuery({
+    queryKey: [categoryId],
+    queryFn: () =>
+      request({
+        url: ProductAPI,
+        params: { status: 1, trending: 1, category: categoryId?.join() },
+      }),
     enabled: false,
     refetchOnWindowFocus: false,
     select: (data) => data.data,
@@ -28,27 +41,66 @@ const TrendingProduct = ({ productState }) => {
   }, [categoryId]);
   if (productData?.length == 0) return null;
   return (
-    <div className='pt-25'>
-      <div className='category-menu'>
-        <h3>{t('TrendingProducts')}</h3>
+    <div className="pt-25">
+      <div className="category-menu">
+        <h3>{t("TrendingProducts")}</h3>
 
-        <ul className='product-list product-right-sidebar border-0 p-0'>
+        <ul className="product-list product-right-sidebar border-0 p-0">
           {productData?.slice(0, 4)?.map((elem, i) => (
             <li key={i}>
-              <div className='offer-product'>
-                <Link href={`/${i18Lang}/product/${elem?.slug}`} className='offer-image'>
-                  {elem?.product_thumbnail?.original_url && <Image src={elem?.product_thumbnail?.original_url} className='img-fluid' alt={elem?.name} height={80} width={80} />}
+              <div className="offer-product">
+                <Link
+                  href={`/${i18Lang}/product/${elem?.slug}`}
+                  className="offer-image"
+                >
+                  {elem?.product_thumbnail?.original_url && (
+                    <Image
+                      src={elem?.product_thumbnail?.original_url}
+                      className="img-fluid"
+                      alt={elem?.name}
+                      height={80}
+                      width={80}
+                    />
+                  )}
                 </Link>
 
-                <div className='offer-detail'>
+                <div className="offer-detail">
                   <div>
                     <Link href={`/${i18Lang}/product/${elem?.slug}`}>
-                      <h6 className='name'>{elem?.name}</h6>
+                      <h6 className="name">{elem?.name}</h6>
                     </Link>
                     <span>{elem?.unit}</span>
-                    <div className='vertical-price'>
-                      <h5 className='price theme-color'>
-                        {convertCurrency(elem?.sale_price)} <del className='text-content'>{convertCurrency(elem?.price)}</del>
+                    <div className="vertical-price">
+                      <h5 className="price theme-color">
+                        {/* {convertCurrency(elem?.sale_price)}{" "}
+                        <del className="text-content">
+                          {convertCurrency(elem?.price)}
+                        </del> */}
+                        {hasToken ? (
+                          <span className="theme-color price">
+                            {convertCurrency(
+                              parseFloat(elem?.price || 0) /
+                                parseFloat(elem?.case_pack || 1)
+                            )}{" "}
+                            <sup>PCS</sup> |{" "}
+                            {convertCurrency(elem?.price)}{" "}
+                            <sup>CA</sup>
+                          </span>
+                        ) : (
+                          <Link href={`/${i18Lang}/auth/login`}>
+                            <div
+                              className="btn btn-primary btn-sm"
+                              style={{
+                                margin: "0 auto",
+                                display: "block",
+                                backgroundColor: "#FEEFEF",
+                                color: "#f6564f",
+                              }}
+                            >
+                              Login to show price
+                            </div>
+                          </Link>
+                        )}
                       </h5>
                     </div>
                   </div>

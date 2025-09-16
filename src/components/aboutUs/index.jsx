@@ -22,8 +22,8 @@ const AboutUsContent = () => {
     setError(null);
     try {
       const response = await request({
-        method: 'GET',
-        url: '/about',
+        method: "GET",
+        url: "/about",
       });
       setData(response.data);
     } catch (err) {
@@ -39,21 +39,26 @@ const AboutUsContent = () => {
       // Cleanup if needed
     };
   }, []);
-  
 
-  if (loading) return <Loader />
+  if (loading) return <Loader />;
   if (error) {
-    return <div style={{ color: 'red' }}>Error: {error.message || 'Failed to load data.'}</div>;
+    return (
+      <div style={{ color: "red" }}>
+        Error: {error.message || "Failed to load data."}
+      </div>
+    );
   }
   return (
     <>
       <Breadcrumb title={"AboutUs"} subNavigation={[{ name: "AboutUs" }]} />
-      <WrapperComponent colProps={{ xs: 12 }}>
-        <OfferBanner
-          classes={{ customHoverClass: "banner-contain hover-effect" }}
-          imgUrl={data?.banner_image?.original_url}
-        />
-      </WrapperComponent>
+      {data?.banner_image?.original_url && (
+        <WrapperComponent colProps={{ xs: 12 }}>
+          <OfferBanner
+            classes={{ customHoverClass: "banner-contain hover-effect" }}
+            imgUrl={data?.banner_image?.original_url}
+          />
+        </WrapperComponent>
+      )}
       <WrapperComponent
         classes={{
           sectionClass: "fresh-vegetable-section section-lg-space",
