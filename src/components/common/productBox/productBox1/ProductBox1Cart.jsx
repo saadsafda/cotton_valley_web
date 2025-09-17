@@ -1,17 +1,17 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Input, InputGroup } from 'reactstrap';
-import { useTranslation } from '@/app/i18n/client';
-import Btn from '@/elements/buttons/Btn';
-import I18NextContext from '@/helper/i18NextContext';
-import CartContext from '@/helper/cartContext';
-import VariationModal from './variationModal';
-import { RiAddLine, RiSubtractLine } from 'react-icons/ri';
+import React, { useContext, useEffect, useMemo, useState } from "react";
+import { Input, InputGroup } from "reactstrap";
+import { useTranslation } from "@/app/i18n/client";
+import Btn from "@/elements/buttons/Btn";
+import I18NextContext from "@/helper/i18NextContext";
+import CartContext from "@/helper/cartContext";
+import VariationModal from "./variationModal";
+import { RiAddLine, RiSubtractLine } from "react-icons/ri";
 
 const ProductBox1Cart = ({ productObj }) => {
   const { cartProducts, handleIncDec } = useContext(CartContext);
-  const [variationModal, setVariationModal] = useState('');
+  const [variationModal, setVariationModal] = useState("");
   const { i18Lang } = useContext(I18NextContext);
-  const { t } = useTranslation(i18Lang, 'common');
+  const { t } = useTranslation(i18Lang, "common");
   const [productQty, setProductQty] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const getSelectedVariant = useMemo(() => {
@@ -19,7 +19,9 @@ const ProductBox1Cart = ({ productObj }) => {
   }, [cartProducts]);
   useEffect(() => {
     if (cartProducts.length > 0) {
-      const foundProduct = cartProducts.find((elem) => elem.product_id === productObj.id);
+      const foundProduct = cartProducts.find(
+        (elem) => elem.product_id === productObj.id
+      );
       if (foundProduct) {
         setIsOpen(true);
         setProductQty(foundProduct.quantity); // Use the quantity from the found product directly
@@ -35,37 +37,109 @@ const ProductBox1Cart = ({ productObj }) => {
 
   return (
     <>
-      <div className='add-to-cart-box'>
+      <div className="add-to-cart-box">
         <Btn
-          className='btn-add-cart addcart-button'
-          disabled={productObj?.stock_status !== 'in_stock' ? true : false}
+          className="btn-add-cart addcart-button"
+          disabled={productObj?.stock_status !== "in_stock" ? true : false}
           onClick={() => {
-            productObj?.stock_status == 'in_stock' && productObj?.type === 'classified' ? setVariationModal(productObj?.id) : handleIncDec(1, productObj, productQty, setProductQty, setIsOpen);
-          }}>
-          {productObj?.stock_status == 'in_stock' ? (
+            productObj?.stock_status == "in_stock" &&
+            productObj?.type === "classified"
+              ? setVariationModal(productObj?.id)
+              : handleIncDec(
+                  1,
+                  productObj,
+                  productQty,
+                  setProductQty,
+                  setIsOpen
+                );
+          }}
+        >
+          {productObj?.stock_status == "in_stock" ? (
             <>
-              {t('Add')}
-              <span className='add-icon'>
-                <RiAddLine/>
+              {t("Add")}
+              <span className="add-icon">
+                <RiAddLine />
               </span>
             </>
           ) : (
-            t('SoldOut')
+            t("SoldOut")
           )}
         </Btn>
-        <div className={`cart_qty qty-box ${isOpen && productQty >= 1 ? 'open' : ''}`}>
+        <div
+          className={`cart_qty qty-box ${
+            isOpen && productQty >= 1 ? "open" : ""
+          }`}
+        >
           <InputGroup>
-            <Btn type='button' className='qty-left-minus' onClick={() => handleIncDec(-1, productObj, productQty, setProductQty, setIsOpen, getSelectedVariant ? getSelectedVariant : null)}>
-              <RiSubtractLine/>
+            <Btn
+              type="button"
+              className="qty-left-minus"
+              onClick={() =>
+                handleIncDec(
+                  -1,
+                  productObj,
+                  productQty,
+                  setProductQty,
+                  setIsOpen,
+                  getSelectedVariant ? getSelectedVariant : null
+                )
+              }
+            >
+              <RiSubtractLine />
             </Btn>
-            <Input className='form-control input-number qty-input' type='text' name='quantity' value={productQty} readOnly />
-            <Btn type='button' className='qty-right-plus' onClick={() => handleIncDec(1, productObj, productQty, setProductQty, setIsOpen, getSelectedVariant ? getSelectedVariant : null)}>
-              <RiAddLine/>
+            <div style={{ display: "flex", alignItems: "center", marginLeft: "2px" }}>
+              {parseFloat(productObj?.case_pack || 1) * productQty}<sub>pcs</sub>
+            </div>
+            <Input
+              className="form-control input-number qty-input"
+              type="number"
+              name="quantity"
+              value={productQty}
+              onChange={(e) => {
+                let val = parseInt(e.target.value, 10);
+
+                // Prevent invalid numbers
+                if (isNaN(val) || val < 0) {
+                  val = 0;
+                }
+
+                setProductQty(val);
+
+                // Optional: directly sync with cart context
+                handleIncDec(
+                  val - (getSelectedVariant ? getSelectedVariant.quantity : 0),
+                  productObj,
+                  getSelectedVariant ? getSelectedVariant.quantity : 0,
+                  setProductQty,
+                  setIsOpen,
+                  getSelectedVariant ? getSelectedVariant : null
+                );
+              }}
+            />
+            <Btn
+              type="button"
+              className="qty-right-plus"
+              onClick={() =>
+                handleIncDec(
+                  1,
+                  productObj,
+                  productQty,
+                  setProductQty,
+                  setIsOpen,
+                  getSelectedVariant ? getSelectedVariant : null
+                )
+              }
+            >
+              <RiAddLine />
             </Btn>
           </InputGroup>
         </div>
       </div>
-      <VariationModal setVariationModal={setVariationModal} variationModal={variationModal} productObj={productObj} />
+      <VariationModal
+        setVariationModal={setVariationModal}
+        variationModal={variationModal}
+        productObj={productObj}
+      />
     </>
   );
 };

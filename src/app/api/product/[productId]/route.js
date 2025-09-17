@@ -1,26 +1,24 @@
-// import { NextResponse } from 'next/server';
-// import product from '../product.json'
-
-// export async function GET(_, { params }) {
-//     const productId = params.productId
-
-//     const productObj = product.data?.find((elem) => elem.slug == productId)
-
-//     return NextResponse.json(productObj)
-// }
-
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function GET(request, { params }) {
     const productId = params.productId;
+    // Read token from cookies
+    const cookieStore = await cookies();
+    const authToken = cookieStore.get("uat")?.value;
+
+    let headers = {
+        "Content-Type": "application/json",
+    }
+    if (authToken) {
+        headers["Cookie"] = `sid=${authToken}`;
+        headers["Authorization"] = `token ${authToken}`;
+    }
 
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/method/cotton_valley.api.products.get_product?product_id=${productId}`;
 
     const response = await fetch(url, {
-        headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-        },
+        headers: headers,
         cache: "no-store", // avoid caching
     });
 

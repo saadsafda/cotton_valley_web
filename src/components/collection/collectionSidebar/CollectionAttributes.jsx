@@ -1,10 +1,25 @@
-import { usePathname, useRouter } from 'next/navigation';
-import { AccordionBody, AccordionHeader, AccordionItem, Input, Label } from 'reactstrap';
-import { useCustomSearchParams } from '@/utils/hooks/useCustomSearchParams';
+import { usePathname, useRouter } from "next/navigation";
+import {
+  AccordionBody,
+  AccordionHeader,
+  AccordionItem,
+  Input,
+  Label,
+} from "reactstrap";
+import { useCustomSearchParams } from "@/utils/hooks/useCustomSearchParams";
 
 const CollectionAttributes = ({ attributeAPIData, filter, setFilter }) => {
   const router = useRouter();
-  const [category, subcategory, price, rating, sortBy, field, layout] = useCustomSearchParams(['category', 'subcategory', 'price', 'rating', 'sortBy', 'field', 'layout']);
+  const [category, subcategory, price, rating, sortBy, field, layout] =
+    useCustomSearchParams([
+      "category",
+      "subcategory",
+      "price",
+      "rating",
+      "sortBy",
+      "field",
+      "layout",
+    ]);
   const pathname = usePathname();
   const checkAttribute = (slug) => {
     if (filter?.attribute?.indexOf(slug) != -1) {
@@ -26,39 +41,77 @@ const CollectionAttributes = ({ attributeAPIData, filter, setFilter }) => {
       };
     });
     if (temp.length > 0) {
-      const queryParams = new URLSearchParams({ ...category, ...subcategory, ...price, ...rating, ...sortBy, ...field, ...layout, attribute: temp }).toString();
+      const queryParams = new URLSearchParams({
+        ...category,
+        ...subcategory,
+        ...price,
+        ...rating,
+        ...sortBy,
+        ...field,
+        ...layout,
+        attribute: temp,
+      }).toString();
       router.push(`${pathname}?${queryParams}`);
     } else {
-      const queryParams = new URLSearchParams({ ...category, ...subcategory, ...price, ...rating, ...sortBy, ...field, ...layout }).toString();
+      const queryParams = new URLSearchParams({
+        ...category,
+        ...subcategory,
+        ...price,
+        ...rating,
+        ...sortBy,
+        ...field,
+        ...layout,
+      }).toString();
       router.push(`${pathname}?${queryParams}`);
     }
   };
   return (
     <>
-      {attributeAPIData?.length > 0 &&
-        attributeAPIData?.map((attribute, i) => (
-          <AccordionItem key={i}>
-            <AccordionHeader targetId={(i + 2).toString()}>
-              <span>{attribute?.name}</span>
-            </AccordionHeader>
-            {attribute?.attribute_values?.length > 0 &&
-              attribute?.attribute_values.map((value, index) => (
-                <AccordionBody accordionId={(i + 2).toString()} key={index}>
-                  <ul className='category-list custom-padding'>
-                    <li>
-                      <div className='form-check m-0 category-list-box'>
-                        <Input className='checkbox_animated' type='checkbox' value={value?.slug} id={value?.value} checked={checkAttribute(value?.slug)} onChange={applyAttribute} />
-                        <Label className='form-check-label color-label-box' htmlFor={value?.value}>
-                          {attribute?.style === 'color' && <div className='color-box' style={{ backgroundColor: value?.hex_color }}></div>}
-                          <span className='name'>{value?.value}</span>
-                        </Label>
-                      </div>
-                    </li>
-                  </ul>
-                </AccordionBody>
-              ))}
-          </AccordionItem>
-        ))}
+      <AccordionItem>
+        <AccordionHeader>
+          <span>Availability</span>
+        </AccordionHeader>
+        <AccordionBody>
+          <ul className="category-list custom-padding">
+            <li>
+              <div className="form-check m-0 category-list-box">
+                <Input
+                  className="checkbox_animated"
+                  type="checkbox"
+                  value="in_stock"
+                  id="in_stock"
+                  checked={checkAttribute("in_stock")}
+                  onChange={applyAttribute}
+                />
+                <Label
+                  className="form-check-label color-label-box"
+                  htmlFor="in_stock"
+                >
+                  <span className="name">In Stock</span>
+                </Label>
+              </div>
+            </li>
+            <li>
+              <div className="form-check m-0 category-list-box">
+                <Input
+                  className="checkbox_animated"
+                  type="checkbox"
+                  value="out_stock"
+                  id="out_stock"
+                  checked={checkAttribute("out_stock")}
+                  onChange={applyAttribute}
+                />
+                <Label
+                  className="form-check-label color-label-box"
+                  htmlFor="out_stock"
+                >
+                  <span className="name">Out Stock</span>
+                </Label>
+              </div>
+            </li>
+          </ul>
+        </AccordionBody>
+      </AccordionItem>
     </>
   );
 };

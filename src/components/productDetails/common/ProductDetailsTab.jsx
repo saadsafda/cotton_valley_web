@@ -39,7 +39,7 @@ const ProductDetailsTab = ({ productState }) => {
                     array={[
                       {
                         heading: "Sub Category",
-                        value: productState?.product?.sub_category,
+                        value: productState?.product?.sub_category_name,
                       },
                       {
                         heading: "Item Length",

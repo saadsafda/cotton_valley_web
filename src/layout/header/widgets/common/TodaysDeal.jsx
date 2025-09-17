@@ -5,6 +5,7 @@ import HeaderDealModal from './HeaderDealModal';
 import I18NextContext from '@/helper/i18NextContext';
 import { useTranslation } from '@/app/i18n/client';
 import { RiFlashlightLine } from 'react-icons/ri';
+import Link from 'next/link';
 
 const TodaysDeal = () => {
   const { themeOption } = useContext(ThemeOptionContext);
@@ -16,13 +17,13 @@ const TodaysDeal = () => {
       {themeOption?.header?.today_deals?.length > 0 && (
         <>
           <div className='header-nav-right'>
-            <Btn className='btn deal-button' onClick={() => setModal(true)}>
+            <Link className='btn deal-button' href={`/${i18Lang}/lead`}>
               {/* <RiFlashlightLine /> */}
               <span>Purchasing more than $5000</span>
               {/* <span>{t('DealToday')}</span> */}
-            </Btn>
+            </Link>
           </div>
-          <HeaderDealModal modal={modal} setModal={setModal} data={themeOption?.header?.today_deals} />
+          {/* <HeaderDealModal modal={modal} setModal={setModal} data={themeOption?.header?.today_deals} /> */}
         </>
       )}
     </>

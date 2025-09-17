@@ -5,12 +5,15 @@ import { useCustomSearchParams } from '@/utils/hooks/useCustomSearchParams';
 import { useTranslation } from '@/app/i18n/client';
 import { RiCloseLine } from 'react-icons/ri';
 import { ModifyString } from '@/utils/customFunctions/ModifyString';
+import CategoryContext from '@/helper/categoryContext';
 
 const CollectionFilter = ({ filter, setFilter }) => {
   const router = useRouter();
   const [layout] = useCustomSearchParams(['layout']);
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, 'common');
+  const { filterCategory } = useContext(CategoryContext);
+  const categoryData = filterCategory('product');
   const [selectedFilters, setSelectedFilters] = useState([]);
   const pathname = usePathname();
   const splitFilter = (filterKey) => {
@@ -23,8 +26,29 @@ const CollectionFilter = ({ filter, setFilter }) => {
     price: splitFilter('price'),
     rating: splitFilter('rating'),
   };
+  // Helper to get category name by id
+  const getCategoryName = (id) => {
+    const cat = categoryData?.find(c => c.id === id || c.slug === id);
+    return cat?.name || id;
+  };
+  // Helper to get subcategory name by id
+  const getSubcategoryName = (id) => {
+    for (const cat of categoryData || []) {
+      const sub = cat.subcategories?.find(s => s.id === id || s.slug === id);
+      if (sub) return sub.name;
+    }
+    return id;
+  };
   const mergeFilter = () => {
-    setSelectedFilters([...filterObj['category'], ...filterObj['subcategory'], ...filterObj['attribute'], ...filterObj['price'], ...filterObj['rating'].map((val) => (val.startsWith('rating ') ? val : `rating ${val}`))]);
+    const categoryNames = filterObj['category'].map(getCategoryName);
+    const subcategoryNames = filterObj['subcategory'].map(getSubcategoryName);
+    setSelectedFilters([
+      ...categoryNames,
+      ...subcategoryNames,
+      ...filterObj['attribute'],
+      ...filterObj['price'],
+      ...filterObj['rating'].map((val) => (val.startsWith('rating ') ? val : `rating ${val}`))
+    ]);
   };
   useEffect(() => {
     mergeFilter();
@@ -55,6 +79,8 @@ const CollectionFilter = ({ filter, setFilter }) => {
     setFilter({ category: [], subcategory: [], attribute: [], price: [], rating: [] });
     router.push(pathname);
   };
+  console.log(categoryData, "checinf");
+  
   if (selectedFilters.length <= 0) return null;
   return (
     <div className='filter-category'>

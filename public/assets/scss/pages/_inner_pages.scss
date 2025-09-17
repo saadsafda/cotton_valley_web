@@ -2244,7 +2244,7 @@
       }
 
       img {
-        width: 60%;
+        width: 100%;
 
         @include breakpoints.mq-max(xl) {
           width: 77%;
@@ -4534,10 +4534,10 @@
 }
 
 .review-section {
-  background-color: var(--light-gray);
+  background-color: var(--white);
 
   .reviewer-box {
-    background-color: var(--white);
+    background-color: var(--light-gray);
     padding: calc(18px + (34 - 18) * ((100vw - 320px) / (1920 - 320)));
     border-radius: 10px;
     z-index: 0;

@@ -21,7 +21,12 @@ const ProductInformation = ({ productState }) => {
             {productState?.selectedVariation?.upc_code ? ModifyString(productState?.selectedVariation?.upc_code, false, '_') : ModifyString(productState?.product?.upc_code, false, '_')}
           </li>
           <li>{t("Carton UPC")} : {productState?.selectedVariation?.carton_upc ?? productState?.product?.carton_upc} </li>
-          {/* <li>{t("Date")} : {dateFormat(productState?.product?.created_at, true)}</li> */}
+          <li>
+              {t("Quantity")} :{" "}
+              {productState?.selectedVariation?.quantity ??
+                productState?.product?.quantity}{" "}
+              {t("ItemsLeft")}
+            </li>
         </ul>
       </div>
     </div>

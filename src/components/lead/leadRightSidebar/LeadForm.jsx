@@ -12,35 +12,42 @@ import {
   phoneSchema,
 } from "@/utils/validation/ValidationSchemas";
 import {
+  RiBuilding2Fill,
   RiChat2Fill,
+  RiHome2Fill,
   RiMailFill,
+  RiPinDistanceFill,
   RiSmartphoneLine,
   RiUserFill,
 } from "react-icons/ri";
+import SelectField from "@/components/common/inputFields/SelectField";
 import request from "@/utils/axiosUtils";
 
-const ContactUsForm = () => {
+const LeadForm = () => {
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, "common");
   return (
     <Formik
       initialValues={{
         name: "",
+        company_name: "",
         email: "",
         phone: "",
-        subject: "",
-        message: "",
+        square_footage: "",
+        address: "",
+        business_type: "",
       }}
       validationSchema={YupObject({
         name: nameSchema,
+        company_name: nameSchema,
         email: emailSchema,
         phone: phoneSchema,
-        subject: nameSchema,
-        message: nameSchema,
+        address: nameSchema,
+        business_type: nameSchema,
       })}
       onSubmit={(values, { resetForm }) =>
         request({
-          url: "/contact",
+          url: "/lead",
           method: "POST",
           data: values,
         }).then(() => {
@@ -59,7 +66,15 @@ const ContactUsForm = () => {
                   toplabel: "Full Name",
                   inputaddon: "true",
                   prefixvalue: <RiUserFill />,
-                  colprops: { xs: 12 },
+                  colprops: { xxl: 6, lg: 12, sm: 6 },
+                },
+                {
+                  name: "company_name",
+                  placeholder: t("Enter Company Name"),
+                  toplabel: "Company Name",
+                  inputaddon: "true",
+                  prefixvalue: <RiBuilding2Fill />,
+                  colprops: { xxl: 6, lg: 12, sm: 6 },
                 },
                 {
                   name: "email",
@@ -79,31 +94,54 @@ const ContactUsForm = () => {
                   colprops: { xxl: 6, lg: 12, sm: 6 },
                 },
                 {
-                  name: "subject",
-                  placeholder: t("EnterSubject"),
-                  toplabel: "Subject",
+                  name: "square_footage",
+                  placeholder: t("Enter Square Footage"),
+                  toplabel: "Square Footage",
                   inputaddon: "true",
                   prefixvalue: <RiUserFill />,
                   colprops: { xs: 12 },
                 },
                 {
-                  name: "message",
-                  placeholder: t("EnterYourMessage"),
-                  toplabel: "Message",
+                  name: "address",
+                  placeholder: t("Enter Your Office Address"),
+                  toplabel: "Address",
                   inputaddon: "true",
-                  prefixvalue: <RiChat2Fill />,
+                  prefixvalue: <RiPinDistanceFill />,
                   colprops: { xs: 12 },
                   type: "textarea",
                   rows: 5,
                 },
               ]}
             />
+            <div className="col-12">
+              <SelectField
+                name="business_type"
+                label="Type of Business"
+                notitle="true"
+                inputprops={{
+                  id: "business_type",
+                  toplabel: "Business Type",
+                  name: "business_type",
+                  options: [
+                    { id: "", name: "Select" },
+                    { id: "Retail", name: "Retail" },
+                    { id: "Wholesale", name: "Wholesale" },
+                    { id: "Manufacturing", name: "Manufacturing" },
+                    { id: "Service", name: "Service" },
+                    { id: "E-commerce", name: "E-commerce" },
+                    { id: "Agriculture", name: "Agriculture" },
+                    { id: "Discount Store", name: "Discount Store" },
+                    { id: "Chain Store", name: "Chain Store" },
+                  ],
+                }}
+              />
+            </div>
           </Row>
           <Btn
             className="btn btn-animation btn-md fw-bold ms-auto"
             type="submit"
           >
-            {t("SendMessage")}
+            {t("Submit")}
           </Btn>
         </Form>
       )}
@@ -111,4 +149,4 @@ const ContactUsForm = () => {
   );
 };
 
-export default ContactUsForm;
+export default LeadForm;

@@ -23,10 +23,11 @@ export async function GET(request) {
     const sortBy = searchParams.get("sortBy");
     const search = searchParams.get("search");
     const page = searchParams.get("page");
+    const attribute = searchParams.get("attribute");
     // console.log(product_ids, "search Params checking");
 
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/method/cotton_valley.api.products.get_all_products`;
-    const params = new URLSearchParams({ ids, category, subcategory, sortBy, search, page });
+    const params = new URLSearchParams({ ids, category, subcategory, sortBy, search, page, attribute });
 
 
     const response = await fetch(`${url}?${params.toString()}`, {

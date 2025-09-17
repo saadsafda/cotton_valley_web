@@ -7,15 +7,15 @@ export async function POST(request) {
             company_name,
             phone,
             square_footage,
-            email, } = await request.json();
+            email, address } = await request.json();
         const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/method/cotton_valley.api.lead.create_lead`;
-
+            
         const response = await fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ name, email, phone, company_name, business_type, square_footage }),
+            body: JSON.stringify({ name, company_name, email, phone, square_footage, address, business_type }),
         });
 
         if (!response.ok) {

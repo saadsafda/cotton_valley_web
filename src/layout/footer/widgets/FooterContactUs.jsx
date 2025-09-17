@@ -6,7 +6,7 @@ import FooterSupportEmail from "./FooterSupportEmail";
 import FooterSupportNumber from "./FooterSupportNumber";
 import I18NextContext from "@/helper/i18NextContext";
 import { useTranslation } from "@/app/i18n/client";
-import { RiHomeLine, RiMailLine } from "react-icons/ri";
+import { RiHome5Line, RiHomeLine, RiMailLine } from "react-icons/ri";
 import Link from "next/link";
 
 const FooterContactUs = () => {
@@ -28,7 +28,7 @@ const FooterContactUs = () => {
           {themeOption?.footer?.about_address && (
             <li>
               <div className="footer-number">
-                <RiHomeLine />
+                <RiHome5Line style={{ fontSize: "30px"}} />
                 <div className="contact-number">
                   <Link href="https://www.google.com/maps" target="_blank">
                     {themeOption?.footer?.about_address}
