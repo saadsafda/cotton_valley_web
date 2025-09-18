@@ -746,8 +746,8 @@ const RegisterForm = () => {
                       name: "shipping_address.country",
                       options: countryList
                         ? countryList.map((cou) => ({
-                            id: cou.name,
-                            name: cou.name,
+                            id: cou.id,
+                            name: cou.id,
                           }))
                         : [],
                     }}
@@ -817,8 +817,8 @@ const RegisterForm = () => {
                         name: "billing_address.country",
                         options: countryList
                           ? countryList.map((cou) => ({
-                              id: cou.name,
-                              name: cou.name,
+                              id: cou.id,
+                              name: cou.id,
                             }))
                           : [],
                       }}

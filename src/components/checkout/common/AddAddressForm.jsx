@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import I18NextContext from '@/helper/i18NextContext';
 import request from '@/utils/axiosUtils';
 import { CountryAPI } from '@/utils/axiosUtils/API';
-import { YupObject, nameSchema, phoneSchema } from '@/utils/validation/ValidationSchemas';
+import { YupObject, emailSchema, nameSchema, phoneSchema } from '@/utils/validation/ValidationSchemas';
 import { useTranslation } from '@/app/i18n/client';
 import SelectForm from './SelectForm';
 
@@ -22,15 +22,17 @@ const AddAddressForm = ({ mutate, type, editAddress, setEditAddress, modal, setM
   return (
     <Formik
       initialValues={{
+        id: editAddress ? editAddress?.id : '',
         title: editAddress ? editAddress?.title : '',
         street: editAddress ? editAddress?.street : '',
-        country_id: editAddress ? editAddress?.country_id : '',
-        state_id: editAddress ? editAddress?.state_id : '',
+        country_id: editAddress ? editAddress?.country?.id : '',
+        state_id: editAddress ? editAddress?.state?.id : '',
         city: editAddress ? editAddress?.city : '',
         pincode: editAddress ? editAddress?.pincode : '',
         phone: editAddress ? editAddress?.phone : '',
-        type: type ? type : null,
-        country_code: editAddress ? editAddress?.country_code : '91',
+        address_type: editAddress ? editAddress?.address_type : null,
+        country_code: editAddress ? editAddress?.country_code : '1',
+        address_type: editAddress ? editAddress?.address_type : '',
       }}
       validationSchema={YupObject({
         title: nameSchema,
@@ -40,6 +42,7 @@ const AddAddressForm = ({ mutate, type, editAddress, setEditAddress, modal, setM
         state_id: nameSchema,
         pincode: nameSchema,
         phone: phoneSchema,
+        address_type: nameSchema,
       })}
       onSubmit={(values) => {
         if (modal) {
