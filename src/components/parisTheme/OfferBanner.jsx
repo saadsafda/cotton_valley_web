@@ -3,6 +3,7 @@ import Link from 'next/link';
 import RatioImage from '@/utils/RatioImage';
 import I18NextContext from '@/helper/i18NextContext';
 import ProductIdsContext from '@/helper/productIdsContext';
+import Image from 'next/image';
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
 
@@ -26,7 +27,7 @@ const OfferBanner = ({ classes = {}, imgUrl, ratioImage, customRatioClass = '', 
     ratioImage ? (
       <RatioImage src={getImageUrl()} className={`bg-img ${customRatioClass}`} alt="banner" />
     ) : (
-      <img src={getImageUrl()} className={`img-fluid ${customRatioClass}`} alt="banner" />
+      <Image src={getImageUrl()} className={`img-fluid ${customRatioClass}`} alt="banner" />
     );
 
   return (
