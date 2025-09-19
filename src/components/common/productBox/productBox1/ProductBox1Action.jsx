@@ -4,10 +4,8 @@ import AddToCompare from '../AddToCompare';
 
 const ProductBoxAction = ({ productObj,listClass }) => {
   return (
-    <ul className={listClass}>
+    <ul className={listClass} style={{justifyContent: 'center'}}>
       <QuickView productObj={productObj} />
-      {/* <AddToCompare productObj={productObj} /> */}
-      {/* <AddToWishlist productObj={productObj} /> */}
     </ul>
   );
 };

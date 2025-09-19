@@ -22,7 +22,7 @@ const LeftSideModal = ({ cloneVariation, productObj }) => {
         <Slider asNavFor={nav2} ref={(slider) => (slider1.current = slider)}>
           {cloneVariation?.product?.product_galleries?.map((item, i) => (
             <div className='slider-image' key={i}>
-              <Image src={item ? item?.original_url || item : placeHolderImage} className='img-fluid' alt={cloneVariation?.product?.item_code} width={500} height={500} />
+              <Image src={item ? item?.original_url || item : placeHolderImage} className='img-fluid' alt={cloneVariation?.product?.item_code ?? "image"} width={500} height={500} />
             </div>
           ))}
         </Slider>
@@ -32,7 +32,7 @@ const LeftSideModal = ({ cloneVariation, productObj }) => {
           {cloneVariation?.product?.product_galleries?.map((item, i) => (
             <div className='slider-image' key={i}>
               <div className="thumbnail-image">
-                <Image src={item ? item?.original_url || item : placeHolderImage} className='img-fluid' alt={cloneVariation?.product?.name} width={500} height={500} />
+                <Image src={item ? item?.original_url || item : placeHolderImage} className='img-fluid' alt={cloneVariation?.product?.name ?? "image"} width={500} height={500} />
               </div>
             </div>
           ))}

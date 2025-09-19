@@ -33,7 +33,7 @@ const DashboardContent = () => {
               <Image src={wallerSvg} alt='wallerSvg' height={60} width={60} />
               <div className='total-detail'>
                 <h5>{t('Sale Rep Name')}</h5>
-                <h3>{Number(accountData?.wallet ? accountData?.wallet?.balance : 0)?.toFixed(2)}</h3>
+                <h3>{accountData?.sales_person ? accountData?.sales_person?.name : ""}</h3>
               </div>
             </div>
           </Col>
@@ -44,7 +44,7 @@ const DashboardContent = () => {
               <Image src={coinSvg} className='' alt='coinSvg' height={60} width={60} />
               <div className='total-detail'>
                 <h5>Sale Rep Email</h5>
-                <h3>{Number(accountData?.point ? accountData?.point?.balance : 0)?.toFixed(2)}</h3>
+                <h3>{accountData?.sales_person ? accountData?.sales_person?.email : ""}</h3>
               </div>
             </div>
           </Col>
@@ -55,7 +55,7 @@ const DashboardContent = () => {
               <Image src={orderSvg} className='' alt='orderSvg' height={60} width={60} />
               <div className='total-detail'>
                 <h5>{t("Sale Rep Contact")}</h5>
-                <h3>{0}</h3>
+                <h3>{accountData?.sales_person ? accountData?.sales_person?.phone : ""}</h3>
               </div>
             </div>
           </Col>

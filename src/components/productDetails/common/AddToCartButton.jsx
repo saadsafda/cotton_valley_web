@@ -7,9 +7,11 @@ import { useTranslation } from '@/app/i18n/client';
 const AddToCartButton = ({ productState, addToCart, buyNow, extraOption }) => {
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, 'common');
+  console.log(productState, 'productState in add to cart button');
+  
   return (
     <div className='dynamic-checkout'>
-      {productState?.product?.type == 'simple' ? (
+      {productState?.product?.type == "Regular" ? (
         <Btn
           className={`${
             productState?.product?.stock_status == 'out_of_stock' || productState?.product?.quantity < productState?.productQty
@@ -41,7 +43,7 @@ const AddToCartButton = ({ productState, addToCart, buyNow, extraOption }) => {
         </Btn>
       )}
       {extraOption !== false ? (
-        productState?.product?.type == 'simple' ? (
+        productState?.product?.type == "Regular" ? (
           <Btn
             className='border-theme-color btn btn-md scroll-button'
             onClick={buyNow}

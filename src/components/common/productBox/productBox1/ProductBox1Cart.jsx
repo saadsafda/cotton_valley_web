@@ -67,7 +67,7 @@ const ProductBox1Cart = ({ productObj }) => {
         </Btn>
         <div
           className={`cart_qty qty-box ${
-            isOpen && productQty >= 1 ? "open" : ""
+            productObj?.stock_status == "in_stock" ? "open" : ""
           }`}
         >
           <InputGroup>
@@ -84,12 +84,22 @@ const ProductBox1Cart = ({ productObj }) => {
                   getSelectedVariant ? getSelectedVariant : null
                 )
               }
+              disabled={productQty <= 0 ? true : false}
             >
               <RiSubtractLine />
             </Btn>
-            <div style={{ display: "flex", alignItems: "center", marginLeft: "2px" }}>
-              {parseFloat(productObj?.case_pack || 1) * productQty}<sub>pcs</sub>
-            </div>
+            {productQty >= 1 && (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginLeft: "2px",
+                }}
+              >
+                {parseFloat(productObj?.case_pack || 1) * productQty}
+                <sub>pcs</sub>
+              </div>
+            )}
             <Input
               className="form-control input-number qty-input"
               type="number"

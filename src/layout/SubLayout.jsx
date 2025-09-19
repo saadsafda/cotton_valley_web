@@ -53,7 +53,6 @@ const SubLayout = ({ children }) => {
       <StickyCompare />
       <RecentPurchase />
       {!isNewsLetter && <NewsLetterModal />}
-      {/* <ExitModal /> */}
     </>
   );
 };

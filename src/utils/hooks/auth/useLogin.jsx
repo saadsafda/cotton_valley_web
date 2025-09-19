@@ -37,7 +37,8 @@ const LoginHandle = (
     }
     refetch();
     compareRefetch();
-    router.push(`/${i18Lang}/account/dashboard`);
+    // router.push(`/${i18Lang}/account/dashboard`);
+    window.location.pathname = `/${i18Lang}/account/dashboard`;
   }
 };
 

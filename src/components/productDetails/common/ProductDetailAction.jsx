@@ -56,18 +56,25 @@ const ProductDetailAction = ({ productState, setProductState, extraOption }) => 
             <Btn type='button' className='qty-right-plus' onClick={() => updateQty(-1)}>
               <RiSubtractLine />
             </Btn>
-            <Input className='input-number qty-input' type='number' value={productState?.productQty} readOnly />
+            <Input className='input-number qty-input' type='number' value={productState?.productQty} 
+              onChange={(e) => {
+                const value = parseInt(e.target.value, 10);
+                if (isNaN(value) || value < 1) return;
+                setProductState((prev) => ({ ...prev, productQty: value }));
+                checkStockAvailable();
+              }}
+            />
             <Btn type='button' className='qty-left-minus' onClick={() => updateQty(1)}>
               <RiAddLine />
             </Btn>
           </InputGroup>
         </div>
-        {extraOption !== false ? (
+        {/* {extraOption !== false ? (
           <div className='wishlist-btn-group'>
             <AddToWishlist productObj={productState?.product} customClass={'wishlist-button btn'} />
             <AddToCompare productObj={productState?.product} customClass={'wishlist-button btn'} />
           </div>
-        ) : null}
+        ) : null} */}
       </div>
       <AddToCartButton productState={productState} addToCart={addToCart} buyNow={buyNow} extraOption={extraOption} />
     </>

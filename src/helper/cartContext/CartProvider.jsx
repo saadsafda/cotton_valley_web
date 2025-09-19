@@ -115,6 +115,7 @@ const CartProvider = (props) => {
       };
       setCartProducts((prev) => {
         const newCart = [...prev, params];
+        // setCartCanvas(true);
         syncSalesOrder(newCart);
         return newCart;
       });
@@ -153,7 +154,6 @@ const CartProvider = (props) => {
       setIsProductQty && setIsProductQty(updatedQty);
       isOpenFun && isOpenFun(true);
     }
-    setCartCanvas(true);
   };
 
   // Replace Cart

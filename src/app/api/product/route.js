@@ -29,7 +29,8 @@ export async function GET(request) {
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/method/cotton_valley.api.products.get_all_products`;
     const params = new URLSearchParams({ ids, category, subcategory, sortBy, search, page, attribute });
 
-
+    console.log("api call", `${url}?${params.toString()}`);
+    
     const response = await fetch(`${url}?${params.toString()}`, {
         method: "GET",
         headers: headers,

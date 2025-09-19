@@ -24,6 +24,7 @@ export async function GET() {
 
     const data = await response.json();
 
+
     if (data?.exception || data?.exc_type === "AuthenticationError") {
         return NextResponse.json({ status: "error", message: "Invalid token" }, { status: 401 });
     }

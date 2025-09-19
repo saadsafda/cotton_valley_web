@@ -27,7 +27,7 @@ const TopBanner = ({ data }) => {
             imgUrl={data?.main_banner[0]?.image_url}
             key={0}
             elem={data?.main_banner[0]}
-            ratioImage={false}
+            ratioImage={true}
           />
         ) : (
           <Slider {...themeParisBannerSlider}>
@@ -40,7 +40,7 @@ const TopBanner = ({ data }) => {
                 imgUrl={elem?.image_url}
                 key={i}
                 elem={elem}
-                ratioImage={false}
+                ratioImage={true}
               />
             ))}
           </Slider>
@@ -68,7 +68,7 @@ const TopBanner = ({ data }) => {
             <OfferBanner
               classes={{ customHoverClass: "home-contain" }}
               imgUrl={data?.sub_banner_1?.image_url}
-              ratioImage={false}
+              ratioImage={true}
               elem={data?.sub_banner_1}
             />
           </SkeletonWrapper>
@@ -82,7 +82,7 @@ const TopBanner = ({ data }) => {
             <OfferBanner
               classes={{ customHoverClass: "home-contain" }}
               imgUrl={data?.sub_banner_2?.image_url}
-              ratioImage={false}
+              ratioImage={true}
               elem={data?.sub_banner_2}
             />
           </SkeletonWrapper>
