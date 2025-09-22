@@ -6,13 +6,14 @@ const SimpleInputField = ({ nameList }) => {
   const [showPassword, setShowPassword] = useState(false);
   return (
     <>
-      {nameList.map(({ name, type, ...rest }, i) => {
+      {nameList.map(({ name, type, toplabel, ...rest }, i) => {
         if (type === 'password') {
           return (
             <div key={i} style={{ position: 'relative' }}>
               <InputField
                 name={name}
                 type={showPassword ? 'text' : 'password'}
+                toplabel={toplabel}
                 {...rest}
               />
               <button
@@ -22,7 +23,7 @@ const SimpleInputField = ({ nameList }) => {
                 style={{
                   position: 'absolute',
                   right: 40,
-                  top: '50%',
+                  top: toplabel ? '52px' : '50%',
                   transform: 'translateY(-50%)',
                   background: 'none',
                   border: 'none',
@@ -37,7 +38,7 @@ const SimpleInputField = ({ nameList }) => {
             </div>
           );
         }
-        return <InputField name={name} type={type} {...rest} key={i} />;
+        return <InputField name={name} type={type} toplabel={toplabel} {...rest} key={i} />;
       })}
     </>
   );

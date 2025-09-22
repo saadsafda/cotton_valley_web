@@ -68,11 +68,11 @@ const CollectionAttributes = ({ attributeAPIData, filter, setFilter }) => {
   return (
     <>
       <AccordionItem>
-        <AccordionHeader>
+        <AccordionHeader targetId='2'>
           <span>Availability</span>
         </AccordionHeader>
-        <AccordionBody>
-          <ul className="category-list custom-padding">
+        <AccordionBody accordionId='2'>
+          <ul className="category-list custom-padding show">
             <li>
               <div className="form-check m-0 category-list-box">
                 <Input

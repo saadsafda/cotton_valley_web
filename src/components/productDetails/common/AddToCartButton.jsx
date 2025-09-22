@@ -7,7 +7,6 @@ import { useTranslation } from '@/app/i18n/client';
 const AddToCartButton = ({ productState, addToCart, buyNow, extraOption }) => {
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, 'common');
-  console.log(productState, 'productState in add to cart button');
   
   return (
     <div className='dynamic-checkout'>

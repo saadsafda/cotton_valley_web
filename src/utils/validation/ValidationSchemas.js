@@ -3,7 +3,14 @@ import * as Yup from "yup";
 export const YupObject = (schemaObject) => Yup.object().shape(schemaObject);
 
 export const emailSchema = Yup.string().email("Enter Valid Email").required();
-export const passwordSchema = Yup.string().min(8, "Too Short!").max(20, "Too Long!").required();
+export const passwordSchema = Yup.string()
+  .min(8, "Too Short! Minimum 8 characters")
+  .max(20, "Too Long! Maximum 20 characters")
+  .required("Password is required")
+  .matches(
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+    "Must contain at least one uppercase, one lowercase, one number, and one special character"
+  );
 export const nameSchema = Yup.string().required();
 export const descriptionSchema = Yup.string().required().min(10, "The description must be at least 10 characters.");
 export const roleIdSchema = Yup.string().required();

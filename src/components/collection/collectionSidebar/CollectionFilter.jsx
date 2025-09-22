@@ -79,7 +79,6 @@ const CollectionFilter = ({ filter, setFilter }) => {
     setFilter({ category: [], subcategory: [], attribute: [], price: [], rating: [] });
     router.push(pathname);
   };
-  console.log(categoryData, "checinf");
   
   if (selectedFilters.length <= 0) return null;
   return (

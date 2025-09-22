@@ -51,7 +51,7 @@ const PayNowModal = ({ modal, setModal, params }) => {
                 </Row>
               </div>
             </div>
-            <ErrorMessage name={'payment_method'} render={(msg) => <div className='invalid-feedback d-block'>{handleModifier(msg)}</div>} />
+            <ErrorMessage name={'payment_method'} render={(msg) => <div className='invalid-feedback d-block'>{msg}</div>} />
             <div className='modal-footer'>
               <Btn title='Cancel' className='btn-md btn-theme-outline fw-bold' onClick={() => setModal(false)} />
               <Btn title='Submit' type='submit' className='btn-md fw-bold text-light theme-bg-color' />

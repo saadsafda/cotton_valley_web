@@ -14,7 +14,7 @@ const ProductInformation = ({ productState }) => {
       </div>
       <div className='product-info'>
         <ul className='product-info-list'>
-          <li>{t("CasePack")} : {productState?.selectedVariation?.case_pack ?? productState?.product?.case_pack}</li>
+          <li>{t("Case Pack")} : {productState?.selectedVariation?.case_pack ?? productState?.product?.case_pack}</li>
           <li>{t("CBM")} : {productState?.product?.cbm}</li>
           <li>
             {t("UPC Code")} :

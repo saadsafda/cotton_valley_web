@@ -29,8 +29,6 @@ export async function GET(request) {
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/method/cotton_valley.api.products.get_all_products`;
     const params = new URLSearchParams({ ids, category, subcategory, sortBy, search, page, attribute });
 
-    console.log("api call", `${url}?${params.toString()}`);
-    
     const response = await fetch(`${url}?${params.toString()}`, {
         method: "GET",
         headers: headers,
@@ -46,5 +44,7 @@ export async function GET(request) {
     products && products.length > 0 && (products[0].total = data?.message?.total);
     products && products.length > 0 && (products[0].current_page = data?.message?.current_page || 1);
     products && products.length > 0 && (products[0].per_page = data?.message?.per_page || 30);
+    products && products.length > 0 && (products[0].from = data?.message?.from || 1);
+    products && products.length > 0 && (products[0].to = data?.message?.to || 30);
     return NextResponse.json(products);
 }

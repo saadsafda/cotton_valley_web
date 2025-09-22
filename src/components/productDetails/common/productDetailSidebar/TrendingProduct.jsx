@@ -8,6 +8,7 @@ import { useTranslation } from "@/app/i18n/client";
 import { useQuery } from "@tanstack/react-query";
 import SettingContext from "@/helper/settingContext";
 import getCookie from "@/utils/customFunctions/GetCookie";
+import ProductIdsContext from "@/helper/productIdsContext";
 
 const TrendingProduct = ({ productState }) => {
   const { i18Lang } = useContext(I18NextContext);
@@ -22,31 +23,32 @@ const TrendingProduct = ({ productState }) => {
     }
   }, []);
 
-  const categoryId = useMemo(() => {
-    return productState?.product?.categories?.map((elem) => elem?.id);
-  }, [productState?.product?.categories]);
+  const productId = useMemo(() => {
+    return [productState?.product?.trending_products?.map((elem) => elem)];
+  }, [productState?.product?.trending_products]);
   const { data: productData, refetch: productRefetch } = useQuery({
-    queryKey: [categoryId],
+    queryKey: [productId],
     queryFn: () =>
       request({
         url: ProductAPI,
-        params: { status: 1, trending: 1, category: categoryId?.join() },
+        params: { status: 1, trending: 1, ids: productId.join(",") },
       }),
     enabled: false,
     refetchOnWindowFocus: false,
     select: (data) => data.data,
   });
   useEffect(() => {
-    categoryId?.length > 0 && productRefetch();
-  }, [categoryId]);
-  if (productData?.length == 0) return null;
+    productId?.length > 0 && productRefetch();
+  }, [productId]);
+
+  if (productData?.length == 0) return <div></div>;
   return (
     <div className="pt-25">
       <div className="category-menu">
         <h3>{t("TrendingProducts")}</h3>
 
         <ul className="product-list product-right-sidebar border-0 p-0">
-          {productData?.slice(0, 4)?.map((elem, i) => (
+          {productData?.map((elem, i) => (
             <li key={i}>
               <div className="offer-product">
                 <Link
@@ -69,7 +71,7 @@ const TrendingProduct = ({ productState }) => {
                     <Link href={`/${i18Lang}/product/${elem?.slug}`}>
                       <h6 className="name">{elem?.name}</h6>
                     </Link>
-                    <span>{elem?.unit}</span>
+                    <span>{`SKU: ${elem?.sku} | CA${elem?.case_pack}`}</span>
                     <div className="vertical-price">
                       <h5 className="price theme-color">
                         {/* {convertCurrency(elem?.sale_price)}{" "}
@@ -82,8 +84,7 @@ const TrendingProduct = ({ productState }) => {
                               parseFloat(elem?.price || 0) /
                                 parseFloat(elem?.case_pack || 1)
                             )}{" "}
-                            <sup>PCS</sup> |{" "}
-                            {convertCurrency(elem?.price)}{" "}
+                            <sup>PCS</sup> | {convertCurrency(elem?.price)}{" "}
                             <sup>CA</sup>
                           </span>
                         ) : (

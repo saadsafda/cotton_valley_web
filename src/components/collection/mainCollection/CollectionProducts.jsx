@@ -4,41 +4,10 @@ import { Col, Row } from "reactstrap";
 import NoDataFound from "@/components/common/NoDataFound";
 import Pagination from "@/components/common/Pagination";
 import ProductBox1 from "@/components/common/productBox/productBox1/ProductBox1";
-import request from "@/utils/axiosUtils";
-import { ProductAPI } from "@/utils/axiosUtils/API";
-import { useQuery } from "@tanstack/react-query";
 import noProduct from "../../../../public/assets/svg/no-product.svg";
 import ProductSkeletonComponent from "@/components/common/skeletonLoader/productSkeleton/ProductSkeletonComponent";
 
-const CollectionProducts = ({ filter, grid }) => {
-  const { slug } = useParams();
-  const [page, setPage] = useState(1);
-
-  const { data, fetchStatus } = useQuery({
-    queryKey: [page, filter],
-    queryFn: () =>
-      request({
-        url: ProductAPI,
-        params: {
-          page,
-          status: 1,
-          paginate: 40,
-          field: filter?.field ?? "",
-          price: filter?.price.join(",") ?? "",
-          category: filter?.category.join(","),
-          subcategory: filter?.subcategory.join(","),
-          sort: "",
-          sortBy: filter?.sortBy ?? "",
-          rating: filter?.rating.join(",") ?? "",
-          attribute: filter?.attribute.join(",") ?? "",
-          store_slug: slug ? slug : null,
-        },
-      }),
-    enabled: true,
-    refetchOnWindowFocus: false,
-    select: (data) => data.data,
-  });
-
+const CollectionProducts = ({ grid, setPage, data, fetchStatus }) => {
   return (
     <>
       {fetchStatus == "fetching" ? (

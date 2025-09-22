@@ -89,7 +89,7 @@ const CartProvider = (props) => {
   };
 
   // Common Handler for Increment and Decrement
-  const handleIncDec = (qty, productObj, isProductQty, setIsProductQty, isOpenFun, cloneVariation) => {
+  const handleIncDec = (qty, productObj, isProductQty, setIsProductQty, isOpenFun, cloneVariation, add=false) => {
     const cartUid = null;
     const updatedQty = isProductQty ? isProductQty : 0 + qty;
     const cart = [...cartProducts];
@@ -142,6 +142,9 @@ const CartProvider = (props) => {
           quantity: newQuantity,
           sub_total: newQuantity * (cart[index]?.variation ? cart[index]?.variation?.sale_price : cart[index]?.product?.sale_price),
         };
+        if (add) {
+          ToastNotification('success', `Item ${cart[index]?.product?.sku} quantity updated to ${newQuantity}.`);
+        }
         setCartProducts([...cart]);
         syncSalesOrder([...cart]);
       }

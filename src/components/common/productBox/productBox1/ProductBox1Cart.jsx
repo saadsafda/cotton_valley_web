@@ -136,7 +136,8 @@ const ProductBox1Cart = ({ productObj }) => {
                   productQty,
                   setProductQty,
                   setIsOpen,
-                  getSelectedVariant ? getSelectedVariant : null
+                  getSelectedVariant ? getSelectedVariant : null,
+                  true
                 )
               }
             >
