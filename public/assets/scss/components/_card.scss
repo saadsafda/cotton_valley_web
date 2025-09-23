@@ -3,6 +3,13 @@
 ==========================**/
 @use '../utils/variables';
 @use '../utils/mixin/common';
+
+.flex-centerlize {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
 .title-header {
   padding-bottom: calc(15px + (25 - 15) * ((100vw - 320px) / (1920 - 320)));
   position: relative;

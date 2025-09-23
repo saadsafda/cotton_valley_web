@@ -99,6 +99,7 @@ const CartProvider = (props) => {
 
     // Checking conditions for Replace Cart
     if (cart[index]?.variation && cloneVariation?.variation_id && tempProductId == tempVariantProductId && cloneVariation?.variation_id !== cart[index]?.variation_id) {
+      
       return replaceCart(updatedQty, productObj, cloneVariation);
     }
 
@@ -113,12 +114,17 @@ const CartProvider = (props) => {
         quantity: cloneVariation?.selectedVariation?.productQty ? cloneVariation?.selectedVariation?.productQty : updatedQty,
         sub_total: cloneVariation?.selectedVariation?.sale_price ? updatedQty * cloneVariation?.selectedVariation?.sale_price : updatedQty * productObj?.sale_price,
       };
+      if (productObj.quantity < params?.quantity) {
+        ToastNotification('error', `You can not add more items than available. In stock ${productObj.quantity} items.`);
+        return false;
+      }
       setCartProducts((prev) => {
         const newCart = [...prev, params];
         // setCartCanvas(true);
         syncSalesOrder(newCart);
         return newCart;
       });
+      ToastNotification('success', `Item ${productObj?.id} add to the cart.`);
     } else {
       // Checking the Stock QTY of particular product
       const productStockQty = cart[index]?.variation?.quantity ? cart[index]?.variation?.quantity : cart[index]?.product?.quantity;

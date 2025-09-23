@@ -37,6 +37,7 @@ const CollectionProducts = ({ grid, setPage, data, fetchStatus }) => {
           {data?.map((product, i) => (
             <Col key={i}>
               <ProductBox1
+                isList={grid == "list" ? true : false}
                 imgUrl={product?.product_thumbnail}
                 productDetail={{ ...product }}
                 classObj={{ productBoxClass: "product-box-3" }}

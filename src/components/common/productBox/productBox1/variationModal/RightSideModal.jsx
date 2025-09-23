@@ -34,7 +34,7 @@ const RightVariationModal = ({ cloneVariation }) => {
           ? cloneVariation?.selectedVariation?.name
           : cloneVariation?.product?.name}
       </h4>
-      <h4 className="price">
+      <h6 className="price">
         {hasToken ? (
           <>
             <span style={{ color: "black" }}>Price: </span>{" "}
@@ -84,7 +84,7 @@ const RightVariationModal = ({ cloneVariation }) => {
         <Label className='modal-label mb-0'>
           {cloneVariation?.selectedVariation ? cloneVariation?.selectedVariation?.discount : cloneVariation?.product?.discount}% {t('Off')}
         </Label> */}
-      </h4>
+      </h6>
       <div className="product-detail">
         <h4>{t("ProductDetails")}:</h4>
         <div className="mt-2">

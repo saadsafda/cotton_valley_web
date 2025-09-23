@@ -31,7 +31,7 @@ const AddProductDetail = ({ productState }) => {
   };
   return (
     <>
-      {productState?.selectedVariation?.quantity ? (
+      {/* {productState?.selectedVariation?.quantity ? (
         productState?.selectedVariation?.quantity <= 10
       ) : productState?.product?.quantity <= 10 ? (
         <div className='progress-sec'>
@@ -42,7 +42,7 @@ const AddProductDetail = ({ productState }) => {
             <Progress className={getQTY <= 2 ? 'danger-progress' : getQTY >= 3 && getQTY <= 7 ? 'warning-progress' : ''} striped animated value={getProgressValue(productState)} />
           </div>
         </div>
-      ) : null}
+      ) : null} */}
       {productState?.product?.size_chart_image ||
       (themeOption?.product?.shipping_and_return && productState?.product?.is_return) ||
       (themeOption?.product?.shipping_and_return && productState?.product?.is_return) ? (

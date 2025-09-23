@@ -20,6 +20,7 @@ const ProductBox1 = ({
   addAction = true,
   classObj,
   setWishlistState,
+  isList = false,
 }) => {
   const { i18Lang } = useContext(I18NextContext);
   const { convertCurrency } = useContext(SettingContext);
@@ -45,7 +46,12 @@ const ProductBox1 = ({
               productDetail.stock_status === "out_of_stock" ? "red" : "green",
             alignItems: "center",
             textAlign: "center",
-            padding: "4px",
+            padding: isList ? "4px 20px" : "4px",
+            position: "absolute",
+            top: "10px",
+            left: "10px",
+            right: isList ? "auto" : "10px",
+            zIndex: 1,
           }}
         >
           <div className="">
@@ -82,17 +88,17 @@ const ProductBox1 = ({
             listClass="product-option"
           />
         </div>
-        <div className="product-detail">
+        <div className="product-detail" style={{ textAlign: isList ? "left" : "center" }}>
           <Link style={{ height: "40px" }} href={`/${i18Lang}/product/${productDetail?.id}`}>
-            <h6 className="name" style={{ textAlign: "center" }}>
+            <h6 className="name">
               {productDetail.name}
             </h6>
             {/* <p dangerouslySetInnerHTML={{ __html: productDetail?.description }} /> */}
           </Link>
-          <h6 className="unit mt-1" style={{ textAlign: "center" }}>
+          <h6 className="unit mt-1">
             SKU: {productDetail?.sku} | CA{productDetail?.case_pack}
           </h6>
-          <h5 className="sold text-content" style={{ textAlign: "center" }}>
+          <h5 className="sold text-content">
             {hasToken ? (
               <span className="theme-color price">
                 {convertCurrency(
