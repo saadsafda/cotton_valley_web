@@ -11,33 +11,33 @@ import { useTranslation } from "@/app/i18n/client";
 const SelectForm = ({ values, data, setModal }) => {
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, "common");
-  
+
   // Fetch state and country when pincode changes
   useEffect(() => {
     const pincode = values.pincode;
     if (pincode && pincode.length >= 5) {
       // Using Zippopotam.us API to fetch location details by pincode
       fetch(`https://api.zippopotam.us/us/${pincode}`)
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
           if (data && data.places && data.places.length > 0) {
             const locationData = data.places[0];
             if (locationData) {
               // You'll need to update these values in the parent component
               // or use a callback function passed as prop
               values.state_id = locationData.state;
-              values.city = locationData['place name'];
+              values.city = locationData["place name"];
               // Note: Country code from this API is in full name, you might need to map it to your country IDs
               values.country_id = data.country;
             }
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.error("Error fetching location:", error);
         });
     }
   }, [values.pincode]);
-  
+
   return (
     <Form>
       <Row>
@@ -95,6 +95,13 @@ const SelectForm = ({ values, data, setModal }) => {
         <SimpleInputField
           nameList={[
             {
+              name: "pincode",
+              placeholder: t("EnterPincode"),
+              toplabel: "Pincode",
+              colprops: { xxl: 6, lg: 12, sm: 6 },
+              require: "true",
+            },
+            {
               name: "state_id",
               placeholder: t("EnterState"),
               toplabel: "State",
@@ -109,20 +116,13 @@ const SelectForm = ({ values, data, setModal }) => {
               require: "true",
             },
             {
-              name: "pincode",
-              placeholder: t("EnterPincode"),
-              toplabel: "Pincode",
-              colprops: { xxl: 6, lg: 12, sm: 6 },
+              name: "phone",
+              type: "number",
+              placeholder: t("EnterPhoneNumber"),
               require: "true",
+              toplabel: "Phone",
+              colprops: { xxl: 6, lg: 12, sm: 6 },
             },
-            {
-                name: "phone",
-                type: "number",
-                placeholder: t("EnterPhoneNumber"),
-                require: "true",
-                toplabel: "Phone",
-                colprops: { xxl: 6, lg: 12, sm: 6 },
-              },
           ]}
         />
         <ModalFooter className="ms-auto justify-content-end save-back-button">

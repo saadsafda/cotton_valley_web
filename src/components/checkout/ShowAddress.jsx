@@ -5,16 +5,16 @@ import { ReactstrapRadio } from '../reactstrapFormik';
 import { useTranslation } from '@/app/i18n/client';
 import I18NextContext from '@/helper/i18NextContext';
 
-const ShowAddress = ({ item, type, index }) => {
+const ShowAddress = ({ item, type, index, onClick }) => {
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, 'common');
   return (
     <Col xxl={6} lg={12} md={6}>
-      <Label htmlFor={`address-${type}-${index}`}>
+      <Label htmlFor={`address-${type}-${index}`}  >
         <div className='delivery-address-box'>
           <div>
             <div className='form-check'>
-              <Field component={ReactstrapRadio} id={`address-${type}-${index}`} className='form-check-input' type='radio' name={`${type}_address_id`} value={item.id} />
+              <Field component={ReactstrapRadio} onClick={onClick} id={`address-${type}-${index}`} className='form-check-input' type='radio' name={`${type}_address_id`} value={item.id} />
             </div>
             <ul className='delivery-address-detail'>
               <li>

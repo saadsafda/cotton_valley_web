@@ -1,22 +1,21 @@
-"use client"
-import ColumnSimpleInputField from "@/components/common/inputFields/ColumnSimpleInputField";
+"use client";
 import SelectField from "@/components/common/inputFields/SelectField";
 import SimpleInputField from "@/components/common/inputFields/SimpleInputField";
 import React, { useEffect } from "react";
 import { Col } from "reactstrap";
 
 const RegisterShippingAddress = ({ values, countryList }) => {
-  
   // Fetch state and country when pincode changes
   useEffect(() => {
     const pincode = values.shipping_address.zip.toString();
+
     if (pincode && pincode.length >= 5) {
       // Using Zippopotam.us API to fetch location details by pincode
       fetch(`https://api.zippopotam.us/us/${pincode}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data && data.places && data.places.length > 0) {
-          const locationData = data.places[0];
+        .then((response) => response.json())
+        .then((data) => {
+          if (data && data.places && data.places.length > 0) {
+            const locationData = data.places[0];
             if (locationData) {
               // You'll need to update these values in the parent component
               // or use a callback function passed as prop
@@ -40,49 +39,42 @@ const RegisterShippingAddress = ({ values, countryList }) => {
           {values.shipping_billing_same ? "Address" : "Shipping Address"}
         </h5>
       </Col>
-      <Col md={6}>
-        <SimpleInputField
-          nameList={[
-            {
-              name: "shipping_address.address_line1",
-              placeholder: "Enter Address Line1",
-              toplabel: "Address Line 1 ",
-              require: "true",
-            },
-          ]}
-        />
-      </Col>
-      <Col md={6}>
-        <SimpleInputField
-          nameList={[
-            {
-              name: "shipping_address.address_line2",
-              placeholder: "Enter Address Line2",
-              toplabel: "Address Line 2 (Optional)",
-            },
-          ]}
-        />
-      </Col>
-      <ColumnSimpleInputField
+      <SimpleInputField
         nameList={[
           {
-            name: "shipping_address.city",
-            placeholder: "Enter City",
-            toplabel: "City ",
+            name: "shipping_address.address_line1",
+            placeholder: "Enter Address Line1",
+            toplabel: "Address Line 1 ",
             require: "true",
+            colprops: { xxl: 12, lg: 12, sm: 12 },
           },
           {
-            name: "shipping_address.state",
-            placeholder: "Enter State",
-            toplabel: "State ",
-            require: "true",
+            name: "shipping_address.address_line2",
+            placeholder: "Enter Address Line2",
+            toplabel: "Address Line 2 (Optional)",
+            colprops: { xxl: 12, lg: 12, sm: 12 },
           },
           {
             name: "shipping_address.zip",
             placeholder: "Enter Zip",
             toplabel: "Zip Code ",
             require: "true",
-            type: "number",
+            type: "text",
+            colprops: { xxl: 6, lg: 12, sm: 6 },
+          },
+          {
+            name: "shipping_address.city",
+            placeholder: "Enter City",
+            toplabel: "City ",
+            require: "true",
+            colprops: { xxl: 6, lg: 12, sm: 6 },
+          },
+          {
+            name: "shipping_address.state",
+            placeholder: "Enter State",
+            toplabel: "State",
+            require: "true",
+            colprops: { xxl: 6, lg: 12, sm: 6 },
           },
         ]}
       />

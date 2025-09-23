@@ -6,6 +6,7 @@ import I18NextContext from "@/helper/i18NextContext";
 import { useTranslation } from "@/app/i18n/client";
 import SettingContext from "@/helper/settingContext";
 import getCookie from "@/utils/customFunctions/GetCookie";
+import Link from "next/link";
 
 const CartData = ({ elem }) => {
   const { i18Lang } = useContext(I18NextContext);

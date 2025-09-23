@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Row } from 'reactstrap';
 import { RiAddLine, RiMapPinLine } from 'react-icons/ri';
 import { useTranslation } from '@/app/i18n/client';
@@ -8,13 +8,35 @@ import AddAddressForm from './common/AddAddressForm';
 import I18NextContext from '@/helper/i18NextContext';
 import ShowAddress from './ShowAddress';
 
-const DeliveryAddress = ({ type, title, address, modal, mutate, setModal, setFieldValue }) => {
+const DeliveryAddress = ({ type, title, address, modal, mutate, setModal, setFieldValue, values }) => {
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, 'common');
+  const [showAllAddresses, setShowAllAddresses] = useState(false);
+  const [selectedAddressId, setSelectedAddressId] = useState(null);
 
   useEffect(() => {
-    address?.length > 0 && setFieldValue(`${type}_address_id`, address[0].id);
+    if (address?.length > 0) {
+      const firstAddressId = address[0].id;
+      console.log('Selected address ID:', firstAddressId);
+      setSelectedAddressId(firstAddressId);
+      setFieldValue(`${type}_address_id`, firstAddressId);
+    }
   }, [address]);
+
+  // Sync with form values if they change externally
+  useEffect(() => {
+    const formValue = values?.[`${type}_address_id`];
+    if (formValue && formValue !== selectedAddressId) {
+      setSelectedAddressId(formValue);
+      setFieldValue(`${type}_address_id`, formValue);
+    }
+  }, [values?.[`${type}_address_id`]]);
+
+  // Get selected address or show all addresses
+  const displayAddresses = showAllAddresses 
+    ? address.filter(addr => addr?.address_type.toLowerCase() == type.toLowerCase())
+    : address?.filter(addr => addr.id === selectedAddressId && addr.address_type.toLowerCase() == type.toLowerCase()) || [];
+
   return (
     <>
       <CheckoutCard icon={<RiMapPinLine />}>
@@ -22,18 +44,30 @@ const DeliveryAddress = ({ type, title, address, modal, mutate, setModal, setFie
           <h4>
             {t(title)}
           </h4>
-          <a className='d-flex align-items-center fw-bold' onClick={() => setModal(type)}>
-            <RiAddLine className='me-1'></RiAddLine>
-            {t('AddNew')}
-          </a>
+          <div className="d-flex gap-2">
+            {address?.length > 1 && !showAllAddresses && (
+              <a className='d-flex align-items-center fw-bold' onClick={() => setShowAllAddresses(true)}>
+                {t('Change')}
+              </a>
+            )}
+            {showAllAddresses && (
+              <a className='d-flex align-items-center fw-bold' onClick={() => setShowAllAddresses(false)}>
+                {t('Done')}
+              </a>
+            )}
+            <a className='d-flex align-items-center fw-bold' onClick={() => setModal(type)}>
+              <RiAddLine className='me-1'></RiAddLine>
+              {t('AddNew')}
+            </a>
+          </div>
         </div>
         <div className='checkout-detail'>
           {
             <>
-              {address?.length > 0 ? (
+              {displayAddresses?.length > 0 ? (
                 <Row className='g-4'>
-                  {address?.map((item, i) => (
-                    <ShowAddress item={item} key={i} type={type} index={i} />
+                  {displayAddresses?.map((item, i) => (
+                    <ShowAddress item={item} key={i} type={type} index={i} onClick={() => setShowAllAddresses(false)} />
                   ))}
                 </Row>
               ) : (

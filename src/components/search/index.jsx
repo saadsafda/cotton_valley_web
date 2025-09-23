@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useEffect, useState } from "react";
+import { use, useContext, useEffect, useState } from "react";
 import Breadcrumb from "../common/Breadcrumb";
 import { LeafSVG } from "../common/CommonSVG";
 import { Input, InputGroup } from "reactstrap";
@@ -23,7 +23,6 @@ const SearchModule = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const search = searchParams.get("search");
-  //  const { productData } = useContext(ProductContext);
   const [page, setPage] = useState(1);
 
   const { data, fetchStatus } = useQuery({
@@ -40,11 +39,12 @@ const SearchModule = () => {
     refetchOnWindowFocus: false,
     select: (data) => data.data,
   });
-
+  
   //  const [data,setData]=useState([])
   useEffect(() => {
     // search ? setData(productData?.filter(product => product.name.toLowerCase().includes(search?.toLowerCase()) || product.sku.toLowerCase().includes(search?.toLowerCase()))) : setData(productData)
     setSearchState(search);
+    setPage(1);
   }, [search]);
   const onHandleSearch = () => {
     router.push(`/${i18Lang}/search?search=${searchState}`);

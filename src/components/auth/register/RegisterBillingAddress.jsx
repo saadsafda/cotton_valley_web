@@ -37,54 +37,47 @@ const RegisterBillingAddress = ({ values, countryList }) => {
           <Col xs={12}>
             <h5 className="mb-3 mt-4">Billing Address</h5>
           </Col>
-          <Col md={6}>
-            <SimpleInputField
-              nameList={[
-                {
-                  name: "billing_address.address_line1",
-                  placeholder: "Enter Address Line1",
-                  title: "Address Line 1",
-                  toplabel: "Address Line 1 ",
-                  require: "true",
-                },
-              ]}
-            />
-          </Col>
-          <Col md={6}>
-            <SimpleInputField
-              nameList={[
-                {
-                  name: "billing_address.address_line2",
-                  placeholder: "Enter Address Line2",
-                  title: "Address Line 2",
-                  toplabel: "Address Line 2 (Optional)",
-                },
-              ]}
-            />
-          </Col>
-          <ColumnSimpleInputField
+          <SimpleInputField
             nameList={[
               {
-                name: "billing_address.city",
-                placeholder: "Enter City",
-                title: "City",
-                toplabel: "City ",
+                name: "billing_address.address_line1",
+                placeholder: "Enter Address Line1",
+                title: "Address Line 1",
+                toplabel: "Address Line 1 ",
                 require: "true",
+                colprops: { xxl: 12, lg: 12, sm: 12 },
               },
               {
-                name: "billing_address.state",
-                placeholder: "Enter State",
-                title: "State",
-                toplabel: "State ",
-                require: "true",
+                name: "billing_address.address_line2",
+                placeholder: "Enter Address Line2",
+                title: "Address Line 2",
+                toplabel: "Address Line 2 (Optional)",
+                colprops: { xxl: 12, lg: 12, sm: 12 },
               },
               {
                 name: "billing_address.zip",
                 placeholder: "Enter Zip",
                 title: "Zip Code",
-                toplabel: "Zip Code ",
+                toplabel: "Zip Code",
                 require: "true",
-                type: "number",
+                type: "text",
+                colprops: { xxl: 6, lg: 12, sm: 6 },
+              },
+              {
+                name: "billing_address.city",
+                placeholder: "Enter City",
+                title: "City",
+                toplabel: "City",
+                require: "true",
+                colprops: { xxl: 6, lg: 12, sm: 6 },
+              },
+              {
+                name: "billing_address.state",
+                placeholder: "Enter State",
+                title: "State",
+                toplabel: "State",
+                require: "true",
+                colprops: { xxl: 6, lg: 12, sm: 6 },
               },
             ]}
           />

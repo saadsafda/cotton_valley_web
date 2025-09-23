@@ -99,7 +99,7 @@ const RegisterBankInformation = ({ values, countryList }) => {
             title: "Zip Code",
             toplabel: "Zip Code",
             require: "true",
-            type: "number",
+            type: "text",
           },
           {
             name: "bank_state",

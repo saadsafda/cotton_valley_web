@@ -38,8 +38,10 @@ export async function POST(request) {
         // Read token from cookies
         const cookieStore = await cookies();
         const authToken = cookieStore.get("uat")?.value;
-        const { items } = await request.json();
+        const { items, ...rest } = await request.json();
         const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/method/cotton_valley.api.sales_order.create_or_update_sales_order`;
+        
+        console.log('Add to cart body:', { items: items, ...rest });
 
         const response = await fetch(url, {
             method: 'POST',
@@ -48,9 +50,10 @@ export async function POST(request) {
                 "Content-Type": "application/json",
                 "Authorization": `token ${authToken}`,
             },
-            body: JSON.stringify({ items: items })
+            body: JSON.stringify({ items: items, ...rest })
         });
-        console.log(response, "response checking");
+
+        
         if (!response.ok) {
             throw new Error('Failed to add item to cart');
         }

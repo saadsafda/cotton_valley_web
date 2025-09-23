@@ -104,7 +104,7 @@ const RegisterBankReferences = ({ values, setFieldValue, t }) => {
                 title: "Zip Code",
                 toplabel: "Zip Code",
                 require: "true",
-                type: "number",
+                type: "text",
               },
               {
                 name: `references[${index}].phone`,

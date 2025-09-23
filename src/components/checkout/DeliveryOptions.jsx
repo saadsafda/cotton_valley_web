@@ -1,35 +1,62 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { RiTruckLine } from 'react-icons/ri';
-import { Col, Input, Label, Row } from 'reactstrap';
-import CheckoutCard from './common/CheckoutCard';
-import { useTranslation } from '@/app/i18n/client';
-import SettingContext from '@/helper/settingContext';
-import I18NextContext from '@/helper/i18NextContext';
+import React, { useContext, useEffect, useState } from "react";
+import { RiTruckLine } from "react-icons/ri";
+import { Col, Input, Label, Row } from "reactstrap";
+import CheckoutCard from "./common/CheckoutCard";
+import { useTranslation } from "@/app/i18n/client";
+import SettingContext from "@/helper/settingContext";
+import I18NextContext from "@/helper/i18NextContext";
 
 const DeliveryOptions = ({ values, setFieldValue }) => {
   const { i18Lang } = useContext(I18NextContext);
-  const { t } = useTranslation(i18Lang, 'common');
-  const { settingData } = useContext(SettingContext);
+  const { t } = useTranslation(i18Lang, "common");
   const [defaultDe, setDefaultDe] = useState(0);
   useEffect(() => {
-    if (settingData?.delivery?.default?.title && settingData?.delivery?.default?.description) {
-      setFieldValue('delivery_description', `${settingData?.delivery?.same_day?.title} | ${settingData?.delivery?.same_day?.description}`);
-      setDefaultDe(1);
-    }
-  }, [settingData]);
+    setFieldValue("delivery_description", "Pickup");
+    setDefaultDe(1);
+  }, []);
 
   return (
     <CheckoutCard icon={<RiTruckLine />}>
-      <div className='checkout-title'>
-        <h4>{t('DeliveryOption')}</h4>
+      <div className="checkout-title">
+        <h4>{t("Shipping Method")}</h4>
       </div>
-      <div className='checkout-detail'>
-        <Row className='g-4'>
-          <Col xxl={6}>
-            <div className='delivery-option'>
-              <div className='delivery-category'>
-                <div className='shipment-detail w-100'>
-                  <div className='form-check custom-form-check hide-check-box'>
+      <div className="checkout-detail">
+        <Row className="g-4">
+          {[
+            "Pickup",
+            "TBD: Our Representive will call you to share the Shipping Pricing",
+          ].map((option, index) => (
+            <Col xxl={6} key={index}>
+              <div className="delivery-option">
+                <div className="delivery-category">
+                  <div className="shipment-detail w-100">
+                    <div className="form-check custom-form-check hide-check-box">
+                      <Input
+                        className="form-check-input"
+                        type="radio"
+                        name="standard"
+                        checked={defaultDe == index + 1}
+                        id={`standard${index + 1}`}
+                        onChange={() => {
+                          setFieldValue("delivery_description", option);
+                          setFieldValue("isTimeSlot", false);
+                          setFieldValue("delivery_interval", null);
+                          setDefaultDe(index + 1);
+                        }}
+                      />
+                      <Label
+                        className="form-check-label"
+                        htmlFor={`standard${index + 1}`}
+                      >
+                        {option}
+                      </Label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Col>
+          ))}
+          {/* {settingData?.delivery?.same_day_delivery && (
                     <Input className='form-check-input' type='radio' name='standard' checked={defaultDe == 1} id='standard1' onChange={() => {setFieldValue('delivery_description', `${settingData?.delivery?.default?.title} | ${settingData?.delivery?.default?.description}`);setFieldValue('isTimeSlot', false);setFieldValue('delivery_interval', null);setDefaultDe(1);}}/>
                     <Label className='form-check-label' htmlFor='standard1'>
                       {settingData?.delivery?.default?.title} | {settingData?.delivery?.default?.description}
@@ -39,7 +66,7 @@ const DeliveryOptions = ({ values, setFieldValue }) => {
               </div>
             </div>
           </Col>
-          {settingData?.delivery?.same_day_delivery && (
+          {/* {settingData?.delivery?.same_day_delivery && (
             <>
               <Col xxl={6}>
                 <div className='delivery-option'>
@@ -87,7 +114,7 @@ const DeliveryOptions = ({ values, setFieldValue }) => {
                 </div>
               </Col>
             </>
-          )}
+          )} */}
         </Row>
       </div>
     </CheckoutCard>
