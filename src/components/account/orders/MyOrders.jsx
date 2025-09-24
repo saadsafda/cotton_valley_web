@@ -54,13 +54,13 @@ const MyOrders = () => {
                       <td>{dateFormat(order?.created_at)}</td>
                       <td>{convertCurrency(order?.total)} </td>
                       <td>
-                        <div className={`status-${order.payment_status.toLowerCase()}`}>
-                          <span>{order.payment_status}</span>
+                        <div className={`status-${order?.payment_status?.toLowerCase()}`}>
+                          <span>{order?.payment_status}</span>
                         </div>
                       </td>
-                      <td>{order.payment_method.toUpperCase()}</td>
+                      <td>{order?.payment_method?.toUpperCase()}</td>
                       <td>
-                        <Link href={`/${i18Lang}/account/order/details/${order.order_number}`}>
+                        <Link href={`/${i18Lang}/account/order/details/${order?.order_number}`}>
                           <RiEyeLine />
                         </Link>
                       </td>

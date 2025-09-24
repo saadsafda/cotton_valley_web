@@ -76,7 +76,7 @@ const ReactstrapFormikInput = ({ field: { ...fields }, form: { touched, errors }
                 value={safeValue}
                 autoComplete='off'
               />
-              {touched[fields.name] && errors[fields.name] ? <FormFeedback>{t(handleModifier(errors[fields.name]).split(' ').join(''))}</FormFeedback> : ''}
+              {touched[fields.name] && errors[fields.name] ? <FormFeedback>{t(handleModifier(errors[fields.name]))}</FormFeedback> : ''}
               {props?.errormsg && (
                 <ErrorMessage
                   name={fields.name}

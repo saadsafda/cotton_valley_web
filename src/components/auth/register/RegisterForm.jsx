@@ -17,19 +17,11 @@ import {
   terms_agreedSchema,
 } from "@/utils/validation/ValidationSchemas";
 import FormBtn from "@/components/common/FormBtn";
-import SimpleInputField from "@/components/common/inputFields/SimpleInputField";
 import { AllCountryCode } from "../../../data/AllCountryCode";
-import SearchableSelectInput from "@/components/common/inputFields/SearchableSelectInput";
 import { requestForReal } from "@/utils/axiosUtils";
-import SelectField from "@/components/common/inputFields/SelectField";
-import ColumnSimpleInputField from "@/components/common/inputFields/ColumnSimpleInputField";
-import Btn from "@/elements/buttons/Btn";
 import ReviewStep from "./ReviewStep";
-import AuthHeadings from "../common/AuthHeadings";
 import { RiCheckFill } from "react-icons/ri";
 import { ToastNotification } from "@/utils/customFunctions/ToastNotification";
-import RegisterShippingAddress from "./RegisterShippingAddress";
-import RegisterBillingAddress from "./RegisterBillingAddress";
 import RegisterBasicInfo from "./RegisterBasicInfo";
 import RegisterBankInformation from "./RegisterBankInformation";
 import RegisterBankReferences from "./RegisterBankReferences";
@@ -481,6 +473,20 @@ const RegisterForm = () => {
                       step
                     );
                     if (isValid) {
+                      if (step === 1) {
+                        const response = await requestForReal({
+                          method: "POST",
+                          url: "/api/method/cotton_valley.api.customer.is_email_exists",
+                          data: { email: values.email },
+                        });
+                        if (response.data?.message?.exists) {
+                          ToastNotification(
+                            "error",
+                            "Email already exists. Please use a different email."
+                          );
+                          return; // Prevent moving to next step
+                        }
+                      }
                       nextStep();
                     }
                   }}
