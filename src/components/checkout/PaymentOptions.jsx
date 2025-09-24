@@ -13,7 +13,7 @@ const PaymentOptions = ({ values, setFieldValue }) => {
   const { settingData } = useContext(SettingContext);
   const [initial, setInitial] = useState('');
   useEffect(() => {
-    setFieldValue('payment_method', 'cod');
+    setFieldValue('payment_method', 'COD');
     setInitial(0);
   }, []);
   return (

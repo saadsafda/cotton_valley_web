@@ -23,6 +23,7 @@ const MainLayout = ({ children, lng  }) => {
       setI18Lang(lng);
     }
   }, [lng]);
+  
   return (
     <>
       <QueryClientProvider client={queryClient}>
