@@ -1,29 +1,35 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import Cookies from 'js-cookie';
-import CartContext from '.';
-import { ToastNotification } from '@/utils/customFunctions/ToastNotification';
-import { AddToCartAPI } from '@/utils/axiosUtils/API';
-import request from '@/utils/axiosUtils';
-import { useQuery } from '@tanstack/react-query';
-import ThemeOptionContext from '../themeOptionsContext';
-import axios from 'axios';
+import React, { useContext, useEffect, useMemo, useState } from "react";
+import Cookies from "js-cookie";
+import CartContext from ".";
+import { ToastNotification } from "@/utils/customFunctions/ToastNotification";
+import { AddToCartAPI } from "@/utils/axiosUtils/API";
+import request from "@/utils/axiosUtils";
+import { useQuery } from "@tanstack/react-query";
+// import ThemeOptionContext from '../themeOptionsContext';
+// import axios from 'axios';
 
 const CartProvider = (props) => {
-  const isCookie = Cookies.get('uat');
+  const isCookie = Cookies.get("uat");
   const [cartProducts, setCartProducts] = useState([]);
-  const [variationModal, setVariationModal] = useState('');
+  const [variationModal, setVariationModal] = useState("");
   const [cartTotal, setCartTotal] = useState(0);
-  const { setCartCanvas } = useContext(ThemeOptionContext);
+  // const { setCartCanvas } = useContext(ThemeOptionContext);
   const {
     data: CartAPIData,
     isLoading: getCartLoading,
     refetch,
-  } = useQuery({queryKey:[AddToCartAPI],queryFn: () => request({ url: AddToCartAPI }), enabled: false, refetchOnWindowFocus: false, select: (res) => res?.data });  //enabled: false, // <-- disables automatic fetching
+  } = useQuery({
+    queryKey: [AddToCartAPI],
+    queryFn: () => request({ url: AddToCartAPI }),
+    enabled: false,
+    refetchOnWindowFocus: false,
+    select: (res) => res?.data,
+  }); //enabled: false, // <-- disables automatic fetching
 
   // --- Sales Order Sync ---
   const syncSalesOrder = async (cartProducts) => {
     try {
-      const items = cartProducts.map(item => ({
+      const items = cartProducts.map((item) => ({
         item_code: item?.variation?.id || item?.product?.id,
         qty: item.quantity,
         rate: item?.variation?.sale_price || item?.product?.sale_price,
@@ -31,7 +37,7 @@ const CartProvider = (props) => {
 
       await request({
         url: AddToCartAPI,
-        method: 'POST',
+        method: "POST",
         data: { items },
       });
     } catch (err) {
@@ -54,7 +60,7 @@ const CartProvider = (props) => {
         setCartTotal(CartAPIData?.total);
       }
     } else {
-      const isCartAvailable = JSON.parse(localStorage.getItem('cart'));
+      const isCartAvailable = JSON.parse(localStorage.getItem("cart"));
       if (isCartAvailable?.items?.length > 0) {
         setCartProducts(isCartAvailable?.items);
         setCartTotal(isCartAvailable?.total);
@@ -89,7 +95,15 @@ const CartProvider = (props) => {
   };
 
   // Common Handler for Increment and Decrement
-  const handleIncDec = (qty, productObj, isProductQty, setIsProductQty, isOpenFun, cloneVariation, add=false) => {
+  const handleIncDec = (
+    qty,
+    productObj,
+    isProductQty,
+    setIsProductQty,
+    isOpenFun,
+    cloneVariation,
+    add = false
+  ) => {
     const cartUid = null;
     const updatedQty = isProductQty ? isProductQty : 0 + qty;
     const cart = [...cartProducts];
@@ -98,8 +112,12 @@ const CartProvider = (props) => {
     let tempVariantProductId = cloneVariation?.selectedVariation?.product_id;
 
     // Checking conditions for Replace Cart
-    if (cart[index]?.variation && cloneVariation?.variation_id && tempProductId == tempVariantProductId && cloneVariation?.variation_id !== cart[index]?.variation_id) {
-      
+    if (
+      cart[index]?.variation &&
+      cloneVariation?.variation_id &&
+      tempProductId == tempVariantProductId &&
+      cloneVariation?.variation_id !== cart[index]?.variation_id
+    ) {
       return replaceCart(updatedQty, productObj, cloneVariation);
     }
 
@@ -109,13 +127,24 @@ const CartProvider = (props) => {
         id: null,
         product: productObj,
         product_id: productObj?.id,
-        variation: cloneVariation?.selectedVariation ? cloneVariation?.selectedVariation : null,
-        variation_id: cloneVariation?.selectedVariation?.id ? cloneVariation?.selectedVariation?.id : null,
-        quantity: cloneVariation?.selectedVariation?.productQty ? cloneVariation?.selectedVariation?.productQty : updatedQty,
-        sub_total: cloneVariation?.selectedVariation?.sale_price ? updatedQty * cloneVariation?.selectedVariation?.sale_price : updatedQty * productObj?.sale_price,
+        variation: cloneVariation?.selectedVariation
+          ? cloneVariation?.selectedVariation
+          : null,
+        variation_id: cloneVariation?.selectedVariation?.id
+          ? cloneVariation?.selectedVariation?.id
+          : null,
+        quantity: cloneVariation?.selectedVariation?.productQty
+          ? cloneVariation?.selectedVariation?.productQty
+          : updatedQty,
+        sub_total: cloneVariation?.selectedVariation?.sale_price
+          ? updatedQty * cloneVariation?.selectedVariation?.sale_price
+          : updatedQty * productObj?.sale_price,
       };
       if (productObj.quantity < params?.quantity) {
-        ToastNotification('error', `You can not add more items than available. In stock ${productObj.quantity} items.`);
+        ToastNotification(
+          "error",
+          `You can not add more items than available. In stock ${productObj.quantity} items.`
+        );
         return false;
       }
       setCartProducts((prev) => {
@@ -124,17 +153,26 @@ const CartProvider = (props) => {
         syncSalesOrder(newCart);
         return newCart;
       });
-      ToastNotification('success', `Item ${productObj?.id} add to the cart.`);
+      ToastNotification("success", `Item ${productObj?.id} add to the cart.`);
     } else {
       // Checking the Stock QTY of particular product
-      const productStockQty = cart[index]?.variation?.quantity ? cart[index]?.variation?.quantity : cart[index]?.product?.quantity;
+      const productStockQty = cart[index]?.variation?.quantity
+        ? cart[index]?.variation?.quantity
+        : cart[index]?.product?.quantity;
       if (productStockQty < cart[index]?.quantity + qty) {
-        ToastNotification('error', `You can not add more items than available. In stock ${productStockQty} items.`);
+        ToastNotification(
+          "error",
+          `You can not add more items than available. In stock ${productStockQty} items.`
+        );
         return false;
       }
 
       if (cart[index]?.variation) {
-        cart[index].variation.selected_variation = cart[index]?.variation?.attribute_values?.map((values) => values.value).join('/');
+        cart[index].variation.selected_variation = cart[
+          index
+        ]?.variation?.attribute_values
+          ?.map((values) => values.value)
+          .join("/");
       }
 
       const newQuantity = cart[index].quantity + qty;
@@ -144,12 +182,23 @@ const CartProvider = (props) => {
       } else {
         cart[index] = {
           ...cart[index],
-          id: cartUid?.id ? cartUid?.id : cart[index].id ? cart[index].id : null,
+          id: cartUid?.id
+            ? cartUid?.id
+            : cart[index].id
+            ? cart[index].id
+            : null,
           quantity: newQuantity,
-          sub_total: newQuantity * (cart[index]?.variation ? cart[index]?.variation?.sale_price : cart[index]?.product?.sale_price),
+          sub_total:
+            newQuantity *
+            (cart[index]?.variation
+              ? cart[index]?.variation?.sale_price
+              : cart[index]?.product?.sale_price),
         };
         if (add) {
-          ToastNotification('success', `Item ${cart[index]?.product?.sku} quantity updated to ${newQuantity}.`);
+          ToastNotification(
+            "success",
+            `Item ${cart[index]?.product?.sku} quantity updated to ${newQuantity}.`
+          );
         }
         setCartProducts([...cart]);
         syncSalesOrder([...cart]);
@@ -171,15 +220,24 @@ const CartProvider = (props) => {
     const index = cart.findIndex((item) => item.product_id === productObj?.id);
     cart[index].quantity = 0;
 
-    const productQty = cart[index]?.variation ? cart[index]?.variation?.quantity : cart[index]?.product?.quantity;
+    const productQty = cart[index]?.variation
+      ? cart[index]?.variation?.quantity
+      : cart[index]?.product?.quantity;
 
     if (cart[index]?.variation) {
-      cart[index].variation.selected_variation = cart[index]?.variation?.attribute_values?.map((values) => values.value).join('/');  // assigning it to a new property called selected_variation.
+      cart[index].variation.selected_variation = cart[
+        index
+      ]?.variation?.attribute_values
+        ?.map((values) => values.value)
+        .join("/"); // assigning it to a new property called selected_variation.
     }
 
     // Checking the Stock QTY of particular product
     if (productQty < cart[index]?.quantity + updatedQty) {
-      ToastNotification('error', `You can not add more items than available. In stock ${productQty} items.`);
+      ToastNotification(
+        "error",
+        `You can not add more items than available. In stock ${productQty} items.`
+      );
       return false;
     }
 
@@ -187,15 +245,25 @@ const CartProvider = (props) => {
       id: null,
       product: productObj,
       product_id: productObj?.id,
-      variation: cloneVariation?.selectedVariation ? cloneVariation?.selectedVariation : null,
-      variation_id: cloneVariation?.selectedVariation?.id ? cloneVariation?.selectedVariation?.id : null,
-      quantity: cloneVariation?.productQty ? cloneVariation?.productQty : updatedQty,
-      sub_total: cloneVariation?.selectedVariation?.sale_price ? updatedQty * cloneVariation?.selectedVariation?.sale_price : updatedQty * productObj?.sale_price,
+      variation: cloneVariation?.selectedVariation
+        ? cloneVariation?.selectedVariation
+        : null,
+      variation_id: cloneVariation?.selectedVariation?.id
+        ? cloneVariation?.selectedVariation?.id
+        : null,
+      quantity: cloneVariation?.productQty
+        ? cloneVariation?.productQty
+        : updatedQty,
+      sub_total: cloneVariation?.selectedVariation?.sale_price
+        ? updatedQty * cloneVariation?.selectedVariation?.sale_price
+        : updatedQty * productObj?.sale_price,
     };
 
     setCartProducts((prevCartProducts) => {
       const newCart = prevCartProducts.map((elem) => {
-        if (elem?.product_id === cloneVariation?.selectedVariation?.product_id) {
+        if (
+          elem?.product_id === cloneVariation?.selectedVariation?.product_id
+        ) {
           return params;
         } else {
           return elem;
@@ -209,7 +277,10 @@ const CartProvider = (props) => {
   // Setting data to localstorage when UAT is not there
   const storeInLocalStorage = () => {
     setCartTotal(total);
-    localStorage.setItem('cart', JSON.stringify({ items: cartProducts, total: total }));
+    localStorage.setItem(
+      "cart",
+      JSON.stringify({ items: cartProducts, total: total })
+    );
   };
 
   return (
@@ -226,7 +297,8 @@ const CartProvider = (props) => {
         variationModal,
         setVariationModal,
         replaceCart,
-      }}>
+      }}
+    >
       {props.children}
     </CartContext.Provider>
   );

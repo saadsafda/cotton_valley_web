@@ -122,6 +122,7 @@ const RegisterBasicInfo = ({ values, countryList, allCountryCode }) => {
             placeholder: "Store Area",
             title: "Square Footage",
             toplabel: "Square Footage",
+            type: "number"
           },
           {
             name: "federal_tax_id",
@@ -147,12 +148,14 @@ const RegisterBasicInfo = ({ values, countryList, allCountryCode }) => {
             placeholder: "Manager Number",
             title: "Manager Number",
             toplabel: "Manager Number",
+            type: "number",
           },
           {
             name: "years_in_business",
             placeholder: "Years In Business",
             title: "Years in Business",
             toplabel: "How long (Years)?",
+            type: "number",
           },
         ]}
       />

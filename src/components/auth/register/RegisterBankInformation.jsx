@@ -87,10 +87,10 @@ const RegisterBankInformation = ({ values, countryList }) => {
             type: "number",
           },
           {
-            name: "bank_city",
-            placeholder: "Enter City",
-            title: "City",
-            toplabel: "City",
+            name: "bank_email",
+            placeholder: "Enter Email",
+            title: "Email",
+            toplabel: "Email",
             require: "true",
           },
           {
@@ -102,17 +102,17 @@ const RegisterBankInformation = ({ values, countryList }) => {
             type: "text",
           },
           {
+            name: "bank_city",
+            placeholder: "Enter City",
+            title: "City",
+            toplabel: "City",
+            require: "true",
+          },
+          {
             name: "bank_state",
             placeholder: "Enter State",
             title: "State",
             toplabel: "State",
-            require: "true",
-          },
-          {
-            name: "bank_email",
-            placeholder: "Enter Email",
-            title: "Email",
-            toplabel: "Email",
             require: "true",
           },
         ]}

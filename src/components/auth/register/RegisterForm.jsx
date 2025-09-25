@@ -32,8 +32,14 @@ const RegisterForm = () => {
   const [step, setStep] = useState(1);
   const [countryList, setCountryList] = useState([]);
 
-  const nextStep = () => setStep((s) => s + 1);
-  const prevStep = () => setStep((s) => s - 1);
+  const nextStep = () => {
+    setStep((s) => s + 1);
+    window.scrollTo({ top: 20, behavior: "smooth" });
+  };
+  const prevStep = () => {
+    setStep((s) => s - 1);
+    window.scrollTo({ top: 20, behavior: "smooth" });
+  };
 
   const initialValues = {
     // Basic Information
@@ -440,17 +446,28 @@ const RegisterForm = () => {
           <Form className="row g-md-4 g-3">
             {/* Name fields */}
             {step === 1 && (
-              <RegisterBasicInfo values={values} countryList={countryList} allCountryCode={AllCountryCode} />
+              <RegisterBasicInfo
+                values={values}
+                countryList={countryList}
+                allCountryCode={AllCountryCode}
+              />
             )}
 
             {/* Bank Information */}
             {step === 2 && (
-              <RegisterBankInformation values={values} countryList={countryList} />
+              <RegisterBankInformation
+                values={values}
+                countryList={countryList}
+              />
             )}
 
             {/* Business References */}
             {step === 3 && (
-              <RegisterBankReferences values={values} setFieldValue={setFieldValue} t={t} />
+              <RegisterBankReferences
+                values={values}
+                setFieldValue={setFieldValue}
+                t={t}
+              />
             )}
 
             {step === 4 && <ReviewStep values={values} />}

@@ -85,6 +85,14 @@ const RegisterBankReferences = ({ values, setFieldValue, t }) => {
           <ColumnSimpleInputField
             nameList={[
               {
+                name: `references[${index}].zip`,
+                placeholder: t("Enter Zip"),
+                title: "Zip Code",
+                toplabel: "Zip Code",
+                require: "true",
+                type: "text",
+              },
+              {
                 name: `references[${index}].city`,
                 placeholder: t("Enter City"),
                 title: "City",
@@ -97,14 +105,6 @@ const RegisterBankReferences = ({ values, setFieldValue, t }) => {
                 title: "State",
                 toplabel: "State",
                 require: "true",
-              },
-              {
-                name: `references[${index}].zip`,
-                placeholder: t("Enter Zip"),
-                title: "Zip Code",
-                toplabel: "Zip Code",
-                require: "true",
-                type: "text",
               },
               {
                 name: `references[${index}].phone`,

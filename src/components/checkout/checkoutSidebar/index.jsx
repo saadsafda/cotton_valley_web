@@ -4,7 +4,7 @@ import SettingContext from "../../../helper/settingContext";
 import { useTranslation } from "@/app/i18n/client";
 import SidebarProduct from "./SidebarProduct";
 import CartContext from "@/helper/cartContext";
-import PointWallet from "./PointWallet";
+// import PointWallet from "./PointWallet";
 import I18NextContext from "@/helper/i18NextContext";
 import ApplyCoupon from "./ApplyCoupon";
 import PlaceOrder from "./PlaceOrder";

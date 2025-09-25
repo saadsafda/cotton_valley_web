@@ -1,22 +1,22 @@
-import React, { useContext } from 'react';
-import ThemeOptionContext from '@/helper/themeOptionsContext';
-import { Col } from 'reactstrap';
-import Slider from 'react-slick';
-import { topBarContentSlider } from '../../../../data/SliderSettings';
+import React, { useContext } from "react";
+import ThemeOptionContext from "@/helper/themeOptionsContext";
+import { Col } from "reactstrap";
+import Slider from "react-slick";
+import { topBarContentSlider } from "../../../../data/SliderSettings";
 
 const TopbarSlider = ({ customClass }) => {
   const { themeOption } = useContext(ThemeOptionContext);
   return (
     <>
       {customClass ? (
-        <div className='notification-slider'>
+        <div className="notification-slider">
           <Slider {...topBarContentSlider}>
             {themeOption?.header?.top_bar_content.length > 0 &&
               themeOption?.header?.top_bar_content?.map((elem, i) => (
                 <div key={i}>
                   <div className={`timer-notification ${customClass}`}>
                     <h6>
-                      <strong className='me-1'>{elem?.content}</strong>
+                      <strong className="me-1">{elem?.content}</strong>
                     </h6>
                   </div>
                 </div>
@@ -24,10 +24,17 @@ const TopbarSlider = ({ customClass }) => {
           </Slider>
         </div>
       ) : (
-        <Col lg={9} xxl={6} className='d-lg-block d-none'>
-          <div className='header-offer'>
-            <div className='notification-slider no-arrow'>
-              {themeOption?.header?.top_bar_content.length > 0 &&<div style={{ color: "white" }} dangerouslySetInnerHTML={{ __html: themeOption?.header?.top_bar_content?.[0].content }} />}
+        <Col lg={9} xxl={6} className="d-lg-block d-none">
+          <div className="header-offer">
+            <div className="notification-slider no-arrow">
+              {themeOption?.header?.top_bar_content.length > 0 && (
+                <div
+                  style={{ color: "white" }}
+                  dangerouslySetInnerHTML={{
+                    __html: themeOption?.header?.top_bar_content?.[0].content,
+                  }}
+                />
+              )}
               {/* <Slider {...topBarContentSlider}>
                 {themeOption?.header?.top_bar_content.length > 0 &&
                   themeOption?.header?.top_bar_content?.map((elem, i) => (

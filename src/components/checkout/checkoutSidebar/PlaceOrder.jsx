@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Btn from "@/elements/buttons/Btn";
 import I18NextContext from "@/helper/i18NextContext";
 import { useTranslation } from "@/app/i18n/client";
@@ -9,6 +9,7 @@ import CartContext from "@/helper/cartContext";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { toast } from "react-toastify";
+import SettingContext from "@/helper/settingContext";
 
 const PlaceOrder = ({ values }) => {
   const { i18Lang } = useContext(I18NextContext);
@@ -18,6 +19,9 @@ const PlaceOrder = ({ values }) => {
   const isAuth = Cookies.get("uat");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { settingData, convertCurrency } = useContext(SettingContext);
+  const [minOrderAmt, setMinOrderAmt] = useState(0);
+
   const handleClick = async () => {
     // Clear previous error
     setError(null);
@@ -38,8 +42,20 @@ const PlaceOrder = ({ values }) => {
 
     try {
       // Show loading toast
-      toast.info(t("PlacingOrder") || "Placing your order...");
+      let totalAmount = 0;
+      for (let i = 0; i < cartProducts.length; i++) {
+        const ele = cartProducts[i];
+        const price =
+          ele?.variation?.sale_price || ele?.product?.sale_price || 0;
+        totalAmount += price * ele.quantity;
+      }
+      if (minOrderAmt && totalAmount < minOrderAmt) {
+        toast.error(`Minimum order amount is ${convertCurrency(minOrderAmt)}`);
+        setIsLoading(false);
+        return;
+      }
 
+      toast.info(t("PlacingOrder") || "Placing your order...");
       const items = cartProducts.map((item) => ({
         item_code: item?.variation?.id || item?.product?.id,
         qty: item.quantity,
@@ -47,7 +63,9 @@ const PlaceOrder = ({ values }) => {
       }));
 
       // Validate items
-      const invalidItems = items.filter(item => !item.item_code || !item.qty || !item.rate);
+      const invalidItems = items.filter(
+        (item) => !item.item_code || !item.qty || !item.rate
+      );
       if (invalidItems.length > 0) {
         throw new Error(t("InvalidCartItems") || "Some cart items are invalid");
       }
@@ -59,39 +77,57 @@ const PlaceOrder = ({ values }) => {
       });
 
       console.log("Order placed successfully:", response);
-      
+
       // Show success message
-      toast.success(t("OrderPlacedSuccessfully") || "Order placed successfully!");
-      
+      toast.success(
+        t("OrderPlacedSuccessfully") || "Order placed successfully!"
+      );
+
       // Redirect to order details
       if (response?.cart?.message) {
-        router.push(`/${i18Lang}/account/order/details/${response?.cart?.message}`);
+        router.push(
+          `/${i18Lang}/account/order/details/${response?.cart?.message}`
+        );
       } else {
         // Fallback redirect if order_id is not available
         router.push(`/${i18Lang}/account/order`);
       }
-
     } catch (err) {
       console.error("Order placement failed:", err);
-      
+
       // Extract error message
       let errorMessage = t("OrderPlacementFailed") || "Failed to place order";
-      
+
       if (err?.response?.data?.message) {
         errorMessage = err.response.data.message;
       } else if (err?.message) {
         errorMessage = err.message;
       }
-      
+
       setError(errorMessage);
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    // Perform side effect here
+    if (settingData?.general?.min_order_amount) {
+      setMinOrderAmt(settingData?.general?.min_order_amount);
+    }
+
+    return () => {
+      // Cleanup here
+    };
+  }, [settingData]);
+
   return (
     <>
-      <Link href={`/${i18Lang}/cart`} className="fw-bold mt-4 outline btn btn-md cart-button text-theme">
+      <Link
+        href={`/${i18Lang}/cart`}
+        className="fw-bold mt-4 outline btn btn-md cart-button text-theme"
+      >
         {t("ViewCart")}
       </Link>
       <Btn
