@@ -10,7 +10,7 @@ export async function POST() {
     }
     if (authToken) {
         headers["Cookie"] = `sid=${authToken}`;
-        headers["Authorization"] = `Bearer ${authToken}`;
+        headers["Customer-Authorization"] = `Bearer ${authToken}`;
     }
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/method/cotton_valley.api.customer.customer_logout`;
 

@@ -13,7 +13,7 @@ export async function GET(request) {
         }
         if (authToken) {
             headers["Cookie"] = `sid=${authToken}`;
-            headers["Authorization"] = `Bearer ${authToken}`;
+            headers["Customer-Authorization"] = `Bearer ${authToken}`;
         }
 
         const searchParams = request?.nextUrl?.searchParams;

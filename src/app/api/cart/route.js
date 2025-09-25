@@ -14,7 +14,7 @@ export async function GET() {
 
     if (authToken) {
         headers["Cookie"] = `sid=${authToken}`;
-        headers["Authorization"] = `Bearer ${authToken}`;
+        headers["Customer-Authorization"] = `Bearer ${authToken}`;
     }
 
     try {

@@ -13,7 +13,7 @@ export async function POST(request) {
     }
     if (authToken) {
         headers["Cookie"] = `sid=${authToken}`;
-        headers["Authorization"] = `Bearer ${authToken}`;
+        headers["Customer-Authorization"] = `Bearer ${authToken}`;
     }
 
     
@@ -40,7 +40,7 @@ export async function PUT(request) {
     }
     if (authToken) {
         headers["Cookie"] = `sid=${authToken}`;
-        headers["Authorization"] = `Bearer ${authToken}`;
+        headers["Customer-Authorization"] = `Bearer ${authToken}`;
     }
 
     console.log("address", address);
@@ -70,7 +70,7 @@ export async function DELETE(request) {
     }
     if (authToken) {
         headers["Cookie"] = `sid=${authToken}`;
-        headers["Authorization"] = `Bearer ${authToken}`;
+        headers["Customer-Authorization"] = `Bearer ${authToken}`;
     }
 
     const response = await fetch(url, {
@@ -93,7 +93,7 @@ export async function GET(request) {
     }
     if (authToken) {
         headers["Cookie"] = `sid=${authToken}`;
-        headers["Authorization"] = `Bearer ${authToken}`;
+        headers["Customer-Authorization"] = `Bearer ${authToken}`;
     }
 
     const response = await fetch(url, {
