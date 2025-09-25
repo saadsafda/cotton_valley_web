@@ -48,7 +48,7 @@ export async function POST(request) {
             headers: {
                 "Cookie": `sid=${authToken}`,
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${authToken}`,
+                "Customer-Authorization": `Bearer ${authToken}`,
             },
             body: JSON.stringify({ items: items, ...rest })
         });
