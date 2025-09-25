@@ -18,7 +18,7 @@ export async function GET() {
         headers: {
             "Cookie": `sid=${authToken}`,
             "Content-Type": "application/json",
-            "Authorization": `token ${authToken}`,
+            "Authorization": `Bearer ${authToken}`,
         },
     });
 

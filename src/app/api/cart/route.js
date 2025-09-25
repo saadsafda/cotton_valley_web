@@ -14,7 +14,7 @@ export async function GET() {
 
     if (authToken) {
         headers["Cookie"] = `sid=${authToken}`;
-        headers["Authorization"] = `token ${authToken}`;
+        headers["Authorization"] = `Bearer ${authToken}`;
     }
 
     try {
@@ -48,7 +48,7 @@ export async function POST(request) {
             headers: {
                 "Cookie": `sid=${authToken}`,
                 "Content-Type": "application/json",
-                "Authorization": `token ${authToken}`,
+                "Authorization": `Bearer ${authToken}`,
             },
             body: JSON.stringify({ items: items, ...rest })
         });

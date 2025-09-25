@@ -12,7 +12,7 @@ export async function GET(request, { params }) {
     }
     if (authToken) {
         headers["Cookie"] = `sid=${authToken}`;
-        headers["Authorization"] = `token ${authToken}`;
+        headers["Authorization"] = `Bearer ${authToken}`;
     }
 
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/method/cotton_valley.api.products.get_product?product_id=${productId}`;
