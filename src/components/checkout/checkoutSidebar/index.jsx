@@ -8,14 +8,19 @@ import CartContext from "@/helper/cartContext";
 import I18NextContext from "@/helper/i18NextContext";
 import ApplyCoupon from "./ApplyCoupon";
 import PlaceOrder from "./PlaceOrder";
+import { CouponAPI } from "@/utils/axiosUtils/API";
+import { useQuery } from "@tanstack/react-query";
+import request from "@/utils/axiosUtils";
 
 const CheckoutSidebar = ({ values, setFieldValue }) => {
   const [storeCoupon, setStoreCoupon] = useState();
   // It Just Static Values as per cart default value (When you are using api then you need calculate as per your requirement)
   const { convertCurrency } = useContext(SettingContext);
-  const { cartProducts, getTotal } = useContext(CartContext);
+  const { cartProducts, setCartProducts, discountAmt, cartTotal, getTotal } =
+    useContext(CartContext);
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, "common");
+
   // Submitting data on Checkout
   useEffect(() => {
     if (
@@ -62,12 +67,22 @@ const CheckoutSidebar = ({ values, setFieldValue }) => {
               setFieldValue={setFieldValue}
               setStoreCoupon={setStoreCoupon}
               storeCoupon={storeCoupon}
+              cartProducts={cartProducts}
+              setCartProducts={setCartProducts}
             />
+            {discountAmt > 0 && (
+              <li className="list-total">
+                <h4>{t("Discount")}</h4>
+                <h4 className="price">
+                  {convertCurrency(discountAmt) || t(`NotCalculatedYet`)}
+                </h4>
+              </li>
+            )}
 
             <li className="list-total">
               <h4>{t("Total")}</h4>
               <h4 className="price">
-                {convertCurrency(getTotal(cartProducts)?.toFixed(2)) ||
+                {convertCurrency(cartTotal?.toFixed(2) || getTotal(cartProducts)?.toFixed(2)) ||
                   t(`NotCalculatedYet`)}
               </h4>
             </li>

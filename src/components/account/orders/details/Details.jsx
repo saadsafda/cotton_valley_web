@@ -40,13 +40,10 @@ const getParentOrderNumber = async (orderNumber) => {
 
 //This recursively searches within an order and all its sub-orders for the order with the target number.
 const findOrderByNumber = (order, targetOrderNumber) => {
-  if (order.order_number === Number(targetOrderNumber)) {
+  if (order.order_number === targetOrderNumber) {
     return order;
   }
-  for (const sub of order.sub_orders || []) {
-    const found = findOrderByNumber(sub, targetOrderNumber);
-    if (found) return found;
-  }
+  
   return null;
 };
 
@@ -54,10 +51,11 @@ const Details = ({ params }) => {
   const { data, isLoading } = useQuery({
     queryKey: ['order', params],
     queryFn: async () => {
-      const parentOrderNumber = await getParentOrderNumber(params);
+      const parentOrderNumber = params;
       if (!parentOrderNumber) throw new Error("Parent order not found");
-
+      
       const res = await request({ url: `${OrderAPI}/${parentOrderNumber}` });
+      console.log("Fetched order data:", res);
       return res?.data;
     },
     enabled: true,

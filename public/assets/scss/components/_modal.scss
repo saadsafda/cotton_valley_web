@@ -207,6 +207,7 @@
         }
 
         .slick-slider {
+          background-color: var(--white);
           .slick-prev,
           .slick-next {
             @include common.center(vertical);

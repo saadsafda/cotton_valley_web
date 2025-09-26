@@ -1,17 +1,17 @@
-import Avatar from '@/components/common/Avatar';
-import { Card, CardBody, Table } from 'reactstrap';
-import { placeHolderImage } from '../../../../data/CommonPath';
-import { useContext, useState } from 'react';
-import RefundModal from './RefundModal';
-import I18NextContext from '@/helper/i18NextContext';
-import { useTranslation } from '@/app/i18n/client';
-import SettingContext from '@/helper/settingContext';
+import Avatar from "@/components/common/Avatar";
+import { Card, CardBody, Table } from "reactstrap";
+import { placeHolderImage } from "../../../../data/CommonPath";
+import { useContext, useState } from "react";
+import RefundModal from "./RefundModal";
+import I18NextContext from "@/helper/i18NextContext";
+import { useTranslation } from "@/app/i18n/client";
+import SettingContext from "@/helper/settingContext";
 
 const DetailsTable = ({ data }) => {
   const { i18Lang } = useContext(I18NextContext);
-  const { t } = useTranslation(i18Lang, 'common');
-  const [modal, setModal] = useState('');
-  const [storeData, setStoreData] = useState('');
+  const { t } = useTranslation(i18Lang, "common");
+  const [modal, setModal] = useState("");
+  const [storeData, setStoreData] = useState("");
   const { convertCurrency } = useContext(SettingContext);
   const onModalOpen = (product) => {
     setStoreData(product);
@@ -21,48 +21,53 @@ const DetailsTable = ({ data }) => {
     <>
       <Card>
         <CardBody>
-          <div className='tracking-wrapper table-responsive'>
-            <Table className='product-table'>
+          <div className="tracking-wrapper table-responsive">
+            <Table className="product-table">
               <thead>
                 <tr>
-                  <th scope='col'>{t('Image')}</th>
-                  <th scope='col'>{t('Name')}</th>
-                  <th scope='col'>{t('Price')}</th>
-                  <th scope='col'>{t('Quantity')}</th>
-                  <th scope='col'>{t('Subtotal')}</th>
-                  <th scope='col'>{t('RefundStatus')}</th>
+                  <th scope="col">{t("Image")}</th>
+                  <th scope="col">{t("Name")}</th>
+                  <th scope="col">{t("Price")}</th>
+                  <th scope="col">{t("Quantity")}</th>
+                  <th scope="col">{t("Subtotal")}</th>
+                  <th scope="col">{t("RefundStatus")}</th>
                 </tr>
               </thead>
               <tbody>
                 {data?.products?.length > 0
                   ? data?.products?.map((product, i) => (
                       <tr key={i}>
-                        <td className='product-image'>
+                        <td className="product-image">
                           <Avatar
                             data={
-                              product?.pivot?.variation && product?.pivot?.variation?.variation_image
-                                ? product?.pivot?.variation?.variation_image
-                                : product?.product_thumbnail
-                                ? product?.product_thumbnail
-                                : placeHolderImage
+                              product?.product_thumbnail || placeHolderImage
                             }
-                            name={product?.pivot?.variation ? product?.pivot?.variation?.name : product?.name}
-                            customImageClass='img-fluid'
+                            name={product?.name}
+                            customImageClass="img-fluid"
                           />
                         </td>
                         <td>
-                          <h6>{product?.pivot?.variation ? product?.pivot?.variation?.name : product?.name}</h6>
+                          <h6>{product?.name}</h6>
                         </td>
                         <td>
-                          <h6>{convertCurrency(product?.pivot?.single_price)}</h6>
+                          <h6>{convertCurrency(product?.price)}</h6>
                         </td>
                         <td>
-                          <h6>{product?.pivot?.quantity}</h6>
+                          <h6>{product?.quantity}</h6>
                         </td>
                         <td>
-                          <h6>{convertCurrency(product?.pivot?.subtotal)}</h6>
+                          <h6>{convertCurrency(product?.sub_total)}</h6>
                         </td>
-                        <td>{product?.is_return === 1 && product?.pivot?.is_refunded === 0 ? <a onClick={() => onModalOpen(product)}>{t('AskForRefund')}</a> : '-'}</td>
+                        <td>
+                          {product?.is_return === 1 &&
+                          product?.is_refunded === 0 ? (
+                            <a onClick={() => onModalOpen(product)}>
+                              {t("AskForRefund")}
+                            </a>
+                          ) : (
+                            "-"
+                          )}
+                        </td>
                       </tr>
                     ))
                   : null}

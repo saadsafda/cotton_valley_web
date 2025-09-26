@@ -13,7 +13,7 @@ import SettingContext from "@/helper/settingContext";
 
 const PlaceOrder = ({ values }) => {
   const { i18Lang } = useContext(I18NextContext);
-  const { cartProducts } = useContext(CartContext);
+  const { cartProducts, setCartProducts } = useContext(CartContext);
   const { t } = useTranslation(i18Lang, "common");
   const router = useRouter();
   const isAuth = Cookies.get("uat");
@@ -76,8 +76,6 @@ const PlaceOrder = ({ values }) => {
         data: { items, submit: true, ...values },
       });
 
-      console.log("Order placed successfully:", response);
-
       // Show success message
       toast.success(
         t("OrderPlacedSuccessfully") || "Order placed successfully!"
@@ -88,9 +86,13 @@ const PlaceOrder = ({ values }) => {
         router.push(
           `/${i18Lang}/account/order/details/${response?.cart?.message}`
         );
+        setCartProducts([]); // Clear cart products in context
+        localStorage.removeItem("cart"); // Clear cart from localStorage
       } else {
         // Fallback redirect if order_id is not available
         router.push(`/${i18Lang}/account/order`);
+        setCartProducts([]); // Clear cart products in context
+        localStorage.removeItem("cart"); // Clear cart from localStorage
       }
     } catch (err) {
       console.error("Order placement failed:", err);

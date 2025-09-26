@@ -29,14 +29,13 @@ const SearchedData = ({ data, fetchStatus }) => {
         >
           {data?.map((elem, i) => (
             <Col key={i}>
-              <div className="search-product product-wrapper">
                 <div>
                   <ProductBox1
                     imgUrl={elem?.product_thumbnail}
                     productDetail={{ ...elem }}
+                    classObj={{ productBoxClass: "product-box-3" }}
                   />
                 </div>
-              </div>
             </Col>
           ))}
         </Row>

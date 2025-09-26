@@ -11,7 +11,7 @@ import I18NextContext from "@/helper/i18NextContext";
 import ProductBagde from "./ProductBagde";
 import SettingContext from "@/helper/settingContext";
 import { ModifyString } from "@/utils/customFunctions/ModifyString";
-import getCookie from '@/utils/customFunctions/GetCookie';
+import getCookie from "@/utils/customFunctions/GetCookie";
 
 const ProductBox1 = ({
   imgUrl,
@@ -30,12 +30,23 @@ const ProductBox1 = ({
   const [hasToken, setHasToken] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const token = getCookie('uat');
+    if (typeof window !== "undefined") {
+      const token = getCookie("uat");
       setHasToken(!!token);
     }
   }, []);
 
+  let listStyle = {};
+
+  if (isList) {
+    listStyle = {
+      position: "absolute",
+      top: "10px",
+      left: "10px",
+      right: isList ? "auto" : "10px",
+      zIndex: 1,
+    };
+  }
 
   return (
     <>
@@ -47,17 +58,14 @@ const ProductBox1 = ({
             alignItems: "center",
             textAlign: "center",
             padding: isList ? "4px 20px" : "4px",
-            position: "absolute",
-            top: "10px",
-            left: "10px",
-            right: isList ? "auto" : "10px",
-            zIndex: 1,
+            ...listStyle
           }}
         >
           <div className="">
             {/* <ProductBox1Rating totalRating={productDetail?.rating_count || 0} /> */}
             <h6 style={{ color: "white" }}>
-              {ModifyString(productDetail.stock_status, false, "_")} {(`(${productDetail.quantity})`)}
+              {ModifyString(productDetail.stock_status, false, "_")}{" "}
+              {`(${productDetail.quantity})`}
             </h6>
           </div>
         </div>
@@ -88,11 +96,15 @@ const ProductBox1 = ({
             listClass="product-option"
           />
         </div>
-        <div className="product-detail" style={{ textAlign: isList ? "left" : "center" }}>
-          <Link style={{ height: "40px" }} href={`/${i18Lang}/product/${productDetail?.id}`}>
-            <h6 className="name">
-              {productDetail.name}
-            </h6>
+        <div
+          className="product-detail"
+          style={{ textAlign: isList ? "left" : "center" }}
+        >
+          <Link
+            style={{ height: "40px" }}
+            href={`/${i18Lang}/product/${productDetail?.id}`}
+          >
+            <h6 className="name">{productDetail.name}</h6>
             {/* <p dangerouslySetInnerHTML={{ __html: productDetail?.description }} /> */}
           </Link>
           <h6 className="unit mt-1">
@@ -112,7 +124,12 @@ const ProductBox1 = ({
               <Link href={`/${i18Lang}/auth/login`}>
                 <div
                   className="btn btn-primary btn-sm"
-                  style={{ margin: '0 auto', display: 'block', backgroundColor: '#FEEFEF', color: '#f6564f' }}
+                  style={{
+                    margin: "0 auto",
+                    display: "block",
+                    backgroundColor: "#FEEFEF",
+                    color: "#f6564f",
+                  }}
                 >
                   Login to show price
                 </div>

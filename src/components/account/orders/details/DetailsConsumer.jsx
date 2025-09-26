@@ -76,7 +76,7 @@ const DetailsConsumer = ({ data }) => {
                   <li>
                     {t('Subtotal')} <span>{convertCurrency(data?.amount ? data?.amount : 0)}</span>
                   </li>
-                  <li>
+                  {/* <li>
                     {t('Shipping')} <span>{convertCurrency(data?.shipping_total ? data?.shipping_total : 0)}</span>
                   </li>
                   <li>
@@ -92,7 +92,7 @@ const DetailsConsumer = ({ data }) => {
                       {t('WalletBalance')}
                       <span>{convertCurrency(data?.wallet_balance)}</span>
                     </li>
-                  ) : null}
+                  ) : null} */}
                   <li>
                     {t('Total')} <span>{convertCurrency(data?.total ? data?.total : 0)}</span>
                   </li>

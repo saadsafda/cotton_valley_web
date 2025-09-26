@@ -13,6 +13,7 @@ const CartProvider = (props) => {
   const [cartProducts, setCartProducts] = useState([]);
   const [variationModal, setVariationModal] = useState("");
   const [cartTotal, setCartTotal] = useState(0);
+  const [discountAmt, setDiscountAmt] = useState(0);
   // const { setCartCanvas } = useContext(ThemeOptionContext);
   const {
     data: CartAPIData,
@@ -58,6 +59,7 @@ const CartProvider = (props) => {
       if (CartAPIData) {
         setCartProducts(CartAPIData?.items);
         setCartTotal(CartAPIData?.total);
+        setDiscountAmt(CartAPIData?.discount);
       }
     } else {
       const isCartAvailable = JSON.parse(localStorage.getItem("cart"));
@@ -291,6 +293,8 @@ const CartProvider = (props) => {
         setCartProducts,
         cartTotal,
         setCartTotal,
+        discountAmt,
+        setDiscountAmt,
         removeCart,
         getTotal,
         handleIncDec,
