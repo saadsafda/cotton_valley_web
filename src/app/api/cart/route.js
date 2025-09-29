@@ -53,8 +53,7 @@ export async function POST(request) {
             body: JSON.stringify({ items: items, ...rest })
         });
 
-        console.log('Add to cart response body:', await response.json());
-
+        
         if (!response.ok) {
             throw new Error('Failed to add item to cart');
         }

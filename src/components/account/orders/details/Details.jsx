@@ -1,16 +1,16 @@
-'use client';
-import Loader from '@/layout/loader';
-import request from '@/utils/axiosUtils';
-import { OrderAPI } from '@/utils/axiosUtils/API';
-import { useQuery } from '@tanstack/react-query';
-import DetailStatus from './DetailStatus';
-import DetailTitle from './DetailTitle';
-import DetailsTable from './DetailsTable';
-import DetailsConsumer from './DetailsConsumer';
-import SubOrders from './SubOrders';
-import { useMemo, useContext } from 'react';
-import CartContext from '@/helper/cartContext';
-import { ToastNotification } from '@/utils/customFunctions/ToastNotification';
+"use client";
+import Loader from "@/layout/loader";
+import request from "@/utils/axiosUtils";
+import { OrderAPI } from "@/utils/axiosUtils/API";
+import { useQuery } from "@tanstack/react-query";
+import DetailStatus from "./DetailStatus";
+import DetailTitle from "./DetailTitle";
+import DetailsTable from "./DetailsTable";
+import DetailsConsumer from "./DetailsConsumer";
+import SubOrders from "./SubOrders";
+import { useMemo, useContext, useState, useEffect } from "react";
+import CartContext from "@/helper/cartContext";
+import { ToastNotification } from "@/utils/customFunctions/ToastNotification";
 
 // This function recursively searches through all orders (and their sub-orders) to find the parent of a given targetOrderNumber.
 const findParentOrderNumber = (orders, targetOrderNumber) => {
@@ -20,7 +20,10 @@ const findParentOrderNumber = (orders, targetOrderNumber) => {
     }
     //Recursively search inside sub_orders. If the target is found inside, return the current order's number (the parent).
     if (order.sub_orders?.length) {
-      const foundInSub = findParentOrderNumber(order.sub_orders, targetOrderNumber);
+      const foundInSub = findParentOrderNumber(
+        order.sub_orders,
+        targetOrderNumber
+      );
       if (foundInSub) {
         return order.order_number;
       }
@@ -46,31 +49,32 @@ const findOrderByNumber = (order, targetOrderNumber) => {
   if (order.order_number === targetOrderNumber) {
     return order;
   }
-  
+
   return null;
 };
 
 const Details = ({ params }) => {
-  const { handleIncDec } = useContext(CartContext);
-  
+  const { cartProducts, handleIncDec } = useContext(CartContext);
+  const [productQty, setProductQty] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
   const { data, isLoading } = useQuery({
-    queryKey: ['order', params],
+    queryKey: ["order", params],
     queryFn: async () => {
       const parentOrderNumber = params;
       if (!parentOrderNumber) throw new Error("Parent order not found");
-      
+
       const res = await request({ url: `${OrderAPI}/${parentOrderNumber}` });
       return res?.data;
     },
     enabled: true,
     refetchOnWindowFocus: false,
   });
-
   //useMemo to extract the current order
-  const currentOrder = useMemo(() => { 
+  const currentOrder = useMemo(() => {
     if (!data) return null;
     return findOrderByNumber(data, params);
   }, [data, params]); //Once the parent order is fetched (data), this memoized function finds the actual order (could be a sub-order or sub-sub-order) matching params.
+
 
   const handleReorder = () => {
     if (!currentOrder?.products?.length) {
@@ -87,27 +91,32 @@ const Details = ({ params }) => {
           name: orderProduct.name,
           sale_price: orderProduct.price,
           quantity: 999, // Set high stock to avoid stock check issues
-          ...orderProduct
+          ...orderProduct,
         };
 
         // Add each product to cart with its ordered quantity
         handleIncDec(
-          orderProduct.quantity, 
-          productObj, 
-          0, // isProductQty
-          () => {}, // setIsProductQty (dummy function)
-          () => {}, // isOpenFun (dummy function)
-          null, // cloneVariation
-          true // add flag
+          orderProduct.quantity,
+          productObj,
+          productQty,
+          setProductQty,
+          setIsOpen,
+          null,
         );
         addedCount++;
       } catch (error) {
-        console.error(`Failed to add product ${orderProduct.name} to cart:`, error);
+        console.error(
+          `Failed to add product ${orderProduct.name} to cart:`,
+          error
+        );
       }
     });
 
     if (addedCount > 0) {
-      ToastNotification("success", `${addedCount} products added to cart successfully!`);
+      ToastNotification(
+        "success",
+        `${addedCount} products added to cart successfully!`
+      );
     }
   };
 
@@ -116,7 +125,11 @@ const Details = ({ params }) => {
 
   return (
     <>
-      <DetailTitle params={params} data={currentOrder} handleReorder={handleReorder} />
+      <DetailTitle
+        params={params}
+        data={currentOrder}
+        handleReorder={handleReorder}
+      />
       <DetailStatus data={currentOrder} />
       <DetailsTable data={currentOrder} />
       <DetailsConsumer data={currentOrder} />

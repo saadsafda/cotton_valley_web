@@ -28,6 +28,7 @@ const CartProvider = (props) => {
   }); //enabled: false, // <-- disables automatic fetching
 
   // --- Sales Order Sync ---
+  let syncTimer;
   const syncSalesOrder = async (cartProducts) => {
     try {
       const items = cartProducts.map((item) => ({
@@ -44,6 +45,14 @@ const CartProvider = (props) => {
     } catch (err) {
       console.error("Sales Order sync failed:", err);
     }
+  };
+
+  // Debounced wrapper
+  const scheduleSync = (cartProducts) => {
+    clearTimeout(syncTimer);
+    syncTimer = setTimeout(() => {
+      syncSalesOrder(cartProducts);
+    }, 500); // waits 500ms after last change
   };
 
   // Refetching Cart API
@@ -153,7 +162,9 @@ const CartProvider = (props) => {
       setCartProducts((prev) => {
         const newCart = [...prev, params];
         // setCartCanvas(true);
-        syncSalesOrder(newCart);
+        // syncSalesOrder(newCart);
+        scheduleSync(newCart);
+
         return newCart;
       });
       ToastNotification("success", `Item ${productObj?.id} add to the cart.`);
@@ -204,7 +215,7 @@ const CartProvider = (props) => {
           );
         }
         setCartProducts([...cart]);
-        syncSalesOrder([...cart]);
+        scheduleSync([...cart])
       }
     }
     // Update the productQty state immediately after updating the cartProducts state
