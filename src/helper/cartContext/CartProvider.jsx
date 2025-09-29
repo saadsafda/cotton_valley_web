@@ -66,6 +66,7 @@ const CartProvider = (props) => {
       if (isCartAvailable?.items?.length > 0) {
         setCartProducts(isCartAvailable?.items);
         setCartTotal(isCartAvailable?.total);
+        setDiscountAmt(0);
       }
     }
   }, [getCartLoading]);

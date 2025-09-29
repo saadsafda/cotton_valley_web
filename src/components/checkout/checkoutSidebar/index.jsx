@@ -16,8 +16,15 @@ const CheckoutSidebar = ({ values, setFieldValue }) => {
   const [storeCoupon, setStoreCoupon] = useState();
   // It Just Static Values as per cart default value (When you are using api then you need calculate as per your requirement)
   const { convertCurrency } = useContext(SettingContext);
-  const { cartProducts, setCartProducts, discountAmt, cartTotal, getTotal } =
-    useContext(CartContext);
+  const {
+    cartProducts,
+    setCartProducts,
+    discountAmt,
+    cartTotal,
+    getTotal,
+    setCartTotal,
+    setDiscountAmt,
+  } = useContext(CartContext);
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, "common");
 
@@ -67,8 +74,8 @@ const CheckoutSidebar = ({ values, setFieldValue }) => {
               setFieldValue={setFieldValue}
               setStoreCoupon={setStoreCoupon}
               storeCoupon={storeCoupon}
-              cartProducts={cartProducts}
-              setCartProducts={setCartProducts}
+              setCartTotal={setCartTotal}
+              setDiscountAmt={setDiscountAmt}
             />
             {discountAmt > 0 && (
               <li className="list-total">
@@ -82,8 +89,9 @@ const CheckoutSidebar = ({ values, setFieldValue }) => {
             <li className="list-total">
               <h4>{t("Total")}</h4>
               <h4 className="price">
-                {convertCurrency(cartTotal?.toFixed(2) || getTotal(cartProducts)?.toFixed(2)) ||
-                  t(`NotCalculatedYet`)}
+                {convertCurrency(
+                  cartTotal?.toFixed(2) || getTotal(cartProducts)?.toFixed(2)
+                ) || t(`NotCalculatedYet`)}
               </h4>
             </li>
           </ul>

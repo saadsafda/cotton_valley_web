@@ -9,7 +9,7 @@ import OfferImage from "../../../../public/assets/images/offer.gif";
 import request from "@/utils/axiosUtils";
 import { CouponAPI } from "@/utils/axiosUtils/API";
 
-const ApplyCoupon = ({ setFieldValue, setStoreCoupon, storeCoupon, cartProducts, setCartProducts }) => {
+const ApplyCoupon = ({ setFieldValue, setStoreCoupon, storeCoupon, setDiscountAmt, setCartTotal }) => {
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, "common");
   const [appliedCoupon, setAppliedCoupon] = useState(false);
@@ -34,7 +34,9 @@ const ApplyCoupon = ({ setFieldValue, setStoreCoupon, storeCoupon, cartProducts,
         if (response?.data?.success) {
           setAppliedCoupon("applied");
           setFieldValue("coupon", storeCoupon);
-          setCartProducts(cartProducts);
+          setDiscountAmt(response?.data?.discount_amount || 0);
+          setCartTotal(response?.data?.new_total || 0);
+          setError("");
         } else {
           setAppliedCoupon("invalid");
           setFieldValue("coupon", "");
