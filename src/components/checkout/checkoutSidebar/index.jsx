@@ -76,6 +76,7 @@ const CheckoutSidebar = ({ values, setFieldValue }) => {
               storeCoupon={storeCoupon}
               setCartTotal={setCartTotal}
               setDiscountAmt={setDiscountAmt}
+              discountAmt={discountAmt}
             />
             {discountAmt > 0 && (
               <li className="list-total">

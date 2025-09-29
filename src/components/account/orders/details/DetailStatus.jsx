@@ -19,9 +19,6 @@ const DetailStatus = ({ data }) => {
     processing: processingImage,
     pending: pendingImage,
     shipped: shippedImage,
-    delivered: deliveredImage,
-    outForDelivery: outForDeliveryImage,
-    cancelled: cancelledImage,
   };
   return (
     <div className='mb-4'>

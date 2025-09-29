@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
-import { Col } from 'reactstrap';
-import Slider from 'react-slick';
-import { placeHolderImage } from '../../../../../data/CommonPath';
-import { viewModalSliderOption } from '../../../../../data/SliderSettings';
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { Col } from "reactstrap";
+import Slider from "react-slick";
+import { placeHolderImage } from "../../../../../data/CommonPath";
+import { viewModalSliderOption } from "../../../../../data/SliderSettings";
 
 const LeftSideModal = ({ cloneVariation, productObj }) => {
   const [state, setState] = useState({ nav1: null, nav2: null });
@@ -17,22 +17,39 @@ const LeftSideModal = ({ cloneVariation, productObj }) => {
     });
   }, []);
   return (
-    <Col lg='6'>
-      <div className='view-image-slider'>
+    <Col lg="6">
+      <div className="view-image-slider">
         <Slider asNavFor={nav2} ref={(slider) => (slider1.current = slider)}>
           {cloneVariation?.product?.product_galleries?.map((item, i) => (
-            <div className='slider-image' key={i}>
-              <Image src={item ? item?.original_url || item : placeHolderImage} className='img-fluid' alt={cloneVariation?.product?.item_code ?? "image"} width={500} height={500} />
+            <div className="slider-image" key={i}>
+              <Image
+                src={item ? item?.original_url || item : placeHolderImage}
+                className="img-fluid"
+                alt={cloneVariation?.product?.item_code ?? "image"}
+                width={500}
+                height={500}
+              />
             </div>
           ))}
         </Slider>
       </div>
       <div className="thumbnail-slider">
-        <Slider {...viewModalSliderOption} slidesToShow={cloneVariation?.product?.product_galleries?.length - 1} asNavFor={nav1} ref={(slider) => (slider2.current = slider)}>
+        <Slider
+          {...viewModalSliderOption}
+          slidesToShow={cloneVariation?.product?.product_galleries?.length - 1}
+          asNavFor={nav1}
+          ref={(slider) => (slider2.current = slider)}
+        >
           {cloneVariation?.product?.product_galleries?.map((item, i) => (
-            <div className='slider-image' key={i}>
+            <div className="slider-image" key={i}>
               <div className="thumbnail-image">
-                <Image src={item ? item?.original_url || item : placeHolderImage} className='img-fluid' alt={cloneVariation?.product?.name ?? "image"} width={500} height={500} />
+                <Image
+                  src={item ? item?.original_url || item : placeHolderImage}
+                  className="img-fluid"
+                  alt={cloneVariation?.product?.name ?? "image"}
+                  width={500}
+                  height={500}
+                />
               </div>
             </div>
           ))}

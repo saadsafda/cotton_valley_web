@@ -9,12 +9,13 @@ import OfferImage from "../../../../public/assets/images/offer.gif";
 import request from "@/utils/axiosUtils";
 import { CouponAPI } from "@/utils/axiosUtils/API";
 
-const ApplyCoupon = ({ setFieldValue, setStoreCoupon, storeCoupon, setDiscountAmt, setCartTotal }) => {
+const ApplyCoupon = ({ setFieldValue, setStoreCoupon, storeCoupon, setDiscountAmt, setCartTotal, discountAmt }) => {
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, "common");
   const [appliedCoupon, setAppliedCoupon] = useState(false);
   const { convertCurrency } = useContext(SettingContext);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const onCouponApply = async (value) => {
     setStoreCoupon(value);
@@ -33,6 +34,7 @@ const ApplyCoupon = ({ setFieldValue, setStoreCoupon, storeCoupon, setDiscountAm
 
         if (response?.data?.success) {
           setAppliedCoupon("applied");
+          setSuccess(response?.data?.message || "Coupon applied successfully");
           setFieldValue("coupon", storeCoupon);
           setDiscountAmt(response?.data?.discount_amount || 0);
           setCartTotal(response?.data?.new_total || 0);
@@ -70,7 +72,7 @@ const ApplyCoupon = ({ setFieldValue, setStoreCoupon, storeCoupon, setDiscountAm
                 alt="offer"
               />
               <h4>
-                {t("YouSaved")} <span>{convertCurrency(10)}</span>{" "}
+                {t("YouSaved")} <span>{convertCurrency(discountAmt)}</span>{" "}
                 {t("WithThisCode")} 🎉 <p>{t("CouponApplied")}</p>
               </h4>
             </div>

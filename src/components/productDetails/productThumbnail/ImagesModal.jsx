@@ -1,21 +1,32 @@
 import CustomModal from "@/components/common/CustomModal";
+import { placeHolderImage } from "@/data/CommonPath";
 import { viewModalSliderOption } from "@/data/SliderSettings";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import Slider from "react-slick";
-import { Col, Row } from "reactstrap";
+import { Col } from "reactstrap";
 
 const ImagesModal = ({ productObj, variationModal, setVariationModal }) => {
   const [state, setState] = useState({ nav1: null, nav2: null });
   const slider1 = useRef();
   const slider2 = useRef();
   const { nav1, nav2 } = state;
+
   useEffect(() => {
     setState({
       nav1: slider1.current,
       nav2: slider2.current,
     });
   }, []);
+
+  const galleries = productObj?.product?.product_galleries || [];
+  const slidesToShowThumbs = Math.max(1, Math.min(galleries.length, 4));
+
+  const handleThumbClick = (index) => {
+    if (slider1.current && typeof slider1.current.slickGoTo === 'function') {
+      slider1.current.slickGoTo(index);
+    }
+  };
 
   return (
     <CustomModal
@@ -28,8 +39,18 @@ const ImagesModal = ({ productObj, variationModal, setVariationModal }) => {
     >
       <Col lg="12">
         <div className="view-image-slider">
-          <Slider asNavFor={nav2} ref={(slider) => (slider1.current = slider)}>
-            {productObj?.product?.product_galleries?.map((item, i) => (
+          <Slider
+            asNavFor={nav2}
+            ref={(slider) => (slider1.current = slider)}
+            slidesToShow={1}
+            slidesToScroll={1}
+            arrows={true}
+            dots={false}
+            infinite={galleries.length > 1}
+            swipeToSlide
+            adaptiveHeight
+          >
+            {galleries.map((item, i) => (
               <div className="slider-image flex-centerlize" key={i}>
                 <Image
                   src={item ? item?.original_url || item : placeHolderImage}
@@ -42,28 +63,34 @@ const ImagesModal = ({ productObj, variationModal, setVariationModal }) => {
             ))}
           </Slider>
         </div>
-        <div className="thumbnail-slider">
-          <Slider
-            {...viewModalSliderOption}
-            slidesToShow={productObj?.product?.product_galleries?.length - 1}
-            asNavFor={nav1}
-            ref={(slider) => (slider2.current = slider)}
-          >
-            {productObj?.product?.product_galleries?.map((item, i) => (
-              <div className="slider-image" key={i}>
-                <div className="thumbnail-image">
-                  <Image
-                    src={item ? item?.original_url || item : placeHolderImage}
-                    className="img-fluid"
-                    alt={productObj?.product?.name ?? "image"}
-                    width={500}
-                    height={500}
-                  />
+        {galleries.length > 1 && (
+          <div className="thumbnail-slider">
+            <Slider
+              {...viewModalSliderOption}
+              slidesToShow={slidesToShowThumbs}
+              asNavFor={nav1}
+              ref={(slider) => (slider2.current = slider)}
+            >
+              {productObj?.product?.product_galleries?.map((item, i) => (
+                <div className="slider-image" key={i}>
+                  <div
+                    className="thumbnail-image"
+                    onClick={() => handleThumbClick(i)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <Image
+                      src={item ? item?.original_url || item : placeHolderImage}
+                      className="img-fluid"
+                      alt={productObj?.product?.name ?? "image"}
+                      width={120}
+                      height={120}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </Slider>
-        </div>
+              ))}
+            </Slider>
+          </div>
+        )}
       </Col>
     </CustomModal>
   );

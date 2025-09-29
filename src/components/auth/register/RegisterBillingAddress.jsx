@@ -1,4 +1,4 @@
-import ColumnSimpleInputField from "@/components/common/inputFields/ColumnSimpleInputField";
+import SelectField from "@/components/common/inputFields/SelectField";
 import SimpleInputField from "@/components/common/inputFields/SimpleInputField";
 import React, { useEffect } from "react";
 import { Col } from "reactstrap";
@@ -81,23 +81,25 @@ const RegisterBillingAddress = ({ values, countryList }) => {
               },
             ]}
           />
-          <SelectField
-            name="billing_address.country"
-            placeholder={"Enter Country"}
-            notitle="true"
-            label="Country "
-            require="true"
-            inputprops={{
-              id: "billing_address.country",
-              name: "billing_address.country",
-              options: countryList
-                ? countryList.map((cou) => ({
-                    id: cou.id,
-                    name: cou.id,
-                  }))
-                : [],
-            }}
-          />
+          <Col md={6}>
+            <SelectField
+              name="billing_address.country"
+              placeholder={"Enter Country"}
+              notitle="true"
+              label="Country "
+              require="true"
+              inputprops={{
+                id: "billing_address.country",
+                name: "billing_address.country",
+                options: countryList
+                  ? countryList.map((cou) => ({
+                      id: cou.id,
+                      name: cou.id,
+                    }))
+                  : [],
+              }}
+            />
+          </Col>
         </>
       )}
     </>

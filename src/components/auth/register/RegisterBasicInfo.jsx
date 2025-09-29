@@ -6,7 +6,7 @@ import RegisterShippingAddress from "./RegisterShippingAddress";
 import RegisterBillingAddress from "./RegisterBillingAddress";
 import SelectField from "@/components/common/inputFields/SelectField";
 
-const RegisterBasicInfo = ({ values, countryList, allCountryCode }) => {
+const RegisterBasicInfo = ({ values, countryList, allCountryCode, setFieldValue }) => {
   return (
     <>
       <SimpleInputField

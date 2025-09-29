@@ -1,3 +1,4 @@
+'use client';
 import Loader from '@/layout/loader';
 import request from '@/utils/axiosUtils';
 import { OrderAPI } from '@/utils/axiosUtils/API';
@@ -7,7 +8,9 @@ import DetailTitle from './DetailTitle';
 import DetailsTable from './DetailsTable';
 import DetailsConsumer from './DetailsConsumer';
 import SubOrders from './SubOrders';
-import { useMemo } from 'react';
+import { useMemo, useContext } from 'react';
+import CartContext from '@/helper/cartContext';
+import { ToastNotification } from '@/utils/customFunctions/ToastNotification';
 
 // This function recursively searches through all orders (and their sub-orders) to find the parent of a given targetOrderNumber.
 const findParentOrderNumber = (orders, targetOrderNumber) => {
@@ -48,6 +51,8 @@ const findOrderByNumber = (order, targetOrderNumber) => {
 };
 
 const Details = ({ params }) => {
+  const { handleIncDec } = useContext(CartContext);
+  
   const { data, isLoading } = useQuery({
     queryKey: ['order', params],
     queryFn: async () => {
@@ -55,7 +60,6 @@ const Details = ({ params }) => {
       if (!parentOrderNumber) throw new Error("Parent order not found");
       
       const res = await request({ url: `${OrderAPI}/${parentOrderNumber}` });
-      console.log("Fetched order data:", res);
       return res?.data;
     },
     enabled: true,
@@ -68,12 +72,51 @@ const Details = ({ params }) => {
     return findOrderByNumber(data, params);
   }, [data, params]); //Once the parent order is fetched (data), this memoized function finds the actual order (could be a sub-order or sub-sub-order) matching params.
 
+  const handleReorder = () => {
+    if (!currentOrder?.products?.length) {
+      ToastNotification("error", "No products found to reorder");
+      return;
+    }
+
+    let addedCount = 0;
+    currentOrder.products.forEach((orderProduct) => {
+      try {
+        // Create a product object that matches the cart structure
+        const productObj = {
+          id: orderProduct.product_id || orderProduct.id,
+          name: orderProduct.name,
+          sale_price: orderProduct.price,
+          quantity: 999, // Set high stock to avoid stock check issues
+          ...orderProduct
+        };
+
+        // Add each product to cart with its ordered quantity
+        handleIncDec(
+          orderProduct.quantity, 
+          productObj, 
+          0, // isProductQty
+          () => {}, // setIsProductQty (dummy function)
+          () => {}, // isOpenFun (dummy function)
+          null, // cloneVariation
+          true // add flag
+        );
+        addedCount++;
+      } catch (error) {
+        console.error(`Failed to add product ${orderProduct.name} to cart:`, error);
+      }
+    });
+
+    if (addedCount > 0) {
+      ToastNotification("success", `${addedCount} products added to cart successfully!`);
+    }
+  };
+
   if (isLoading) return <Loader />;
   if (!currentOrder) return <div>Order not found</div>;
 
   return (
     <>
-      <DetailTitle params={params} data={currentOrder} />
+      <DetailTitle params={params} data={currentOrder} handleReorder={handleReorder} />
       <DetailStatus data={currentOrder} />
       <DetailsTable data={currentOrder} />
       <DetailsConsumer data={currentOrder} />

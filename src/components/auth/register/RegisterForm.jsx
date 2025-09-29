@@ -450,6 +450,7 @@ const RegisterForm = () => {
                 values={values}
                 countryList={countryList}
                 allCountryCode={AllCountryCode}
+                setFieldValue={setFieldValue}
               />
             )}
 
