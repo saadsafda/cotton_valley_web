@@ -38,8 +38,8 @@ const HeaderCartData = ({ cartStyle }) => {
       if (tempConfetti === 0) {
         setConfetti((prev) => 1);
         timer = setTimeout(() => {
-          // Update the confetti state after the setTimeout completes
-          setConfetti((prev) => 2);
+          // Hide confetti after 4.5 seconds
+          setConfetti((prev) => 0);
         }, 4500);
       }
     } else {
