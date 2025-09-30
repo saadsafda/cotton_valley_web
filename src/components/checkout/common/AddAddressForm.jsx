@@ -51,7 +51,7 @@ const AddAddressForm = ({ mutate, type, editAddress, setEditAddress, modal, setM
         values['pincode'] = values['pincode'].toString();
         mutate(values);
       }}>
-      {({ values, setFieldValue }) => <SelectForm values={values} setFieldValue={setFieldValue} setModal={setModal} data={data} />}
+      {({ values, setFieldValue, isSubmitting }) => <SelectForm values={values} setFieldValue={setFieldValue} setModal={setModal} data={data} isSubmitting={isSubmitting} />}
     </Formik>
   );
 };

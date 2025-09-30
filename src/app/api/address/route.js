@@ -76,7 +76,7 @@ export async function DELETE(request) {
     const response = await fetch(url, {
         method: "DELETE",
         headers: headers,
-        body: JSON.stringify({ id }),
+        body: JSON.stringify({ address_id: id }),
     });
 
     const data = await response.json();

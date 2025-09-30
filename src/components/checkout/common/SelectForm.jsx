@@ -2,20 +2,21 @@ import SearchableSelectInput from "@/components/common/inputFields/SearchableSel
 import SimpleInputField from "@/components/common/inputFields/SimpleInputField";
 import { Form } from "formik";
 import { ModalFooter, Row } from "reactstrap";
-import { AllCountryCode } from "../../../data/AllCountryCode";
 import Btn from "@/elements/buttons/Btn";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import I18NextContext from "@/helper/i18NextContext";
 import { useTranslation } from "@/app/i18n/client";
 
-const SelectForm = ({ values, data, setModal }) => {
+const SelectForm = ({ values, data, setModal, isSubmitting }) => {
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, "common");
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
 
   // Fetch state and country when pincode changes
   useEffect(() => {
     const pincode = values.pincode;
     if (pincode && pincode.length >= 5) {
+      setIsLoadingLocation(true);
       // Using Zippopotam.us API to fetch location details by pincode
       fetch(`https://api.zippopotam.us/us/${pincode}`)
         .then((response) => response.json())
@@ -34,6 +35,9 @@ const SelectForm = ({ values, data, setModal }) => {
         })
         .catch((error) => {
           console.error("Error fetching location:", error);
+        })
+        .finally(() => {
+          setIsLoadingLocation(false);
         });
     }
   }, [values.pincode]);
@@ -45,17 +49,19 @@ const SelectForm = ({ values, data, setModal }) => {
           nameList={[
             {
               name: "title",
-              placeholder: t("EnterTitle"),
+              placeholder: t("Enter Title"),
               toplabel: "Title",
               colprops: { xs: 12 },
               require: "true",
+              disabled: isSubmitting,
             },
             {
               name: "street",
-              placeholder: t("EnterAddress"),
+              placeholder: t("Enter Address"),
               toplabel: "Address",
               colprops: { xs: 12 },
               require: "true",
+              disabled: isSubmitting,
             },
           ]}
         />
@@ -96,21 +102,21 @@ const SelectForm = ({ values, data, setModal }) => {
           nameList={[
             {
               name: "pincode",
-              placeholder: t("EnterPincode"),
-              toplabel: "Pincode",
+              placeholder: isLoadingLocation ? t("Loading...") : t("Enter Zip Code"),
+              toplabel: "Zip Code",
               colprops: { xxl: 6, lg: 12, sm: 6 },
               require: "true",
             },
             {
               name: "state_id",
-              placeholder: t("EnterState"),
+              placeholder: isLoadingLocation ? t("Loading...") : t("Enter State"),
               toplabel: "State",
               colprops: { xxl: 6, lg: 12, sm: 6 },
               require: "true",
             },
             {
               name: "city",
-              placeholder: t("EnterCity"),
+              placeholder: isLoadingLocation ? t("Loading...") : t("Enter City"),
               toplabel: "City",
               colprops: { xxl: 6, lg: 12, sm: 6 },
               require: "true",
@@ -118,10 +124,11 @@ const SelectForm = ({ values, data, setModal }) => {
             {
               name: "phone",
               type: "number",
-              placeholder: t("EnterPhoneNumber"),
+              placeholder: t("Enter Phone Number"),
               require: "true",
               toplabel: "Phone",
               colprops: { xxl: 6, lg: 12, sm: 6 },
+              disabled: isSubmitting,
             },
           ]}
         />
@@ -130,11 +137,14 @@ const SelectForm = ({ values, data, setModal }) => {
             className="btn-md btn-theme-outline fw-bold"
             title="Cancel"
             onClick={() => setModal(false)}
+            disabled={isSubmitting}
           />
           <Btn
             className="btn-md fw-bold text-light theme-bg-color"
             type="submit"
-            title="Submit"
+            title={isSubmitting ? t("Submitting...") : t("Submit")}
+            disabled={isSubmitting || isLoadingLocation}
+            loading={isSubmitting}
           />
         </ModalFooter>
       </Row>

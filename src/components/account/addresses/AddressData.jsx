@@ -4,13 +4,21 @@ import { useState } from 'react';
 import { RiDeleteBinLine, RiEditBoxLine } from 'react-icons/ri';
 import { Col, Row } from 'reactstrap';
 import AddressTable from './AddressTable';
+import request from '@/utils/axiosUtils';
 
 const AddressData = ({ addressState, setAddressState, modal, setModal, setEditAddress }) => {
   const [deleteId, setDeleteId] = useState('');
-  const removeAddress = () => {
+  const removeAddress = async () => {
     // Add remove address login here
     setAddressState((prev) => prev.filter((elem) => elem.id !== deleteId));
     setModal('');
+
+    await request({
+      method: 'DELETE',
+      url: `/address`,
+      data: { id: deleteId },
+    });
+
   };
   return (
     <Row className='g-sm-4 g-3'>
