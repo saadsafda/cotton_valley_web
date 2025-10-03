@@ -70,10 +70,16 @@ const PlaceOrder = ({ values }) => {
         throw new Error(t("InvalidCartItems") || "Some cart items are invalid");
       }
 
+      // Format current date and time as "YYYY-MM-DD HH:mm:ss"
+      const localDate = new Date();
+      const formatted = localDate
+        .toLocaleString("sv-SE", { hour12: false }) // "YYYY-MM-DD HH:mm:ss"
+        .replace("T", " ");
+
       const response = await request({
         url: AddToCartAPI,
         method: "POST",
-        data: { items, submit: true, ...values },
+        data: { items, submit: true, submit_datetime: formatted, ...values },
       });
 
       // Show success message
