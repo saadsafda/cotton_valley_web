@@ -1,25 +1,69 @@
-import { useState } from 'react';
-import { Col, Row } from 'reactstrap';
-import CustomModal from '@/components/common/CustomModal';
-import LeftSideModal from './LeftSideModal';
-import RightVariationModal from './RightSideModal';
-import VariationModalQty from './VariationModalQty';
-import VariationAddToCart from './VariationAddToCart';
-import ProductAttribute from '@/components/productDetails/common/productAttribute/ProductAttribute';
+import { useEffect, useState } from "react";
+import { Col, Row } from "reactstrap";
+import CustomModal from "@/components/common/CustomModal";
+import LeftSideModal from "./LeftSideModal";
+import RightVariationModal from "./RightSideModal";
+import VariationModalQty from "./VariationModalQty";
+import VariationAddToCart from "./VariationAddToCart";
+import ProductAttribute from "@/components/productDetails/common/productAttribute/ProductAttribute";
+import request from "@/utils/axiosUtils";
 
 const VariationModal = ({ productObj, variationModal, setVariationModal }) => {
-  const [cloneVariation, setCloneVariation] = useState({ product: productObj, attributeValues: [], productQty: 1, selectedVariation: '', variantIds: [] });
+  const [cloneVariation, setCloneVariation] = useState({
+    product: productObj,
+    attributeValues: [],
+    productQty: 1,
+    selectedVariation: "",
+    variantIds: [],
+  });
+
+  // const handleProductClick = async () => {
+  //   try {
+  //     await request({
+  //       url: "/productView",
+  //       method: "POST",
+  //       data: { product_id: productObj?.id },
+  //     });
+  //   } catch (error) {
+  //     console.error("Error updating product views:", error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   handleProductClick();
+  // }, []);
+
   return (
-    <CustomModal modal={productObj?.id == variationModal} setModal={setVariationModal} classes={{ modalClass: 'view-modal modal-lg theme-modal', modalHeaderClass: 'p-0' }}>
-      <Row className='g-sm-4 g-2'>
-        <LeftSideModal cloneVariation={cloneVariation} productObj={productObj} />
-        <Col lg='6'>
-          <div className='right-sidebar-modal'>
+    <CustomModal
+      modal={productObj?.id == variationModal}
+      setModal={setVariationModal}
+      classes={{
+        modalClass: "view-modal modal-lg theme-modal",
+        modalHeaderClass: "p-0",
+      }}
+    >
+      <Row className="g-sm-4 g-2">
+        <LeftSideModal
+          cloneVariation={cloneVariation}
+          productObj={productObj}
+        />
+        <Col lg="6">
+          <div className="right-sidebar-modal">
             <RightVariationModal cloneVariation={cloneVariation} />
-            {cloneVariation?.product && productObj?.id == variationModal && <ProductAttribute productState={cloneVariation} setProductState={setCloneVariation} />}
-            <div className='modal-bottom-cart'>
-              <VariationModalQty cloneVariation={cloneVariation} setCloneVariation={setCloneVariation} />
-              <VariationAddToCart cloneVariation={cloneVariation} setVariationModal={setVariationModal} />
+            {cloneVariation?.product && productObj?.id == variationModal && (
+              <ProductAttribute
+                productState={cloneVariation}
+                setProductState={setCloneVariation}
+              />
+            )}
+            <div className="modal-bottom-cart">
+              <VariationModalQty
+                cloneVariation={cloneVariation}
+                setCloneVariation={setCloneVariation}
+              />
+              <VariationAddToCart
+                cloneVariation={cloneVariation}
+                setVariationModal={setVariationModal}
+              />
             </div>
           </div>
         </Col>
