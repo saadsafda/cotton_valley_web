@@ -1,20 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
-import { Form, Input, InputGroup, ModalHeader } from "reactstrap";
+import { ModalHeader } from "reactstrap";
 import CustomModal from "@/components/common/CustomModal";
-import Btn from "@/elements/buttons/Btn";
-import newsLetterImage from "../../../public/assets/images/newsletter/3.jpg";
-import I18NextContext from "@/helper/i18NextContext";
-import { useTranslation } from "@/app/i18n/client";
 import Cookies from "js-cookie";
-import Logo from "../../../public/assets/images/logo/logo.png";
 import ThemeOptionContext from "@/helper/themeOptionsContext";
+import { placeHolderImage } from "@/data/CommonPath";
 
 const NewsLetterModal = () => {
   const { themeOption } = useContext(ThemeOptionContext);
   const [modal, setModal] = useState(true);
-  const { i18Lang } = useContext(I18NextContext);
-  const { t } = useTranslation(i18Lang, "common");
   useEffect(() => {
     const newsLetterModal = Cookies.get("newsLetterModal");
     if (newsLetterModal) {
@@ -42,7 +36,7 @@ const NewsLetterModal = () => {
             <Image
               src={
                 themeOption?.newsletter_modal?.image?.original_url ||
-                newsLetterImage
+                placeHolderImage
               }
               className="img-fluid"
               alt="NewsLetter Image"
