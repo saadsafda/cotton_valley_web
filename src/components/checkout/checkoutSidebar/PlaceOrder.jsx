@@ -21,6 +21,42 @@ const PlaceOrder = ({ values }) => {
   const [error, setError] = useState(null);
   const { settingData, convertCurrency } = useContext(SettingContext);
   const [minOrderAmt, setMinOrderAmt] = useState(0);
+  const [clientLocation, setClientLocation] = useState({
+    ip: null,
+    latitude: null,
+    longitude: null,
+  });
+
+  // Fetch client IP address
+  const fetchClientIP = async () => {
+    try {
+      const response = await fetch('https://api.ipify.org?format=json');
+      const data = await response.json();
+      setClientLocation((prev) => ({ ...prev, ip: data.ip }));
+    } catch (error) {
+      console.error('Failed to fetch IP address:', error);
+    }
+  };
+
+  // Fetch client geolocation (latitude and longitude)
+  const fetchClientGeolocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setClientLocation((prev) => ({
+            ...prev,
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          }));
+        },
+        (error) => {
+          console.error('Failed to get geolocation:', error);
+        }
+      );
+    } else {
+      console.warn('Geolocation is not supported by this browser.');
+    }
+  };
 
   const handleClick = async () => {
     // Clear previous error
@@ -79,7 +115,15 @@ const PlaceOrder = ({ values }) => {
       const response = await request({
         url: AddToCartAPI,
         method: "POST",
-        data: { items, submit: true, submit_datetime: formatted, ...values },
+        data: { 
+          items, 
+          submit: true, 
+          submit_datetime: formatted, 
+          client_ip: clientLocation.ip,
+          client_latitude: clientLocation.latitude,
+          client_longitude: clientLocation.longitude,
+          ...values 
+        },
       });
 
       // Show success message
@@ -124,6 +168,10 @@ const PlaceOrder = ({ values }) => {
     if (settingData?.general?.min_order_amount) {
       setMinOrderAmt(settingData?.general?.min_order_amount);
     }
+
+    // Fetch client location data
+    fetchClientIP();
+    fetchClientGeolocation();
 
     return () => {
       // Cleanup here
