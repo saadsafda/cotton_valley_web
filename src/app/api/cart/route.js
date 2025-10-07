@@ -41,7 +41,7 @@ export async function POST(request) {
         const { items, ...rest } = await request.json();
         const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/method/cotton_valley.api.sales_order.create_or_update_sales_order`;
         
-        console.log('Add to cart body:', { items: items, ...rest });
+        // console.log('Add to cart body:', { items: items, ...rest });
 
         const response = await fetch(url, {
             method: 'POST',

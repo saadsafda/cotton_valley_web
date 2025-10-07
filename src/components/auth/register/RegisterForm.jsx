@@ -404,22 +404,35 @@ const RegisterForm = () => {
                   response.data?.message ||
                   "Registered successfully!"
               );
-              const fileFormData = new FormData();
-              fileFormData.append("file", values.sales_tax_certificate);
-              fileFormData.append("folder", "Home/Attachments");
-              fileFormData.append("doctype", "Customer");
-              fileFormData.append(
-                "customer",
-                response.data?.message?.customer_id
-              );
-              fileFormData.append("is_private", 0);
+              const file = values.sales_tax_certificate;
+              const reader = new FileReader();
+              reader.onloadend = async () => {
+                const base64Data = reader.result.split(",")[1]; // remove data prefix
+                const response = await requestForReal({ method: "POST", url: "/api/method/cotton_valley.api.upload_file.guest_upload", data: {
+                  file_name: file.name,
+                  file_data: base64Data,
+                  doctype: "Customer",
+                  docname: response.data?.message?.customer_id,
+                  is_private: 0,
+                }});
+                // console.log(response.data);
+              };
+              reader.readAsDataURL(file);
+              // const fileFormData = new FormData();
+              // fileFormData.append("file", values.sales_tax_certificate);
+              // fileFormData.append("folder", "Home/Attachments");
+              // fileFormData.append("doctype", "Customer");
+              // fileFormData.append(
+              //   "customer",
+              //   response.data?.message?.customer_id
+              // );
+              // fileFormData.append("is_private", 0);
 
-              let fileResponse = await requestForReal({
-                method: "POST",
-                url: "api/method/upload_file",
-                data: fileFormData,
-              });
-              console.log(fileResponse, "fileResponse");
+              // let fileResponse = await requestForReal({
+              //   method: "POST",
+              //   url: "/api/method/upload_file",
+              //   data: fileFormData,
+              // });
               resetForm();
               window.location.href = `/`;
             } else {
