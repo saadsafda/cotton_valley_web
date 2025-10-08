@@ -55,8 +55,8 @@ const RegisterForm = () => {
         (position) => {
           setClientLocation((prev) => ({
             ...prev,
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
+            latitude: position.coords.latitude || "",
+            longitude: position.coords.longitude || "",
           }));
         },
         (error) => {
@@ -433,7 +433,7 @@ const RegisterForm = () => {
               data: {
                 data: values,
                 ip_address: clientLocation.ip,
-                lat_long: `${clientLocation.latitude.toString()},${clientLocation.longitude.toString()}`
+                lat_long: `${clientLocation.latitude || ""},${clientLocation.longitude || ""}`
               },
             });
 
