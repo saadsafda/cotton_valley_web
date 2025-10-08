@@ -25,8 +25,10 @@ import { ToastNotification } from "@/utils/customFunctions/ToastNotification";
 import RegisterBasicInfo from "./RegisterBasicInfo";
 import RegisterBankInformation from "./RegisterBankInformation";
 import RegisterBankReferences from "./RegisterBankReferences";
+import { useRouter } from "next/navigation";
 
 const RegisterForm = () => {
+  const router = useRouter();
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, "common");
   const [step, setStep] = useState(1);
@@ -40,11 +42,11 @@ const RegisterForm = () => {
   // Fetch client IP address
   const fetchClientIP = async () => {
     try {
-      const response = await fetch('https://api.ipify.org?format=json');
+      const response = await fetch("https://api.ipify.org?format=json");
       const data = await response.json();
       setClientLocation((prev) => ({ ...prev, ip: data.ip }));
     } catch (error) {
-      console.error('Failed to fetch IP address:', error);
+      console.error("Failed to fetch IP address:", error);
     }
   };
 
@@ -60,11 +62,11 @@ const RegisterForm = () => {
           }));
         },
         (error) => {
-          console.error('Failed to get geolocation:', error);
+          console.error("Failed to get geolocation:", error);
         }
       );
     } else {
-      console.warn('Geolocation is not supported by this browser.');
+      console.warn("Geolocation is not supported by this browser.");
     }
   };
 
@@ -358,6 +360,19 @@ const RegisterForm = () => {
     return true;
   };
 
+  const readFileAsBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      if (!file) {
+        resolve(null); // Resolve with null if no file
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result.split(",")[1]); // Get base64 string
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+    });
+  };
+
   return (
     <>
       <div className="step-indicator d-flex justify-content-between mb-4">
@@ -425,15 +440,15 @@ const RegisterForm = () => {
               return;
             }
 
-            let response;
-
-            response = await requestForReal({
+            const response = await requestForReal({
               method: "POST",
               url: "/api/method/cotton_valley.api.api.register_customer",
               data: {
                 data: values,
                 ip_address: clientLocation.ip,
-                lat_long: `${clientLocation.latitude || ""},${clientLocation.longitude || ""}`
+                lat_long: `${clientLocation.latitude || ""},${
+                  clientLocation.longitude || ""
+                }`,
               },
             });
 
@@ -441,32 +456,35 @@ const RegisterForm = () => {
               response.data?.message?.status === "success" ||
               response.data?.status === "success"
             ) {
+              var customerId = response.data?.message?.customer_id;
               ToastNotification(
                 "success",
                 response.data?.message?.message ||
                   response.data?.message ||
                   "Registered successfully!"
               );
+              console.log("Customer created:", response.data);
+
               const file = values.sales_tax_certificate;
-              const reader = new FileReader();
-              reader.onloadend = async () => {
-                const base64Data = reader.result.split(",")[1]; // remove data prefix
-                const response = await requestForReal({
-                  method: "POST",
-                  url: "/api/method/cotton_valley.api.upload_file.guest_upload",
-                  data: {
-                    file_name: file.name,
-                    file_data: base64Data,
-                    doctype: "Customer",
-                    docname: response.data?.message?.customer_id,
-                    is_private: 0,
-                  },
-                });
-                // console.log(response.data);
-              };
-              reader.readAsDataURL(file);
+              const base64Data = await readFileAsBase64(file);
+              if (!base64Data) {
+                ToastNotification("error", "Failed to read file");
+                return;
+              }
+              await requestForReal({
+                method: "POST",
+                url: "/api/method/cotton_valley.api.upload_file.guest_upload",
+                data: {
+                  file_name: file.name,
+                  file_data: base64Data,
+                  doctype: "Customer",
+                  docname: customerId,
+                  is_private: 0,
+                },
+              });
+              // console.log(response.data);
               resetForm();
-              window.location.href = `/`;
+              router.push(`/${i18Lang}/auth/login`);
             } else {
               ToastNotification(
                 "error",

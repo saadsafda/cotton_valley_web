@@ -47,7 +47,6 @@ const modernStyles = {
     padding: "15px",
     border: "1px dashed #ccc",
     borderRadius: "4px",
-    backgroundColor: "#fafafa",
     flex: "1 1 calc(50% - 10px)", // Two reference blocks per row
     minWidth: "300px",
   },
