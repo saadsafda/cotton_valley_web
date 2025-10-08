@@ -120,8 +120,8 @@ const PlaceOrder = ({ values }) => {
           submit: true, 
           submit_datetime: formatted, 
           client_ip: clientLocation.ip,
-          client_latitude: clientLocation.latitude.toString(),
-          client_longitude: clientLocation.longitude.toString(),
+          client_latitude: clientLocation.latitude || "",
+          client_longitude: clientLocation.longitude || "",
           ...values 
         },
       });
