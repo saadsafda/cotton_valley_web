@@ -7,7 +7,7 @@ const AddressTable = ({ address }) => {
   return (
     <div>
       <div className='label'>
-        <label>{address?.title}</label>
+        <label>{address?.address_type}</label>
       </div>
       <div className='table-responsive address-table'>
         <Table>
@@ -24,7 +24,7 @@ const AddressTable = ({ address }) => {
               </td>
             </tr>
             <tr>
-              <td>Pin Code :</td>
+              <td>Zip Code :</td>
               <td>{address?.pincode}</td>
             </tr>
             <tr>

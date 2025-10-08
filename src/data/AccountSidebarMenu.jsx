@@ -38,12 +38,12 @@ export const sidebarMenu = [
     id: 'order',
     path: '/account/order',
   },
-  {
-    title: 'RefundHistory',
-    icon: <RiMapPinLine />,
-    id: 'refund',
-    path: '/account/refund',
-  },
+  // {
+  //   title: 'RefundHistory',
+  //   icon: <RiMapPinLine />,
+  //   id: 'refund',
+  //   path: '/account/refund',
+  // },
   {
     title: 'SavedAddress',
     icon: <RiMapPinLine />,

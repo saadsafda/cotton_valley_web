@@ -13,7 +13,7 @@ import Btn from "@/elements/buttons/Btn";
 
 const HeaderProfile = () => {
   const { i18Lang } = useContext(I18NextContext);
-  const { accountData } = useContext(AccountContext);
+  const { accountData, setAccountData } = useContext(AccountContext);
   const router = useRouter();
   const [modal, setModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -24,6 +24,9 @@ const HeaderProfile = () => {
     false,
     "Logout Successfully",
     () => {
+      localStorage.removeItem('account');
+      localStorage.removeItem('role');
+      setAccountData(null);
       router.push(`/${i18Lang}/auth/login`);
       setModal(false);
       setLoading(false);

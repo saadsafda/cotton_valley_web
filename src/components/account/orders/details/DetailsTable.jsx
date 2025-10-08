@@ -38,22 +38,24 @@ const DetailsTable = ({ data }) => {
             <Table className="product-table">
               <thead>
                 <tr>
+                  <th scope="col">{t("S.No")}</th>
                   <th scope="col">{t("Image")}</th>
+                  <th scope="col">{t("Case Pack")}</th>
                   <th scope="col">{t("Name")}</th>
                   <th scope="col">{t("Price")}</th>
                   <th scope="col">{t("Quantity")}</th>
                   <th scope="col">{t("Subtotal")}</th>
-                  <th scope="col">{t("RefundStatus")}</th>
                 </tr>
               </thead>
               <tbody>
                 {data?.products?.length > 0
                   ? data?.products?.map((product, i) => (
                       <tr 
-                        key={i}
+                        key={product?.id}
                         onClick={() => handleRowClick(product)}
                         style={{ cursor: 'pointer' }}
                       >
+                        <td>{i + 1}</td>
                         <td className="product-image">
                           <Avatar
                             data={
@@ -63,6 +65,7 @@ const DetailsTable = ({ data }) => {
                             customImageClass="img-fluid"
                           />
                         </td>
+                        <td>{product?.case_pack}</td>
                         <td
                           style={{
                             overflow: "hidden",
@@ -78,19 +81,6 @@ const DetailsTable = ({ data }) => {
                         </td>
                         <td>
                           <h6>{convertCurrency(product?.sub_total)}</h6>
-                        </td>
-                        <td>
-                          {product?.is_return === 1 &&
-                          product?.is_refunded === 0 ? (
-                            <a onClick={(e) => {
-                              e.stopPropagation();
-                              onModalOpen(product);
-                            }}>
-                              {t("AskForRefund")}
-                            </a>
-                          ) : (
-                            "-"
-                          )}
                         </td>
                       </tr>
                     ))

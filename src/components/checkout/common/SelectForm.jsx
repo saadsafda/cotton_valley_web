@@ -1,13 +1,19 @@
 import SearchableSelectInput from "@/components/common/inputFields/SearchableSelectInput";
 import SimpleInputField from "@/components/common/inputFields/SimpleInputField";
-import { Form } from "formik";
-import { ModalFooter, Row } from "reactstrap";
+import { Form, Field } from "formik";
+import { ModalFooter, Row, Col, Label, Input, FormGroup } from "reactstrap";
 import Btn from "@/elements/buttons/Btn";
 import { useContext, useEffect, useState } from "react";
 import I18NextContext from "@/helper/i18NextContext";
 import { useTranslation } from "@/app/i18n/client";
 
-const SelectForm = ({ values, data, setModal, isSubmitting }) => {
+const SelectForm = ({
+  values,
+  data,
+  setFieldValue,
+  setModal,
+  isSubmitting,
+}) => {
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, "common");
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
@@ -65,6 +71,46 @@ const SelectForm = ({ values, data, setModal, isSubmitting }) => {
             },
           ]}
         />
+        <SimpleInputField
+          nameList={[
+            {
+              name: "pincode",
+              placeholder: isLoadingLocation
+                ? t("Loading...")
+                : t("Enter Zip Code"),
+              toplabel: "Zip Code",
+              colprops: { xxl: 6, lg: 12, sm: 6 },
+              require: "true",
+            },
+            {
+              name: "state_id",
+              placeholder: isLoadingLocation
+                ? t("Loading...")
+                : t("Enter State"),
+              toplabel: "State",
+              colprops: { xxl: 6, lg: 12, sm: 6 },
+              require: "true",
+            },
+            {
+              name: "city",
+              placeholder: isLoadingLocation
+                ? t("Loading...")
+                : t("Enter City"),
+              toplabel: "City",
+              colprops: { xxl: 6, lg: 12, sm: 6 },
+              require: "true",
+            },
+            {
+              name: "phone",
+              type: "number",
+              placeholder: t("Enter Phone Number"),
+              require: "true",
+              toplabel: "Phone",
+              colprops: { xxl: 6, lg: 12, sm: 6 },
+              disabled: isSubmitting,
+            },
+          ]}
+        />
         <SearchableSelectInput
           nameList={[
             {
@@ -98,40 +144,25 @@ const SelectForm = ({ values, data, setModal, isSubmitting }) => {
             },
           ]}
         />
-        <SimpleInputField
-          nameList={[
-            {
-              name: "pincode",
-              placeholder: isLoadingLocation ? t("Loading...") : t("Enter Zip Code"),
-              toplabel: "Zip Code",
-              colprops: { xxl: 6, lg: 12, sm: 6 },
-              require: "true",
-            },
-            {
-              name: "state_id",
-              placeholder: isLoadingLocation ? t("Loading...") : t("Enter State"),
-              toplabel: "State",
-              colprops: { xxl: 6, lg: 12, sm: 6 },
-              require: "true",
-            },
-            {
-              name: "city",
-              placeholder: isLoadingLocation ? t("Loading...") : t("Enter City"),
-              toplabel: "City",
-              colprops: { xxl: 6, lg: 12, sm: 6 },
-              require: "true",
-            },
-            {
-              name: "phone",
-              type: "number",
-              placeholder: t("Enter Phone Number"),
-              require: "true",
-              toplabel: "Phone",
-              colprops: { xxl: 6, lg: 12, sm: 6 },
-              disabled: isSubmitting,
-            },
-          ]}
-        />
+        <Col xs={12}>
+          <FormGroup check className="mb-3">
+            <div className="form-check ps-0 custome-form-check">
+              <Input
+                type="checkbox"
+                id="is_default"
+                name={"is_default"}
+                checked={values.is_default || false}
+                onChange={(e) => {
+                  setFieldValue("is_default", e.target.checked);
+                }}
+                disabled={isSubmitting}
+              />
+              <Label check htmlFor="is_default" className="ms-2">
+                {"Set as default address"}
+              </Label>
+            </div>
+          </FormGroup>
+        </Col>
         <ModalFooter className="ms-auto justify-content-end save-back-button">
           <Btn
             className="btn-md btn-theme-outline fw-bold"

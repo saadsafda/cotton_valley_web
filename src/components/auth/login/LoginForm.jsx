@@ -13,12 +13,12 @@ const LoginForm = () => {
   const { t } = useTranslation(i18Lang, "common");
   const [isLoading, setIsLoading] = useState(false);
   const { mutate } = useHandleLogin();
-  
+
   return (
     <Formik
       initialValues={{
-        email: "saadi@gmail.coom",
-        password: "Cotton@1234",
+        email: "",
+        password: "",
       }}
       validationSchema={LogInSchema}
       onSubmit={(values, { setStatus }) => {
@@ -43,7 +43,18 @@ const LoginForm = () => {
     >
       {({ status }) => {
         if (isLoading) {
-          return <div style={{ textAlign: 'center', padding: '2rem', fontWeight: 500, fontSize: '1.2rem' }}>Loading...</div>;
+          return (
+            <div
+              style={{
+                textAlign: "center",
+                padding: "2rem",
+                fontWeight: 500,
+                fontSize: "1.2rem",
+              }}
+            >
+              Loading...
+            </div>
+          );
         }
         return (
           <Form className="row g-4">
@@ -85,7 +96,10 @@ const LoginForm = () => {
                     type="checkbox"
                     id="flexCheckDefault"
                   />
-                  <Label className="form-check-label" htmlFor="flexCheckDefault">
+                  <Label
+                    className="form-check-label"
+                    htmlFor="flexCheckDefault"
+                  >
                     {t("RememberMe")}
                   </Label>
                 </div>
@@ -93,7 +107,7 @@ const LoginForm = () => {
                   href={`/${i18Lang}/auth/forgot-password`}
                   className="forgot-password"
                 >
-                  {t("ForgotPassword")}? 
+                  {t("ForgotPassword")}?
                 </Link>
               </div>
             </Col>

@@ -23,7 +23,7 @@ const NavTabTitles = ({ classes = {}, activeTab, setActiveTab, titleList, isLogo
   const { mutate, isLoading } = useCreate(LogoutAPI, false, false, 'Logout Successfully', async () => {
     localStorage.removeItem('account');
     localStorage.removeItem('role');
-    router.push(`/${i18Lang}/auth/login`);
+    window.location.href = `/${i18Lang}/auth/login`;
     setModal(false);
   });
   const handleLogout = () => {

@@ -34,6 +34,38 @@ const CartVariationModal = ({ modal, setModal, selectedVariation = {} }) => {
     });
     checkStockAvailable();
   };
+
+  // Handle direct input change
+  const handleQuantityChange = (e) => {
+    const value = e.target.value;
+    // Allow empty string for user to clear and type new value
+    if (value === '') {
+      setCloneVariation((prev) => {
+        return { ...prev, productQty: '' };
+      });
+      return;
+    }
+    
+    // Parse and validate the input
+    const qty = parseInt(value, 10);
+    if (!isNaN(qty) && qty >= 1) {
+      setCloneVariation((prev) => {
+        return { ...prev, productQty: qty };
+      });
+      checkStockAvailable();
+    }
+  };
+
+  // Handle blur to ensure minimum quantity
+  const handleQuantityBlur = () => {
+    if (!cloneVariation?.productQty || cloneVariation?.productQty < 1) {
+      setCloneVariation((prev) => {
+        return { ...prev, productQty: 1 };
+      });
+    }
+    checkStockAvailable();
+  };
+
   const checkStockAvailable = () => {
     if (cloneVariation?.selectedVariation) {
       setCloneVariation((prevState) => {
@@ -74,7 +106,14 @@ const CartVariationModal = ({ modal, setModal, selectedVariation = {} }) => {
               <Btn type='button' className='qty-left-minus' onClick={() => updateQuantity(-1)}>
                 <RiSubtractLine />
               </Btn>
-              <Input className='form-control input-number qty-input' type='text' name='quantity' value={cloneVariation?.productQty} readOnly />
+              <Input 
+                className='form-control input-number qty-input' 
+                type='text' 
+                name='quantity' 
+                value={cloneVariation?.productQty} 
+                onChange={handleQuantityChange}
+                // onBlur={handleQuantityBlur}
+              />
               <Btn type='button' className='qty-right-plus' onClick={() => updateQuantity(1)}>
                 <RiAddLine />
               </Btn>

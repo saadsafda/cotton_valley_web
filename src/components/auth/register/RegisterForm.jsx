@@ -31,6 +31,47 @@ const RegisterForm = () => {
   const { t } = useTranslation(i18Lang, "common");
   const [step, setStep] = useState(1);
   const [countryList, setCountryList] = useState([]);
+  const [clientLocation, setClientLocation] = useState({
+    ip: null,
+    latitude: null,
+    longitude: null,
+  });
+
+  // Fetch client IP address
+  const fetchClientIP = async () => {
+    try {
+      const response = await fetch('https://api.ipify.org?format=json');
+      const data = await response.json();
+      setClientLocation((prev) => ({ ...prev, ip: data.ip }));
+    } catch (error) {
+      console.error('Failed to fetch IP address:', error);
+    }
+  };
+
+  // Fetch client geolocation (latitude and longitude)
+  const fetchClientGeolocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setClientLocation((prev) => ({
+            ...prev,
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          }));
+        },
+        (error) => {
+          console.error('Failed to get geolocation:', error);
+        }
+      );
+    } else {
+      console.warn('Geolocation is not supported by this browser.');
+    }
+  };
+
+  useEffect(() => {
+    fetchClientIP();
+    fetchClientGeolocation();
+  }, []);
 
   const nextStep = () => {
     setStep((s) => s + 1);
@@ -391,6 +432,8 @@ const RegisterForm = () => {
               url: "/api/method/cotton_valley.api.api.register_customer",
               data: {
                 data: values,
+                ip_address: clientLocation.ip,
+                lat_long: `${clientLocation.latitude.toString()},${clientLocation.longitude.toString()}`
               },
             });
 
@@ -408,31 +451,20 @@ const RegisterForm = () => {
               const reader = new FileReader();
               reader.onloadend = async () => {
                 const base64Data = reader.result.split(",")[1]; // remove data prefix
-                const response = await requestForReal({ method: "POST", url: "/api/method/cotton_valley.api.upload_file.guest_upload", data: {
-                  file_name: file.name,
-                  file_data: base64Data,
-                  doctype: "Customer",
-                  docname: response.data?.message?.customer_id,
-                  is_private: 0,
-                }});
+                const response = await requestForReal({
+                  method: "POST",
+                  url: "/api/method/cotton_valley.api.upload_file.guest_upload",
+                  data: {
+                    file_name: file.name,
+                    file_data: base64Data,
+                    doctype: "Customer",
+                    docname: response.data?.message?.customer_id,
+                    is_private: 0,
+                  },
+                });
                 // console.log(response.data);
               };
               reader.readAsDataURL(file);
-              // const fileFormData = new FormData();
-              // fileFormData.append("file", values.sales_tax_certificate);
-              // fileFormData.append("folder", "Home/Attachments");
-              // fileFormData.append("doctype", "Customer");
-              // fileFormData.append(
-              //   "customer",
-              //   response.data?.message?.customer_id
-              // );
-              // fileFormData.append("is_private", 0);
-
-              // let fileResponse = await requestForReal({
-              //   method: "POST",
-              //   url: "/api/method/upload_file",
-              //   data: fileFormData,
-              // });
               resetForm();
               window.location.href = `/`;
             } else {
