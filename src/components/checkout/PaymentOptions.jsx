@@ -6,16 +6,17 @@ import I18NextContext from '@/helper/i18NextContext';
 import { Fragment, useContext, useEffect, useState } from 'react';
 import SettingContext from '@/helper/settingContext';
 import { ModifyString } from '@/utils/customFunctions/ModifyString';
+import AccountContext from '@/helper/accountContext';
 
 const PaymentOptions = ({ values, setFieldValue }) => {
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, 'common');
   const { settingData } = useContext(SettingContext);
-  const [initial, setInitial] = useState('');
+  const { accountData } = useContext(AccountContext);
   useEffect(() => {
-    setFieldValue('payment_method', 'COD');
-    setInitial(0);
-  }, []);
+    setFieldValue('payment_method', accountData?.mode_of_payment || settingData?.payment_methods?.[0]?.name);
+  }, [accountData]);
+
   return (
     <CheckoutCard icon={<RiBankCardLine />}>
       <div className='checkout-title'>
@@ -33,12 +34,11 @@ const PaymentOptions = ({ values, setFieldValue }) => {
                         <Input
                           className='form-check-input'
                           id={elem?.name}
-                          checked={i == initial}
+                          checked={elem?.name == values?.payment_method}
                           type='radio'
                           name='payment_method'
                           onChange={() => {
                             setFieldValue('payment_method', elem.name);
-                            setInitial(i);
                           }}
                         />
                         <Label className='form-check-label' htmlFor={elem.name}>
