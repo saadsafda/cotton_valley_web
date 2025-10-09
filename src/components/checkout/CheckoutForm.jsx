@@ -6,6 +6,7 @@ import PaymentOptions from "./PaymentOptions";
 import { useContext, useEffect, useState } from "react";
 import AccountContext from "@/helper/accountContext";
 import CheckoutSidebar from "./checkoutSidebar";
+import request from "@/utils/axiosUtils";
 
 const CheckoutForm = () => {
   const { accountData, refetch } = useContext(AccountContext);
@@ -15,9 +16,30 @@ const CheckoutForm = () => {
     accountData?.address.length > 0 &&
       setAddress((prev) => [...accountData?.address]);
   }, [accountData]);
-  const addAddress = () => {
-    setModal("");
+  const addAddress = (values) => {
+    const response = request({
+      method: "POST",
+      url: "/address",
+      data: {
+        address: {
+          address_title: values.title,
+          address_type: values.address_type,
+          address_line1: values.street,
+          city: values.city,
+          state: values.state_id,
+          pincode: values.pincode,
+          country: values.country_id,
+          phone: values.phone,
+          email_id: values.email_id,
+        },
+      },
+    });
+    response.then((res) => {
+      setAddress((prev) => [...prev, res?.data]);
+      setModal("");
+    });
   };
+
   return (
     <Formik initialValues={{}}>
       {({ values, setFieldValue }) => (
