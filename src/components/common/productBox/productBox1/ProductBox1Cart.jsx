@@ -24,7 +24,7 @@ const ProductBox1Cart = ({ productObj }) => {
       );
       if (foundProduct) {
         setIsOpen(true);
-        setProductQty(foundProduct.quantity); // Use the quantity from the found product directly
+        setProductQty(foundProduct.quantity);
       } else {
         setProductQty(0);
         setIsOpen(false);
@@ -113,17 +113,24 @@ const ProductBox1Cart = ({ productObj }) => {
                   val = 0;
                 }
 
-                setProductQty(val);
+                setProductQty(val); // Only update temporary state
+              }}
+              onBlur={() => {
+                // Update cart only when user finishes typing (loses focus)
+                const difference =
+                  productQty -
+                  (getSelectedVariant ? getSelectedVariant.quantity : 0);
 
-                // Optional: directly sync with cart context
-                handleIncDec(
-                  val - (getSelectedVariant ? getSelectedVariant.quantity : 0),
-                  productObj,
-                  getSelectedVariant ? getSelectedVariant.quantity : 0,
-                  setProductQty,
-                  setIsOpen,
-                  getSelectedVariant ? getSelectedVariant : null
-                );
+                if (difference !== 0) {
+                  handleIncDec(
+                    difference,
+                    productObj,
+                    getSelectedVariant ? getSelectedVariant.quantity : 0,
+                    setProductQty,
+                    setIsOpen,
+                    getSelectedVariant ? getSelectedVariant : null
+                  );
+                }
               }}
             />
             <Btn
