@@ -37,6 +37,7 @@ export async function GET(request) {
 
 
     const data = await response.json();
+    // console.log('Fetching products from:', data);
     const products = data?.message?.data || [];
     // console.log('Checking calling url:', products);
 

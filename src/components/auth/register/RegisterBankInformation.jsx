@@ -128,7 +128,7 @@ const RegisterBankInformation = ({ values, countryList }) => {
             name: "account_type",
             options: [
               { id: "", name: "Select" },
-              { id: "Saving", name: "Saving " },
+              { id: "Saving", name: "Saving" },
               { id: "Checking", name: "Checking" },
               { id: "Other", name: "Other" },
             ],

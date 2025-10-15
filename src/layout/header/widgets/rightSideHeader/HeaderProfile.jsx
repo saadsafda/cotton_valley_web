@@ -9,7 +9,6 @@ import useCreate from "@/utils/hooks/useCreate";
 import ConfirmationModal from "@/components/common/ConfirmationModal";
 import AccountContext from "@/helper/accountContext";
 import Avatar from "@/components/common/Avatar";
-import Btn from "@/elements/buttons/Btn";
 
 const HeaderProfile = () => {
   const { i18Lang } = useContext(I18NextContext);
@@ -24,8 +23,8 @@ const HeaderProfile = () => {
     false,
     "Logout Successfully",
     () => {
-      localStorage.removeItem('account');
-      localStorage.removeItem('role');
+      localStorage.removeItem("account");
+      localStorage.removeItem("role");
       setAccountData(null);
       router.push(`/${i18Lang}/auth/login`);
       setModal(false);
@@ -41,9 +40,15 @@ const HeaderProfile = () => {
   return (
     <>
       {!accountData || Object.keys(accountData).length === 0 ? (
-        <Link className="btn" href={`/${i18Lang}/auth/login`} >
-          Login / Register
-        </Link>
+        <div className="d-flex align-items-center">
+          <Link style={{ fontWeight: "bold", fontSize: "16px", marginRight: "8px" }} href={`/${i18Lang}/auth/login`}>
+            Login
+          </Link>
+           /
+          <Link style={{ fontWeight: "bold", fontSize: "16px", marginLeft: "8px" }} href={`/${i18Lang}/auth/register`}>
+            Register
+          </Link>
+        </div>
       ) : (
         <li className="right-side onhover-dropdown">
           <div className="delivery-login-box">

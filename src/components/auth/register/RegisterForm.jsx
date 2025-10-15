@@ -201,6 +201,12 @@ const RegisterForm = () => {
     password_confirmation: passwordConfirmationSchema,
     phone: phoneSchema,
     company_name: nameSchema,
+    years_in_business: nameSchema,
+    store_name: nameSchema,
+    cell_phone: phoneSchema,
+    hear_about_us: nameSchema,
+    business_type: nameSchema,
+    federal_tax_id: nameSchema,
     shipping_billing_same: shipping_billing_sameSchema,
     shipping_address: shipping_addressSchema,
 

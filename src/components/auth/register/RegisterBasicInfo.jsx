@@ -41,6 +41,7 @@ const RegisterBasicInfo = ({ values, countryList, allCountryCode, setFieldValue 
             placeholder: "Cell Phone",
             toplabel: "Cell Phone",
             type: "number",
+            require: "true",
           },
         ]}
       />
@@ -116,6 +117,7 @@ const RegisterBasicInfo = ({ values, countryList, allCountryCode, setFieldValue 
             placeholder: "Store Name",
             title: "Store Name",
             toplabel: "Store Name",
+            require: "true",
           },
           {
             name: "square_footage",
@@ -130,6 +132,7 @@ const RegisterBasicInfo = ({ values, countryList, allCountryCode, setFieldValue 
             title: "Federal Tax ID",
             toplabel: "Federal Tax ID",
             type: "number",
+            require: "true",
           },
           {
             name: "website",
@@ -156,6 +159,7 @@ const RegisterBasicInfo = ({ values, countryList, allCountryCode, setFieldValue 
             title: "Years in Business",
             toplabel: "How long (Years)?",
             type: "number",
+            require: "true",
           },
         ]}
       />
@@ -165,6 +169,7 @@ const RegisterBasicInfo = ({ values, countryList, allCountryCode, setFieldValue 
           name="business_type"
           label="Type of Business"
           notitle="true"
+          require="true"
           inputprops={{
             id: "business_type",
             name: "business_type",
@@ -189,6 +194,7 @@ const RegisterBasicInfo = ({ values, countryList, allCountryCode, setFieldValue 
           name="hear_about_us"
           label="How did you hear about us?"
           notitle="true"
+          require="true"
           inputprops={{
             id: "hear_about_us",
             name: "hear_about_us",
