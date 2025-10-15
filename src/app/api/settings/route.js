@@ -1,10 +1,22 @@
+import { cookies } from 'next/headers';
 import setting from './setting.json'
 import { NextResponse } from "next/server";
 
 export async function GET() {
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/method/cotton_valley.api.website_theme_setting.settings`;
     try {
-        const response = await fetch(url);
+        // Read token from cookies
+        const cookieStore = await cookies();
+        const authToken = cookieStore.get("uat")?.value;
+    
+        let headers = {
+            "Content-Type": "application/json",
+        }
+        if (authToken) {
+            headers["Cookie"] = `sid=${authToken}`;
+            headers["Customer-Authorization"] = `Bearer ${authToken}`;
+        }
+        const response = await fetch(url, { headers });
 
         if (!response.ok) {
             const errorText = await response.text();
