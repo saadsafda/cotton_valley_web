@@ -5,7 +5,7 @@ import I18NextContext from "@/helper/i18NextContext";
 import { useTranslation } from "@/app/i18n/client";
 import PayNowModal from "./PayNowModal";
 
-const DetailTitle = ({ params, data, handleReorder }) => {
+const DetailTitle = ({ params, data, handleReorder, reOrderLoading }) => {
   const { i18Lang } = useContext(I18NextContext);
   const [modal, setModal] = useState(false);
   const { t } = useTranslation(i18Lang, "common");
@@ -38,9 +38,15 @@ const DetailTitle = ({ params, data, handleReorder }) => {
           <button
             className="reorder-btn btn btn-secondary"
             onClick={handleReorder}
-            disabled={!data?.products?.length}
+            disabled={!data?.products?.length || reOrderLoading}
           >
-            <RiRefreshLine /> {" "} Reorder
+            {reOrderLoading ? (
+              <span>Loading...</span>
+            ) : (
+              <>
+                <RiRefreshLine /> {" "} Reorder
+              </>
+            )}
           </button>
         </div>
       </div>

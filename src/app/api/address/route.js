@@ -43,9 +43,6 @@ export async function PUT(request) {
         headers["Customer-Authorization"] = `Bearer ${authToken}`;
     }
 
-    console.log("address", address);
-
-
     const response = await fetch(url, {
         method: "PUT",
         headers: headers,
@@ -53,7 +50,6 @@ export async function PUT(request) {
     });
 
     const data = await response.json();
-    console.log("data", data);
 
     return NextResponse.json(data?.message);
 }

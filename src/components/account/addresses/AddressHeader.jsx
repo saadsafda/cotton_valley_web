@@ -37,6 +37,7 @@ const AddressHeader = () => {
           "country": values.country_id,
           "phone": values.phone,
           "email_id": values.email_id,
+          "is_default": values.is_default,
         }
       },
     });
@@ -63,6 +64,7 @@ const AddressHeader = () => {
           "country": values.country_id,
           "phone": values.phone,
           "email_id": values.email_id,
+          "is_default": values.is_default,
         }
       },
     });

@@ -23,7 +23,6 @@ const AddAddressForm = ({ mutate, type, editAddress, setEditAddress, modal, setM
     <Formik
       initialValues={{
         id: editAddress ? editAddress?.id : '',
-        title: editAddress ? editAddress?.title : '',
         street: editAddress ? editAddress?.street : '',
         country_id: editAddress ? editAddress?.country?.id : '',
         state_id: editAddress ? editAddress?.state?.id : '',
@@ -36,7 +35,6 @@ const AddAddressForm = ({ mutate, type, editAddress, setEditAddress, modal, setM
         is_default: editAddress ? editAddress?.is_default : false,
       }}
       validationSchema={YupObject({
-        title: nameSchema,
         street: nameSchema,
         city: nameSchema,
         country_id: nameSchema,

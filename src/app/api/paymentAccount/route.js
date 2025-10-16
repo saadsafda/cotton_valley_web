@@ -48,7 +48,7 @@ export async function POST(request) {
     const reqData = await request.json();
 
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/method/cotton_valley.api.customer.update_customer_bank_account`;
-
+    
     const response = await fetch(`${url}`, {
         method: "POST",
         headers: headers,

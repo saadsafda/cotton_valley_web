@@ -1,7 +1,7 @@
 "use client";
 import Loader from "@/layout/loader";
 import request from "@/utils/axiosUtils";
-import { OrderAPI } from "@/utils/axiosUtils/API";
+import { OrderAPI, ProductAPI } from "@/utils/axiosUtils/API";
 import { useQuery } from "@tanstack/react-query";
 import DetailStatus from "./DetailStatus";
 import DetailTitle from "./DetailTitle";
@@ -58,6 +58,7 @@ const Details = ({ params }) => {
   const { cartProducts, handleIncDec } = useContext(CartContext);
   const [productQty, setProductQty] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const [reOrderLoading, setReOrderLoading] = useState(false);
   const { data, isLoading } = useQuery({
     queryKey: ["order", params],
     queryFn: async () => {
@@ -77,27 +78,78 @@ const Details = ({ params }) => {
   }, [data, params]); //Once the parent order is fetched (data), this memoized function finds the actual order (could be a sub-order or sub-sub-order) matching params.
 
 
-  const handleReorder = () => {
+  const handleReorder = async () => {
     if (!currentOrder?.products?.length) {
       ToastNotification("error", "No products found to reorder");
       return;
     }
 
+    setReOrderLoading(true);
+
     let addedCount = 0;
-    currentOrder.products.forEach((orderProduct) => {
+    let outOfStockProducts = [];
+    let insufficientStockProducts = [];
+
+    // Process products sequentially to check backend stock
+    for (const orderProduct of currentOrder.products) {
       try {
+        const productId = orderProduct.product_id || orderProduct.id;
+        
+        // Fetch current product data from backend
+        const response = await request({ 
+          url: `${ProductAPI}/${productId}` 
+        });
+        
+        const backendProduct = response?.data;
+        
+        if (!backendProduct) {
+          console.error(`Product ${orderProduct.name} not found in backend`);
+          continue;
+        }
+
         // Create a product object that matches the cart structure
         const productObj = {
-          id: orderProduct.product_id || orderProduct.id,
-          name: orderProduct.name,
-          sale_price: orderProduct.price,
-          quantity: 999, // Set high stock to avoid stock check issues
-          ...orderProduct,
+          id: productId,
+          name: backendProduct.name || orderProduct.name,
+          sale_price: backendProduct.sale_price || orderProduct.price,
+          slug: backendProduct.slug || productId,
+          ...backendProduct,
         };
+        
+        // Check stock availability from backend data
+        const stockStatus = backendProduct.stock_status;
+        const availableStock = backendProduct.quantity || 0;
+        const requestedQty = orderProduct.quantity;
 
-        // Add each product to cart with its ordered quantity
+        // Check if product is out of stock
+        if (stockStatus === "out_of_stock" || availableStock === 0) {
+          outOfStockProducts.push(productObj.name);
+          continue;
+        }
+
+        // Check if requested quantity exceeds available stock
+        if (availableStock < requestedQty) {
+          insufficientStockProducts.push({
+            name: productObj.name,
+            requested: requestedQty,
+            available: availableStock
+          });
+          // Add only available quantity
+          handleIncDec(
+            availableStock,
+            productObj,
+            productQty,
+            setProductQty,
+            setIsOpen,
+            null,
+          );
+          addedCount++;
+          continue;
+        }
+
+        // Add product to cart with requested quantity
         handleIncDec(
-          orderProduct.quantity,
+          requestedQty,
           productObj,
           productQty,
           setProductQty,
@@ -105,19 +157,42 @@ const Details = ({ params }) => {
           null,
         );
         addedCount++;
+        setReOrderLoading(false);
       } catch (error) {
         console.error(
-          `Failed to add product ${orderProduct.name} to cart:`,
+          `Failed to check stock or add product ${orderProduct.name} to cart:`,
           error
         );
+        ToastNotification("error", `Failed to process ${orderProduct.name}`);
+        setReOrderLoading(false);
       }
-    });
+    }
+
+    // Show appropriate notifications
+    if (outOfStockProducts.length > 0) {
+      ToastNotification(
+        "error",
+        `Out of stock: ${outOfStockProducts.join(", ")}`
+      );
+    }
+
+    if (insufficientStockProducts.length > 0) {
+      const messages = insufficientStockProducts.map(
+        item => `${item.name} (requested: ${item.requested}, available: ${item.available})`
+      );
+      ToastNotification(
+        "warning",
+        `Limited stock: ${messages.join(", ")}`
+      );
+    }
 
     if (addedCount > 0) {
       ToastNotification(
         "success",
-        `${addedCount} products added to cart successfully!`
+        `${addedCount} product(s) added to cart successfully!`
       );
+    } else if (outOfStockProducts.length === 0 && insufficientStockProducts.length === 0) {
+      ToastNotification("error", "No products could be added to cart");
     }
   };
 
@@ -130,6 +205,7 @@ const Details = ({ params }) => {
         params={params}
         data={currentOrder}
         handleReorder={handleReorder}
+        reOrderLoading={reOrderLoading}
       />
       <DetailStatus data={currentOrder} />
       <DetailsAddress data={currentOrder} />

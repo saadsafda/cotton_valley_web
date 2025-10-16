@@ -31,6 +31,7 @@ const CheckoutForm = () => {
           country: values.country_id,
           phone: values.phone,
           email_id: values.email_id,
+          is_default: values.is_default,
         },
       },
     });

@@ -54,14 +54,6 @@ const SelectForm = ({
         <SimpleInputField
           nameList={[
             {
-              name: "title",
-              placeholder: t("Enter Title"),
-              toplabel: "Title",
-              colprops: { xs: 12 },
-              require: "true",
-              disabled: isSubmitting,
-            },
-            {
               name: "street",
               placeholder: t("Enter Address"),
               toplabel: "Address",
@@ -174,7 +166,7 @@ const SelectForm = ({
             className="btn-md fw-bold text-light theme-bg-color"
             type="submit"
             title={isSubmitting ? t("Submitting...") : t("Submit")}
-            disabled={isSubmitting || isLoadingLocation}
+            disabled={isSubmitting}
             loading={isSubmitting}
           />
         </ModalFooter>
