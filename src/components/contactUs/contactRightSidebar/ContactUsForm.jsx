@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useRef, useState } from "react";
 import { Row } from "reactstrap";
 import Btn from "@/elements/buttons/Btn";
 import { Form, Formik } from "formik";
@@ -18,10 +18,20 @@ import {
   RiUserFill,
 } from "react-icons/ri";
 import request from "@/utils/axiosUtils";
+import { ToastNotification } from "@/utils/customFunctions/ToastNotification";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const ContactUsForm = () => {
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, "common");
+  const recaptchaRef = useRef(null);
+  const [captchaValue, setCaptchaValue] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleCaptchaChange = (value) => {
+    setCaptchaValue(value);
+  };
+
   return (
     <Formik
       initialValues={{
@@ -38,15 +48,42 @@ const ContactUsForm = () => {
         subject: nameSchema,
         message: nameSchema,
       })}
-      onSubmit={(values, { resetForm }) =>
-        request({
-          url: "/contact",
-          method: "POST",
-          data: values,
-        }).then(() => {
+      onSubmit={async (values, { resetForm }) => {
+        if (!captchaValue) {
+          ToastNotification("error", "Please complete the CAPTCHA verification");
+          return;
+        }
+
+        setIsSubmitting(true);
+        try {
+          await request({
+            url: "/contact",
+            method: "POST",
+            data: { ...values, captcha: captchaValue },
+          });
           resetForm(); // optional: clears form after submit
-        })
-      }
+          setCaptchaValue(null);
+          if (recaptchaRef.current) {
+            recaptchaRef.current.reset();
+          }
+          ToastNotification(
+            "success",
+            "Your inquiry has been submitted, our representative will call you shortly"
+          );
+        } catch (error) {
+          console.error("Contact form submission error:", error);
+          ToastNotification(
+            "error",
+            error?.response?.data?.message || "There was an error submitting the form. Please try again later."
+          );
+          if (recaptchaRef.current) {
+            recaptchaRef.current.reset();
+          }
+          setCaptchaValue(null);
+        } finally {
+          setIsSubmitting(false);
+        }
+      }}
     >
       {({ values, errors, touched, setFieldValue }) => (
         <Form>
@@ -99,11 +136,19 @@ const ContactUsForm = () => {
               ]}
             />
           </Row>
+          <div className="mb-3 mt-3">
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"}
+              onChange={handleCaptchaChange}
+            />
+          </div>
           <Btn
             className="btn btn-animation btn-md fw-bold ms-auto"
             type="submit"
+            disabled={!captchaValue || isSubmitting}
           >
-            {t("SendMessage")}
+            {isSubmitting ? "Sending..." : t("SendMessage")}
           </Btn>
         </Form>
       )}

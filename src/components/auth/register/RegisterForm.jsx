@@ -15,6 +15,7 @@ import {
   shipping_addressSchema,
   shipping_billing_sameSchema,
   terms_agreedSchema,
+  zipcodeSchema,
 } from "@/utils/validation/ValidationSchemas";
 import FormBtn from "@/components/common/FormBtn";
 import { AllCountryCode } from "../../../data/AllCountryCode";
@@ -211,9 +212,11 @@ const RegisterForm = () => {
     shipping_address: shipping_addressSchema,
 
     bank_name: nameSchema,
+    bank_email: emailSchema,
     account_number: nameSchema,
     bank_phone: phoneSchema,
     account_type: nameSchema,
+    bank_zip_code: zipcodeSchema,
 
     references: referencesSchema,
 
@@ -490,7 +493,7 @@ const RegisterForm = () => {
               });
               // console.log(response.data);
               resetForm();
-              router.push(`/${i18Lang}/auth/login`);
+              router.push(`/${i18Lang}/auth/register-success`);
             } else {
               ToastNotification(
                 "error",

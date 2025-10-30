@@ -63,8 +63,7 @@ const RegisterBankReferences = ({ values, setFieldValue, t }) => {
                   name: `references[${index}].email`,
                   placeholder: t("Enter Email"),
                   title: "Email",
-                  toplabel: "Email ",
-                  require: "true",
+                  toplabel: "Email",
                 },
               ]}
             />
@@ -119,7 +118,6 @@ const RegisterBankReferences = ({ values, setFieldValue, t }) => {
                 placeholder: t("Enter Fax"),
                 title: "Fax",
                 toplabel: "Fax ",
-                require: "true",
                 type: "number",
               },
             ]}

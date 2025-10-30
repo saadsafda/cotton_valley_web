@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState, useRef } from "react";
 import { Row } from "reactstrap";
 import Btn from "@/elements/buttons/Btn";
 import { Form, Formik } from "formik";
@@ -22,10 +22,20 @@ import {
 } from "react-icons/ri";
 import SelectField from "@/components/common/inputFields/SelectField";
 import request from "@/utils/axiosUtils";
+import { ToastNotification } from "@/utils/customFunctions/ToastNotification";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const LeadForm = () => {
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, "common");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const recaptchaRef = useRef(null);
+  const [captchaValue, setCaptchaValue] = useState(null);
+
+  const handleCaptchaChange = (value) => {
+    setCaptchaValue(value);
+  };
+
   return (
     <Formik
       initialValues={{
@@ -45,15 +55,42 @@ const LeadForm = () => {
         address: nameSchema,
         business_type: nameSchema,
       })}
-      onSubmit={(values, { resetForm }) =>
-        request({
-          url: "/lead",
-          method: "POST",
-          data: values,
-        }).then(() => {
-          resetForm(); // optional: clears form after submit
-        })
-      }
+      onSubmit={async (values, { resetForm }) => {
+        if (!captchaValue) {
+          ToastNotification("error", "Please complete the CAPTCHA verification");
+          return;
+        }
+
+        setIsSubmitting(true);
+        try {
+          await request({
+            url: "/lead",
+            method: "POST",
+            data: { ...values, captcha: captchaValue },
+          });
+          resetForm(); // clears form after submit
+          ToastNotification(
+            "success",
+            "Your inquiry has been submitted successfully. Our representative will contact you shortly."
+          );
+          setCaptchaValue(null);
+          if (recaptchaRef.current) {
+            recaptchaRef.current.reset();
+          }
+        } catch (error) {
+          console.error("Lead form submission error:", error);
+          ToastNotification(
+            "error",
+            error?.response?.data?.message || "Failed to submit your inquiry. Please try again."
+          );
+          if (recaptchaRef.current) {
+            recaptchaRef.current.reset();
+          }
+          setCaptchaValue(null);
+        } finally {
+          setIsSubmitting(false);
+        }
+      }}
     >
       {({ values, errors, touched, setFieldValue }) => (
         <Form>
@@ -99,6 +136,7 @@ const LeadForm = () => {
                   toplabel: "Square Footage",
                   inputaddon: "true",
                   prefixvalue: <RiUserFill />,
+                  type: "number",
                   colprops: { xs: 12 },
                 },
                 {
@@ -129,7 +167,6 @@ const LeadForm = () => {
                     { id: "Manufacturing", name: "Manufacturing" },
                     { id: "Service", name: "Service" },
                     { id: "E-commerce", name: "E-commerce" },
-                    { id: "Agriculture", name: "Agriculture" },
                     { id: "Discount Store", name: "Discount Store" },
                     { id: "Chain Store", name: "Chain Store" },
                   ],
@@ -137,11 +174,19 @@ const LeadForm = () => {
               />
             </div>
           </Row>
+          <div className="mb-3">
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"}
+              onChange={handleCaptchaChange}
+            />
+          </div>
           <Btn
             className="btn btn-animation btn-md fw-bold ms-auto"
             type="submit"
+            disabled={isSubmitting || !captchaValue}
           >
-            {t("Submit")}
+            {isSubmitting ? "Submitting..." : t("Submit")}
           </Btn>
         </Form>
       )}

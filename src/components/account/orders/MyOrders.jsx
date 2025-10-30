@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { RiEyeLine } from 'react-icons/ri';
 import { Table } from 'reactstrap';
@@ -26,6 +26,11 @@ const MyOrders = () => {
     refetchOnMount: false,
     select: (res) => res?.data,
   });
+
+  useEffect(() => {
+    refetch();
+  }, []);
+
   if (isLoading) return <Loader />;
   return (
     <>

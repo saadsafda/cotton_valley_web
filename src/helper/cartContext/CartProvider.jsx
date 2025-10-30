@@ -5,6 +5,7 @@ import { ToastNotification } from "@/utils/customFunctions/ToastNotification";
 import { AddToCartAPI } from "@/utils/axiosUtils/API";
 import request from "@/utils/axiosUtils";
 import { useQuery } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 // import ThemeOptionContext from '../themeOptionsContext';
 // import axios from 'axios';
 
@@ -15,6 +16,16 @@ const CartProvider = (props) => {
   const [cartTotal, setCartTotal] = useState(0);
   const [discountAmt, setDiscountAmt] = useState(0);
   // const { setCartCanvas } = useContext(ThemeOptionContext);
+
+  // Custom toast notification with shorter duration for success messages
+  const CartToastNotification = (type, message) => {
+    if (type === "success") {
+      toast.success(message, { autoClose: 1000 }); // Half of default (3000ms)
+    } else {
+      ToastNotification(type, message); // Use default for other types
+    }
+  };
+
   const {
     data: CartAPIData,
     isLoading: getCartLoading,
@@ -167,7 +178,7 @@ const CartProvider = (props) => {
 
         return newCart;
       });
-      ToastNotification("success", `Item ${productObj?.id} add to the cart.`);
+      CartToastNotification("success", `Item ${productObj?.id} add to the cart.`);
     } else {
       // Checking the Stock QTY of particular product
       const productStockQty = cart[index]?.variation?.quantity
@@ -209,7 +220,7 @@ const CartProvider = (props) => {
               : cart[index]?.product?.sale_price),
         };
         if (add) {
-          ToastNotification(
+          CartToastNotification(
             "success",
             `Item ${cart[index]?.product?.sku} quantity updated to ${newQuantity}.`
           );

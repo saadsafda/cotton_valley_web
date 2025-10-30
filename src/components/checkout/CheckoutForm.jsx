@@ -3,6 +3,7 @@ import { Col, Row } from "reactstrap";
 import DeliveryAddress from "./DeliveryAddress";
 import DeliveryOptions from "./DeliveryOptions";
 import PaymentOptions from "./PaymentOptions";
+import CustomerNotes from "./CustomerNotes";
 import { useContext, useEffect, useState } from "react";
 import AccountContext from "@/helper/accountContext";
 import CheckoutSidebar from "./checkoutSidebar";
@@ -42,7 +43,7 @@ const CheckoutForm = () => {
   };
 
   return (
-    <Formik initialValues={{}}>
+    <Formik initialValues={{ notes: "" }}>
       {({ values, setFieldValue }) => (
         <Form>
           <div className="pb-4 checkout-section-2">
@@ -80,6 +81,10 @@ const CheckoutForm = () => {
                         setFieldValue={setFieldValue}
                       />
                       <PaymentOptions
+                        values={values}
+                        setFieldValue={setFieldValue}
+                      />
+                      <CustomerNotes
                         values={values}
                         setFieldValue={setFieldValue}
                       />

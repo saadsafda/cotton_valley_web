@@ -64,6 +64,16 @@ export const StatusSchema = Yup.boolean().required();
 
 export const phoneSchema = Yup.string().min(10).max(10).required();
 
+export const zipcodeSchema = Yup.string()
+  .test('is-numeric', 'Zipcode must contain only numbers', (value) => {
+    if (!value) return true; // Allow empty
+    return /^\d+$/.test(value);
+  })
+  .test('min-length', 'Zipcode must be at least 5 digits', (value) => {
+    if (!value) return true; // Allow empty
+    return value.length >= 5;
+  });
+
 export const ifIsApplyAll = Yup.array().when("is_apply_all", {
   is: (val) => !val,
   then: () => Yup.array().min(1).required(),
@@ -86,9 +96,17 @@ export const referencesSchema = Yup.array().of(
     address: Yup.string().required("Reference address is required"),
     city: Yup.string().required("Reference city is required"),
     state: Yup.string().required("Reference state is required"),
-    zip: Yup.string().required("Reference zip is required"),
+    zip: Yup.string()
+      .test('is-numeric', 'Zipcode must contain only numbers', (value) => {
+        if (!value) return false; // Required field, so empty not allowed
+        return /^\d+$/.test(value);
+      })
+      .test('min-length', 'Zipcode must be at least 5 digits', (value) => {
+        if (!value) return false; // Required field, so empty not allowed
+        return value.length >= 5;
+      })
+      .required("Reference zip is required"),
     phone: Yup.string().required("Reference phone is required"),
-    fax: Yup.string().required("Reference fax is required"),
     email: Yup.string().email("Invalid email").required("Reference email is required"),
   })
 );
@@ -98,7 +116,16 @@ export const shipping_addressSchema = Yup.object().shape({
   address_line1: Yup.string().required("Shipping address line1 is required"),
   city: Yup.string().required("Shipping city is required"),
   state: Yup.string().required("Shipping state is required"),
-  zip: Yup.string().required("Shipping zip is required"),
+  zip: Yup.string()
+    .test('is-numeric', 'Zipcode must contain only numbers', (value) => {
+      if (!value) return false; // Required field, so empty not allowed
+      return /^\d+$/.test(value);
+    })
+    .test('min-length', 'Zipcode must be at least 5 digits', (value) => {
+      if (!value) return false; // Required field, so empty not allowed
+      return value.length >= 5;
+    })
+    .required("Shipping zip is required"),
   country: Yup.string().required("Shipping country is required"),
 });
 // export const billing_addressSchema = Yup.object().when("shipping_billing_same", {

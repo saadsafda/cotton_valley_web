@@ -180,7 +180,6 @@ const RegisterBasicInfo = ({ values, countryList, allCountryCode, setFieldValue 
               { id: "Manufacturing", name: "Manufacturing" },
               { id: "Service", name: "Service" },
               { id: "E-commerce", name: "E-commerce" },
-              { id: "Agriculture", name: "Agriculture" },
               { id: "Discount Store", name: "Discount Store" },
               { id: "Chain Store", name: "Chain Store" },
             ],

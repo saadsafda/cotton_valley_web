@@ -116,7 +116,7 @@ const PlaceOrder = ({ values }) => {
         url: AddToCartAPI,
         method: "POST",
         data: { 
-          items, 
+          items,
           submit: true, 
           submit_datetime: formatted, 
           client_ip: clientLocation.ip,
