@@ -12,9 +12,10 @@ import { useCustomSearchParams } from '@/utils/hooks/useCustomSearchParams';
 
 const CollectionSlider = ({ filter, setFilter }) => {
   const { i18Lang } = useContext(I18NextContext);
-  const [attribute, price, rating, sortBy, field, layout] = useCustomSearchParams([
+  const [attribute, price, pcsPrice, rating, sortBy, field, layout] = useCustomSearchParams([
     'attribute',
     'price',
+    'pcsPrice',
     'rating',
     'sortBy',
     'field',
@@ -57,6 +58,7 @@ const CollectionSlider = ({ filter, setFilter }) => {
     const queryParams = new URLSearchParams({
       ...attribute,
       ...price,
+      ...pcsPrice,
       ...sortBy,
       ...field,
       ...rating,

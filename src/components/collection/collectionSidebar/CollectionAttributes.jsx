@@ -10,11 +10,12 @@ import { useCustomSearchParams } from "@/utils/hooks/useCustomSearchParams";
 
 const CollectionAttributes = ({ attributeAPIData, filter, setFilter }) => {
   const router = useRouter();
-  const [category, subcategory, price, rating, sortBy, field, layout] =
+  const [category, subcategory, price, pcsPrice, rating, sortBy, field, layout] =
     useCustomSearchParams([
       "category",
       "subcategory",
       "price",
+      "pcsPrice",
       "rating",
       "sortBy",
       "field",
@@ -45,6 +46,7 @@ const CollectionAttributes = ({ attributeAPIData, filter, setFilter }) => {
         ...category,
         ...subcategory,
         ...price,
+        ...pcsPrice,
         ...rating,
         ...sortBy,
         ...field,
@@ -57,6 +59,7 @@ const CollectionAttributes = ({ attributeAPIData, filter, setFilter }) => {
         ...category,
         ...subcategory,
         ...price,
+        ...pcsPrice,
         ...rating,
         ...sortBy,
         ...field,

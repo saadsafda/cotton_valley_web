@@ -14,6 +14,7 @@ import BlogProvider from '@/helper/blogContext/BlogProvider';
 import CompareProvider from '@/helper/compareContext/CompareProvider';
 import ProductIdsProvider from '@/helper/productIdsContext/ProductIdsProvider';
 import CurrencyProvider from '@/helper/currencyContext/CurrencyProvider';
+import PriceProvider from '@/helper/priceContext/PriceProvider';
 
 const MainLayout = ({ children, lng  }) => {
   const { i18Lang, setI18Lang } = useContext(I18NextContext);
@@ -38,7 +39,9 @@ const MainLayout = ({ children, lng  }) => {
                         <ProductProvider>
                           <SettingProvider>
                             <CurrencyProvider>
-                              <SubLayout children={children}  />
+                              <PriceProvider>
+                                <SubLayout children={children}  />
+                              </PriceProvider>
                             </CurrencyProvider>
                           </SettingProvider>
                         </ProductProvider>

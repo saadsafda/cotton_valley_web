@@ -21,7 +21,7 @@ const UpdatePasswordContent = () => {
         <Col xxl={4} xl={5} lg={6} sm={8} className='mx-auto'>
           <div className='d-flex align-items-center justify-content-center h-100'>
             <div className='log-in-box'>
-              <AuthHeadings heading1={'WelcomeToFastkart'} heading2={'UpdateYourPassword'} />
+              <AuthHeadings heading1={'WelcomeToCV'} heading2={'UpdateYourPassword'} />
               <div className='input-box'>
                 <UpdatePasswordForm />
               </div>

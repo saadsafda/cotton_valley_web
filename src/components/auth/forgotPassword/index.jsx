@@ -21,7 +21,7 @@ const ForgotPasswordContent = () => {
         <Col xxl={4} xl={5} lg={6} sm={8} className='mx-auto'>
           <div className='d-flex align-items-center justify-content-center h-100'>
             <div className='log-in-box'>
-              <AuthHeadings heading1={'WelcomeToFastkart'} heading2={'ForgotYourPassword'} />
+              <AuthHeadings heading1={'WelcomeToCV'} heading2={'ForgotYourPassword'} />
               <div className='input-box'>
                 <ForgotPasswordForm />
               </div>

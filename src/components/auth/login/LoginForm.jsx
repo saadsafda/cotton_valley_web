@@ -12,18 +12,57 @@ const LoginForm = () => {
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, "common");
   const [isLoading, setIsLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [savedCredentials, setSavedCredentials] = useState({
+    email: "",
+    password: "",
+  });
   const { mutate } = useHandleLogin();
+
+  // Load saved credentials on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("rememberMe");
+      if (saved) {
+        const { email, password, remember } = JSON.parse(saved);
+        setSavedCredentials({ email: email || "", password: password || "" });
+        setRememberMe(remember || false);
+      }
+    } catch (error) {
+      console.error("Error loading saved credentials:", error);
+    }
+  }, []);
 
   return (
     <Formik
       initialValues={{
-        email: "",
-        password: "",
+        email: savedCredentials.email,
+        password: savedCredentials.password,
       }}
+      enableReinitialize={true}
       validationSchema={LogInSchema}
       onSubmit={(values, { setStatus }) => {
         setIsLoading(true);
         setStatus(undefined);
+
+        // Save or clear credentials based on rememberMe
+        try {
+          if (rememberMe) {
+            localStorage.setItem(
+              "rememberMe",
+              JSON.stringify({
+                email: values.email,
+                password: values.password,
+                remember: true,
+              })
+            );
+          } else {
+            localStorage.removeItem("rememberMe");
+          }
+        } catch (error) {
+          console.error("Error saving credentials:", error);
+        }
+
         mutate(values, {
           onSuccess: (data) => {
             setIsLoading(false);
@@ -95,6 +134,8 @@ const LoginForm = () => {
                     className="checkbox_animated check-box"
                     type="checkbox"
                     id="flexCheckDefault"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
                   />
                   <Label
                     className="form-check-label"

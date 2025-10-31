@@ -1,24 +1,33 @@
 import { useContext } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { AccordionBody, AccordionHeader, AccordionItem, Input, Label } from 'reactstrap';
-import { filterPrice, filterPCSPrice } from '../../../data/Custom';
 import I18NextContext from '@/helper/i18NextContext';
 import { useCustomSearchParams } from '@/utils/hooks/useCustomSearchParams';
 import { useTranslation } from '@/app/i18n/client';
 import SettingContext from '@/helper/settingContext';
+import PriceContext from '@/helper/priceContext';
 
 const CollectionPrice = ({ filter, setFilter, attributeAPIData }) => {
   const { convertCurrency } = useContext(SettingContext);
+  const { filterPrice, filterPCSPrice, isLoading } = useContext(PriceContext);
   const router = useRouter();
-  const [category, subcategory, attribute, sortBy, field, rating, layout] = useCustomSearchParams(['category', 'subcategory', 'attribute', 'sortBy', 'field', 'rating', 'layout']);
+  const [category, subcategory, attribute, pcsPrice, sortBy, field, rating, layout] = useCustomSearchParams(['category', 'subcategory', 'attribute', 'pcsPrice', 'sortBy', 'field', 'rating', 'layout']);
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, 'common');
   const pathname = usePathname();
+  
   const checkPrice = (value) => {
     if (filter?.price?.indexOf(value) != -1) {
       return true;
     } else return false;
   };
+  
+  const checkPCSPrice = (value) => {
+    if (filter?.pcsPrice?.indexOf(value) != -1) {
+      return true;
+    } else return false;
+  };
+  
   const applyPrice = (event) => {
     const index = filter?.price.indexOf(event?.target?.value);
     let temp = [...filter?.price];
@@ -34,13 +43,50 @@ const CollectionPrice = ({ filter, setFilter, attributeAPIData }) => {
       };
     });
     if (temp.length > 0) {
-      const queryParams = new URLSearchParams({ ...category, ...subcategory, ...attribute, ...sortBy, ...field, ...rating, ...layout, price: temp }).toString();
+      const queryParams = new URLSearchParams({ ...category, ...subcategory, ...attribute, ...pcsPrice, ...sortBy, ...field, ...rating, ...layout, price: temp }).toString();
+      router.push(`${pathname}?${queryParams}`);
+    } else {
+      const queryParams = new URLSearchParams({ ...category, ...subcategory, ...attribute, ...pcsPrice, ...sortBy, ...field, ...rating, ...layout }).toString();
+      router.push(`${pathname}?${queryParams}`);
+    }
+  };
+
+  const applyPCSPrice = (event) => {
+    const index = filter?.pcsPrice?.indexOf(event?.target?.value);
+    let temp = [...(filter?.pcsPrice || [])];
+    if (event.target.checked) {
+      temp.push(event?.target?.value);
+    } else {
+      temp.splice(index, 1);
+    }
+    setFilter((prev) => {
+      return {
+        ...prev,
+        pcsPrice: temp,
+      };
+    });
+    if (temp.length > 0) {
+      const queryParams = new URLSearchParams({ ...category, ...subcategory, ...attribute, ...sortBy, ...field, ...rating, ...layout, pcsPrice: temp }).toString();
       router.push(`${pathname}?${queryParams}`);
     } else {
       const queryParams = new URLSearchParams({ ...category, ...subcategory, ...attribute, ...sortBy, ...field, ...rating, ...layout }).toString();
       router.push(`${pathname}?${queryParams}`);
     }
   };
+
+  if (isLoading) {
+    return (
+      <AccordionItem>
+        <AccordionHeader targetId={(attributeAPIData?.length + 2).toString()}>
+          <span>{t('Price')}</span>
+        </AccordionHeader>
+        <AccordionBody accordionId={(attributeAPIData?.length + 2).toString()}>
+          <div className="text-center py-3">Loading prices...</div>
+        </AccordionBody>
+      </AccordionItem>
+    );
+  }
+
   return (
     <AccordionItem>
       <AccordionHeader targetId={(attributeAPIData?.length + 2).toString()}>
@@ -48,24 +94,28 @@ const CollectionPrice = ({ filter, setFilter, attributeAPIData }) => {
       </AccordionHeader>
       <AccordionBody accordionId={(attributeAPIData?.length + 2).toString()}>
         <ul className='category-list custom-padding custom-height'>
-          {filterPrice.map((price, i) => (
-            <li key={i}>
-              <div className='form-check category-list-box'>
-                <Input className='checkbox_animated' type='checkbox' id={`price-${price.id}`} value={price?.value} checked={checkPrice(price?.value)} onChange={applyPrice} />
-                <Label className='form-check-label' htmlFor={`price-${price.id}`}>
-                  {price?.price ? (
-                    <span className='name'>
-                      {price.text} {convertCurrency(price.price)}
-                    </span>
-                  ) : (
-                    <span className='name'>
-                      {convertCurrency(price.minPrice)} - {convertCurrency(price.maxPrice)}
-                    </span>
-                  )}
-                </Label>
-              </div>
-            </li>
-          ))}
+          {filterPrice?.length > 0 ? (
+            filterPrice.map((price, i) => (
+              <li key={i}>
+                <div className='form-check category-list-box'>
+                  <Input className='checkbox_animated' type='checkbox' id={`price-${price.id}`} value={price?.value} checked={checkPrice(price?.value)} onChange={applyPrice} />
+                  <Label className='form-check-label' htmlFor={`price-${price.id}`}>
+                    {price?.price ? (
+                      <span className='name'>
+                        {price.text} {convertCurrency(price.price)}
+                      </span>
+                    ) : (
+                      <span className='name'>
+                        {convertCurrency(price.minPrice)} - {convertCurrency(price.maxPrice)}
+                      </span>
+                    )}
+                  </Label>
+                </div>
+              </li>
+            ))
+          ) : (
+            <li className="text-center py-2">No price filters available</li>
+          )}
         </ul>
       </AccordionBody>
       <br />
@@ -74,24 +124,28 @@ const CollectionPrice = ({ filter, setFilter, attributeAPIData }) => {
       </AccordionHeader>
       <AccordionBody accordionId={(attributeAPIData?.length + 2).toString()}>
         <ul className='category-list custom-padding custom-height'>
-          {filterPCSPrice.map((price, i) => (
-            <li key={i}>
-              <div className='form-check category-list-box'>
-                <Input className='checkbox_animated' type='checkbox' id={`price-${price.id}`} value={price?.value} checked={checkPrice(price?.value)} onChange={applyPrice} />
-                <Label className='form-check-label' htmlFor={`price-${price.id}`}>
-                  {price?.price ? (
-                    <span className='name'>
-                      {price.text} {convertCurrency(price.price)}
-                    </span>
-                  ) : (
-                    <span className='name'>
-                      {convertCurrency(price.minPrice)} - {convertCurrency(price.maxPrice)}
-                    </span>
-                  )}
-                </Label>
-              </div>
-            </li>
-          ))}
+          {filterPCSPrice?.length > 0 ? (
+            filterPCSPrice.map((price, i) => (
+              <li key={i}>
+                <div className='form-check category-list-box'>
+                  <Input className='checkbox_animated' type='checkbox' id={`pcs-price-${price.id}`} value={price?.value} checked={checkPCSPrice(price?.value)} onChange={applyPCSPrice} />
+                  <Label className='form-check-label' htmlFor={`pcs-price-${price.id}`}>
+                    {price?.price ? (
+                      <span className='name'>
+                        {price.text} {convertCurrency(price.price)}
+                      </span>
+                    ) : (
+                      <span className='name'>
+                        {convertCurrency(price.minPrice)} - {convertCurrency(price.maxPrice)}
+                      </span>
+                    )}
+                  </Label>
+                </div>
+              </li>
+            ))
+          ) : (
+            <li className="text-center py-2">No PCS price filters available</li>
+          )}
         </ul>
       </AccordionBody>
     </AccordionItem>

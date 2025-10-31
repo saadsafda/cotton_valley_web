@@ -14,9 +14,9 @@ import Loader from '@/layout/loader';
 import CategoryContext from '@/helper/categoryContext';
 
 const CollectionContain = () => {
-  const [filter, setFilter] = useState({ category: [], subcategory: [], price: [], attribute: [], rating: [], sortBy: '', field: '' });
+  const [filter, setFilter] = useState({ category: [], subcategory: [], price: [], pcsPrice: [], attribute: [], rating: [], sortBy: '', field: '' });
   // const { themeOption, isLoading } = useContext(ThemeOptionContext);
-  const [category, subcategory, attribute, price, rating, sortBy, field, layout] = useCustomSearchParams(['category', 'subcategory', 'attribute', 'price', 'rating', 'sortBy', 'field', 'layout']);
+  const [category, subcategory, attribute, price, pcsPrice, rating, sortBy, field, layout] = useCustomSearchParams(['category', 'subcategory', 'attribute', 'price', 'pcsPrice', 'rating', 'sortBy', 'field', 'layout']);
   // const collectionLayout = layout?.layout ? layout?.layout : themeOption?.collection?.collection_layout;
   const { categoryAPIData, categoryIsLoading } = useContext(CategoryContext);
   const categoryItem = categoryAPIData?.data?.filter(cat => cat.id === filter?.category?.[0])?.[0];
@@ -28,12 +28,13 @@ const CollectionContain = () => {
         subcategory: subcategory ? subcategory?.subcategory?.split(',') : [],
         attribute: attribute ? attribute?.attribute?.split(',') : [],
         price: price ? price?.price?.split(',') : [],
+        pcsPrice: pcsPrice ? pcsPrice?.pcsPrice?.split(',') : [],
         rating: rating ? rating?.rating?.split(',') : [],
         sortBy: sortBy ? sortBy?.sortBy : '',
         field: field ? field?.field : '',
       };
     });
-  }, [category, subcategory, attribute, price, rating, sortBy, field]);
+  }, [category, subcategory, attribute, price, pcsPrice, rating, sortBy, field]);
 
   // const isCollectionMatch = {
   //   collection_category_slider: <MainCollectionSlider filter={filter} setFilter={setFilter} />,

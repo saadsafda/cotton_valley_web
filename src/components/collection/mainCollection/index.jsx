@@ -44,6 +44,7 @@ const MainCollection = ({
           paginate: 40,
           field: filter?.field ?? "",
           price: filter?.price.join(",") ?? "",
+          pcsPrice: filter?.pcsPrice.join(",") ?? "",
           category: filter?.category.join(","),
           subcategory: filter?.subcategory.join(","),
           sort: "",
