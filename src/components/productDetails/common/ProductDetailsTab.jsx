@@ -1,16 +1,13 @@
 import { useState } from "react";
-import { Col, Row, TabContent, TabPane } from "reactstrap";
+import { Col, TabContent, TabPane } from "reactstrap";
 import NavTabTitles from "@/components/common/NavTabs";
 import TextLimit from "@/utils/customFunctions/TextLimit";
-import CustomerReview from "./CustomerReview";
-import QnATab from "./QnATab";
-import NoDataFound from "@/components/common/NoDataFound";
 
 const ProductDetailsTab = ({ productState }) => {
   const [activeTab, setActiveTab] = useState(1);
   const ProductDetailsTabTitle = [
-    { id: 1, name: "Description" },
-    { id: 2, name: "Specifications" },
+    { id: 1, name: "Specifications" },
+    { id: 2, name: "Description" },
     // { id: 3, name: 'QA' },
   ];
   // console.log(productState?.product?.description, "Description");
@@ -25,12 +22,9 @@ const ProductDetailsTab = ({ productState }) => {
         />
 
         <TabContent className="custom-tab" activeTab={activeTab}>
-          <TabPane className={activeTab == 1 ? "show active" : ""}>
-            
-            <TextLimit value={productState?.product?.description} />
-          </TabPane>
+          
 
-          <TabPane className={activeTab == 2 ? "show active" : ""}>
+          <TabPane className={activeTab == 1 ? "show active" : ""}>
             <div className="right-box-contain p-sticky">
               <div className="row">
                 <div className="col-12 col-md-6">
@@ -123,6 +117,11 @@ const ProductDetailsTab = ({ productState }) => {
                 </div>
               </div>
             </div>
+          </TabPane>
+
+          {/* Description */}
+          <TabPane className={activeTab == 2 ? "show active" : ""}> 
+            <TextLimit value={productState?.product?.description} />
           </TabPane>
           {/* <TabPane className={activeTab == 3 ? 'show active' : ''}>
             <QnATab productState={productState} activeTab={activeTab} />
