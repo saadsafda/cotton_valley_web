@@ -91,7 +91,6 @@ const RegisterBankInformation = ({ values, countryList }) => {
             placeholder: "Enter Email",
             title: "Email",
             toplabel: "Email",
-            require: "true",
           },
           {
             name: "bank_zip_code",

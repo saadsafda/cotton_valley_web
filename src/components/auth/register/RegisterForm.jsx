@@ -15,6 +15,7 @@ import {
   shipping_addressSchema,
   shipping_billing_sameSchema,
   terms_agreedSchema,
+  unrEmailSchema,
   zipcodeSchema,
 } from "@/utils/validation/ValidationSchemas";
 import FormBtn from "@/components/common/FormBtn";
@@ -212,7 +213,7 @@ const RegisterForm = () => {
     shipping_address: shipping_addressSchema,
 
     bank_name: nameSchema,
-    bank_email: emailSchema,
+    bank_email: unrEmailSchema,
     account_number: nameSchema,
     bank_phone: phoneSchema,
     account_type: nameSchema,

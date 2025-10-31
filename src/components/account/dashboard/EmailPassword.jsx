@@ -19,9 +19,9 @@ const EmailPassword = () => {
               <td>{t('Email')} :</td>
               <td>
                 {accountData?.email}
-                <span className='custom-anchor ms-2' onClick={() => setModal('email')}>
+                {/* <span className='custom-anchor ms-2' onClick={() => setModal('email')}>
                   {t('Edit')}
-                </span>
+                </span> */}
               </td>
             </tr>
             <tr>

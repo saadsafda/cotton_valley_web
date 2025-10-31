@@ -3,6 +3,8 @@ import * as Yup from "yup";
 export const YupObject = (schemaObject) => Yup.object().shape(schemaObject);
 
 export const emailSchema = Yup.string().email("Enter Valid Email").required();
+export const unrEmailSchema = Yup.string().email("Enter Valid Email");
+
 export const passwordSchema = Yup.string()
   .min(8, "Too Short! Minimum 8 characters")
   .max(20, "Too Long! Maximum 20 characters")
@@ -96,16 +98,17 @@ export const referencesSchema = Yup.array().of(
     address: Yup.string().required("Reference address is required"),
     city: Yup.string().required("Reference city is required"),
     state: Yup.string().required("Reference state is required"),
-    zip: Yup.string()
-      .test('is-numeric', 'Zipcode must contain only numbers', (value) => {
-        if (!value) return false; // Required field, so empty not allowed
-        return /^\d+$/.test(value);
-      })
-      .test('min-length', 'Zipcode must be at least 5 digits', (value) => {
-        if (!value) return false; // Required field, so empty not allowed
-        return value.length >= 5;
-      })
-      .required("Reference zip is required"),
+    zip: Yup.string().required("Reference zip is required"),
+    // zip: Yup.string()
+    //   .test('is-numeric', 'Zipcode must contain only numbers', (value) => {
+    //     if (!value) return false; // Required field, so empty not allowed
+    //     return /^\d+$/.test(value);
+    //   })
+    //   .test('min-length', 'Zipcode must be at least 5 digits', (value) => {
+    //     if (!value) return false; // Required field, so empty not allowed
+    //     return value.length >= 5;
+    //   })
+    //   .required("Reference zip is required"),
     phone: Yup.string().required("Reference phone is required"),
     email: Yup.string().email("Invalid email").required("Reference email is required"),
   })
