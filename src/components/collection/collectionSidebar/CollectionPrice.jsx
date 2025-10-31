@@ -1,33 +1,59 @@
-import { useContext } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
-import { AccordionBody, AccordionHeader, AccordionItem, Input, Label } from 'reactstrap';
-import I18NextContext from '@/helper/i18NextContext';
-import { useCustomSearchParams } from '@/utils/hooks/useCustomSearchParams';
-import { useTranslation } from '@/app/i18n/client';
-import SettingContext from '@/helper/settingContext';
-import PriceContext from '@/helper/priceContext';
+import { useContext } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import {
+  AccordionBody,
+  AccordionHeader,
+  AccordionItem,
+  Input,
+  Label,
+} from "reactstrap";
+import I18NextContext from "@/helper/i18NextContext";
+import { useCustomSearchParams } from "@/utils/hooks/useCustomSearchParams";
+import { useTranslation } from "@/app/i18n/client";
+import SettingContext from "@/helper/settingContext";
+import PriceContext from "@/helper/priceContext";
+import AccountContext from "@/helper/accountContext";
 
 const CollectionPrice = ({ filter, setFilter, attributeAPIData }) => {
   const { convertCurrency } = useContext(SettingContext);
   const { filterPrice, filterPCSPrice, isLoading } = useContext(PriceContext);
+  const { accountData } = useContext(AccountContext);
   const router = useRouter();
-  const [category, subcategory, attribute, pcsPrice, sortBy, field, rating, layout] = useCustomSearchParams(['category', 'subcategory', 'attribute', 'pcsPrice', 'sortBy', 'field', 'rating', 'layout']);
+  const [
+    category,
+    subcategory,
+    attribute,
+    pcsPrice,
+    sortBy,
+    field,
+    rating,
+    layout,
+  ] = useCustomSearchParams([
+    "category",
+    "subcategory",
+    "attribute",
+    "pcsPrice",
+    "sortBy",
+    "field",
+    "rating",
+    "layout",
+  ]);
   const { i18Lang } = useContext(I18NextContext);
-  const { t } = useTranslation(i18Lang, 'common');
+  const { t } = useTranslation(i18Lang, "common");
   const pathname = usePathname();
-  
+
   const checkPrice = (value) => {
     if (filter?.price?.indexOf(value) != -1) {
       return true;
     } else return false;
   };
-  
+
   const checkPCSPrice = (value) => {
     if (filter?.pcsPrice?.indexOf(value) != -1) {
       return true;
     } else return false;
   };
-  
+
   const applyPrice = (event) => {
     const index = filter?.price.indexOf(event?.target?.value);
     let temp = [...filter?.price];
@@ -43,10 +69,29 @@ const CollectionPrice = ({ filter, setFilter, attributeAPIData }) => {
       };
     });
     if (temp.length > 0) {
-      const queryParams = new URLSearchParams({ ...category, ...subcategory, ...attribute, ...pcsPrice, ...sortBy, ...field, ...rating, ...layout, price: temp }).toString();
+      const queryParams = new URLSearchParams({
+        ...category,
+        ...subcategory,
+        ...attribute,
+        ...pcsPrice,
+        ...sortBy,
+        ...field,
+        ...rating,
+        ...layout,
+        price: temp,
+      }).toString();
       router.push(`${pathname}?${queryParams}`);
     } else {
-      const queryParams = new URLSearchParams({ ...category, ...subcategory, ...attribute, ...pcsPrice, ...sortBy, ...field, ...rating, ...layout }).toString();
+      const queryParams = new URLSearchParams({
+        ...category,
+        ...subcategory,
+        ...attribute,
+        ...pcsPrice,
+        ...sortBy,
+        ...field,
+        ...rating,
+        ...layout,
+      }).toString();
       router.push(`${pathname}?${queryParams}`);
     }
   };
@@ -66,10 +111,27 @@ const CollectionPrice = ({ filter, setFilter, attributeAPIData }) => {
       };
     });
     if (temp.length > 0) {
-      const queryParams = new URLSearchParams({ ...category, ...subcategory, ...attribute, ...sortBy, ...field, ...rating, ...layout, pcsPrice: temp }).toString();
+      const queryParams = new URLSearchParams({
+        ...category,
+        ...subcategory,
+        ...attribute,
+        ...sortBy,
+        ...field,
+        ...rating,
+        ...layout,
+        pcsPrice: temp,
+      }).toString();
       router.push(`${pathname}?${queryParams}`);
     } else {
-      const queryParams = new URLSearchParams({ ...category, ...subcategory, ...attribute, ...sortBy, ...field, ...rating, ...layout }).toString();
+      const queryParams = new URLSearchParams({
+        ...category,
+        ...subcategory,
+        ...attribute,
+        ...sortBy,
+        ...field,
+        ...rating,
+        ...layout,
+      }).toString();
       router.push(`${pathname}?${queryParams}`);
     }
   };
@@ -78,7 +140,7 @@ const CollectionPrice = ({ filter, setFilter, attributeAPIData }) => {
     return (
       <AccordionItem>
         <AccordionHeader targetId={(attributeAPIData?.length + 2).toString()}>
-          <span>{t('Price')}</span>
+          <span>{t("Price")}</span>
         </AccordionHeader>
         <AccordionBody accordionId={(attributeAPIData?.length + 2).toString()}>
           <div className="text-center py-3">Loading prices...</div>
@@ -87,26 +149,42 @@ const CollectionPrice = ({ filter, setFilter, attributeAPIData }) => {
     );
   }
 
+  // Don't show price filters if user is not logged in
+  if (!accountData) {
+    return null;
+  }
+
   return (
     <AccordionItem>
       <AccordionHeader targetId={(attributeAPIData?.length + 2).toString()}>
-        <span>{t('Price by Case')}</span>
+        <span>{t("Price by Case")}</span>
       </AccordionHeader>
       <AccordionBody accordionId={(attributeAPIData?.length + 2).toString()}>
-        <ul className='category-list custom-padding custom-height'>
+        <ul className="category-list custom-padding custom-height">
           {filterPrice?.length > 0 ? (
             filterPrice.map((price, i) => (
               <li key={i}>
-                <div className='form-check category-list-box'>
-                  <Input className='checkbox_animated' type='checkbox' id={`price-${price.id}`} value={price?.value} checked={checkPrice(price?.value)} onChange={applyPrice} />
-                  <Label className='form-check-label' htmlFor={`price-${price.id}`}>
+                <div className="form-check category-list-box">
+                  <Input
+                    className="checkbox_animated"
+                    type="checkbox"
+                    id={`price-${price.id}`}
+                    value={price?.value}
+                    checked={checkPrice(price?.value)}
+                    onChange={applyPrice}
+                  />
+                  <Label
+                    className="form-check-label"
+                    htmlFor={`price-${price.id}`}
+                  >
                     {price?.price ? (
-                      <span className='name'>
+                      <span className="name">
                         {price.text} {convertCurrency(price.price)}
                       </span>
                     ) : (
-                      <span className='name'>
-                        {convertCurrency(price.minPrice)} - {convertCurrency(price.maxPrice)}
+                      <span className="name">
+                        {convertCurrency(price.minPrice)} -{" "}
+                        {convertCurrency(price.maxPrice)}
                       </span>
                     )}
                   </Label>
@@ -120,23 +198,34 @@ const CollectionPrice = ({ filter, setFilter, attributeAPIData }) => {
       </AccordionBody>
       <br />
       <AccordionHeader targetId={(attributeAPIData?.length + 2).toString()}>
-        <span>{t('Price by PCS')}</span>
+        <span>{t("Price by PCS")}</span>
       </AccordionHeader>
       <AccordionBody accordionId={(attributeAPIData?.length + 2).toString()}>
-        <ul className='category-list custom-padding custom-height'>
+        <ul className="category-list custom-padding custom-height">
           {filterPCSPrice?.length > 0 ? (
             filterPCSPrice.map((price, i) => (
               <li key={i}>
-                <div className='form-check category-list-box'>
-                  <Input className='checkbox_animated' type='checkbox' id={`pcs-price-${price.id}`} value={price?.value} checked={checkPCSPrice(price?.value)} onChange={applyPCSPrice} />
-                  <Label className='form-check-label' htmlFor={`pcs-price-${price.id}`}>
+                <div className="form-check category-list-box">
+                  <Input
+                    className="checkbox_animated"
+                    type="checkbox"
+                    id={`pcs-price-${price.id}`}
+                    value={price?.value}
+                    checked={checkPCSPrice(price?.value)}
+                    onChange={applyPCSPrice}
+                  />
+                  <Label
+                    className="form-check-label"
+                    htmlFor={`pcs-price-${price.id}`}
+                  >
                     {price?.price ? (
-                      <span className='name'>
+                      <span className="name">
                         {price.text} {convertCurrency(price.price)}
                       </span>
                     ) : (
-                      <span className='name'>
-                        {convertCurrency(price.minPrice)} - {convertCurrency(price.maxPrice)}
+                      <span className="name">
+                        {convertCurrency(price.minPrice)} -{" "}
+                        {convertCurrency(price.maxPrice)}
                       </span>
                     )}
                   </Label>
