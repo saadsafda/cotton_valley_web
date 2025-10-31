@@ -10,7 +10,7 @@ const FormBtn = ({ title, classes = {}, loading }) => {
   return (
     <Col xs={12}>
       <Btn className={classes.btnClass ? classes.btnClass : ''} type='submit' loading={Number(loading)}>
-        {t(title)}
+        {loading ? t('Loading') : t(title)}
       </Btn>
     </Col>
   );
