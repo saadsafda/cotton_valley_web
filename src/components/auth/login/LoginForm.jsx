@@ -1,12 +1,13 @@
 import { Form, Formik } from "formik";
 import Link from "next/link";
-import { Col, Input, Label } from "reactstrap";
+import { Col, Input, Label, Alert } from "reactstrap";
 import FormBtn from "@/components/common/FormBtn";
 import SimpleInputField from "@/components/common/inputFields/SimpleInputField";
 import useHandleLogin, { LogInSchema } from "@/utils/hooks/auth/useLogin";
 import { useContext, useEffect, useState } from "react";
 import I18NextContext from "@/helper/i18NextContext";
 import { useTranslation } from "@/app/i18n/client";
+import { RiErrorWarningLine } from "react-icons/ri";
 
 const LoginForm = () => {
   const { i18Lang } = useContext(I18NextContext);
@@ -81,33 +82,19 @@ const LoginForm = () => {
       }}
     >
       {({ status }) => {
-        if (isLoading) {
-          return (
-            <div
-              style={{
-                textAlign: "center",
-                padding: "2rem",
-                fontWeight: 500,
-                fontSize: "1.2rem",
-              }}
-            >
-              Loading...
-            </div>
-          );
-        }
         return (
           <Form className="row g-4">
             {status && (
               <Col xs={12}>
-                <div
-                  style={{
-                    color: "red",
-                    marginBottom: "1rem",
-                    textAlign: "center",
-                  }}
-                >
-                  {status}
-                </div>
+                <Alert color="danger" className="d-flex align-items-center mb-0" style={{ 
+                  borderRadius: '8px',
+                  border: '1px solid #f8d7da',
+                  backgroundColor: '#f8d7da',
+                  padding: '12px 16px'
+                }}>
+                  <RiErrorWarningLine size={20} className="me-2" style={{ minWidth: '20px', color: '#842029' }} />
+                  <span style={{ color: '#842029', fontSize: '14px' }}>{status}</span>
+                </Alert>
               </Col>
             )}
             <SimpleInputField

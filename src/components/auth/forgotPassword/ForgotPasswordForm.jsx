@@ -13,6 +13,25 @@ const ForgotPasswordForm = () => {
   const { t } = useTranslation(i18Lang, "common");
   const [isLoading, setIsLoading] = useState(false);
   const { mutate } = useHandleForgotPassword();
+  
+  const handleSubmit = (values) => {
+    setIsLoading(true);
+    mutate(values, {
+      onSuccess: () => {
+        // Loading will be reset after redirect, but we can keep it true
+        // since user is being redirected anyway
+      },
+      onError: () => {
+        setIsLoading(false);
+      },
+      onSettled: () => {
+        // This runs after both success and error
+        // Keep loading true on success since we're redirecting
+        // Only reset on error (already handled above)
+      }
+    });
+  };
+  
   return (
     <>
       <Formik
@@ -20,11 +39,7 @@ const ForgotPasswordForm = () => {
           email: "",
         }}
         validationSchema={ForgotPasswordSchema}
-        onSubmit={async (values) => {
-          setIsLoading(true);
-          await mutate(values);
-          setIsLoading(false);
-        }}
+        onSubmit={handleSubmit}
       >
         {() => (
           <Form className="row g-4">
@@ -39,7 +54,7 @@ const ForgotPasswordForm = () => {
               ]}
             />
             <FormBtn
-              title={isLoading ? t("Loading") : t("ForgotPassword")}
+              title={"ForgotPassword"}
               classes={{
                 btnClass: "btn-animation w-100 justify-content-center",
               }}

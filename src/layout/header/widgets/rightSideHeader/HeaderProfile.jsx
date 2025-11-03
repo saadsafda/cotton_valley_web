@@ -29,6 +29,10 @@ const HeaderProfile = () => {
       router.push(`/${i18Lang}/auth/login`);
       setModal(false);
       setLoading(false);
+      // Refresh the page after logout
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
     }
   );
 

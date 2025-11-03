@@ -35,6 +35,7 @@ const RegisterForm = () => {
   const { t } = useTranslation(i18Lang, "common");
   const [step, setStep] = useState(1);
   const [countryList, setCountryList] = useState([]);
+  const [isLoadingNext, setIsLoadingNext] = useState(false);
   const [clientLocation, setClientLocation] = useState({
     ip: null,
     latitude: null,
@@ -443,6 +444,7 @@ const RegisterForm = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values, { resetForm, setSubmitting }) => {
+          setSubmitting(true);
           try {
             if (!values.sales_tax_certificate) {
               ToastNotification("error", "Sales Tax Certificate is required");
@@ -479,6 +481,7 @@ const RegisterForm = () => {
               const base64Data = await readFileAsBase64(file);
               if (!base64Data) {
                 ToastNotification("error", "Failed to read file");
+                setSubmitting(false);
                 return;
               }
               await requestForReal({
@@ -515,7 +518,7 @@ const RegisterForm = () => {
           }
         }}
       >
-        {({ values, setFieldValue, validateForm, setFieldTouched }) => (
+        {({ values, setFieldValue, validateForm, setFieldTouched, isSubmitting }) => (
           <Form className="row g-md-4 g-3">
             {/* Name fields */}
             {step === 1 && (
@@ -548,7 +551,11 @@ const RegisterForm = () => {
 
             <div className="mt-4 d-flex justify-content-between">
               {step > 1 && (
-                <Button style={{ marginRight: "20px" }} onClick={prevStep}>
+                <Button 
+                  style={{ marginRight: "20px" }} 
+                  onClick={prevStep}
+                  disabled={isLoadingNext || isSubmitting}
+                >
                   Back
                 </Button>
               )}
@@ -556,33 +563,46 @@ const RegisterForm = () => {
                 <Button
                   type="button"
                   className="btn btn-animation"
+                  disabled={isLoadingNext || isSubmitting}
                   onClick={async () => {
-                    const isValid = await validateCurrentStep(
-                      validateForm,
-                      setFieldTouched,
-                      values,
-                      step
-                    );
-                    if (isValid) {
-                      if (step === 1) {
-                        const response = await requestForReal({
-                          method: "POST",
-                          url: "/api/method/cotton_valley.api.customer.is_email_exists",
-                          data: { email: values.email },
-                        });
-                        if (response.data?.message?.exists) {
-                          ToastNotification(
-                            "error",
-                            "Email already exists. Please use a different email."
-                          );
-                          return; // Prevent moving to next step
+                    setIsLoadingNext(true);
+                    try {
+                      const isValid = await validateCurrentStep(
+                        validateForm,
+                        setFieldTouched,
+                        values,
+                        step
+                      );
+                      if (isValid) {
+                        if (step === 1) {
+                          const response = await requestForReal({
+                            method: "POST",
+                            url: "/api/method/cotton_valley.api.customer.is_email_exists",
+                            data: { email: values.email },
+                          });
+                          if (response.data?.message?.exists) {
+                            ToastNotification(
+                              "error",
+                              "Email already exists. Please use a different email."
+                            );
+                            return; // Prevent moving to next step
+                          }
                         }
+                        nextStep();
                       }
-                      nextStep();
+                    } finally {
+                      setIsLoadingNext(false);
                     }
                   }}
                 >
-                  {step === 3 ? "Save & Review" : "Next"}
+                  {isLoadingNext ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                      Loading...
+                    </>
+                  ) : (
+                    step === 3 ? "Save & Review" : "Next"
+                  )}
                 </Button>
               )}
               {step === 4 && (
@@ -590,6 +610,7 @@ const RegisterForm = () => {
                   title={"Submit"}
                   type={"submit"}
                   classes={{ btnClass: "btn btn-animation w-90" }}
+                  loading={isSubmitting}
                 />
               )}
             </div>
