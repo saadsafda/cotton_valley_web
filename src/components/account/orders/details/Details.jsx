@@ -12,6 +12,7 @@ import { useMemo, useContext, useState, useEffect } from "react";
 import CartContext from "@/helper/cartContext";
 import { ToastNotification } from "@/utils/customFunctions/ToastNotification";
 import DetailsAddress from "./DetailsAddress";
+import InvoiceDetailsTable from "./InvoiceDetailsTable";
 
 // This function recursively searches through all orders (and their sub-orders) to find the parent of a given targetOrderNumber.
 const findParentOrderNumber = (orders, targetOrderNumber) => {
@@ -209,6 +210,7 @@ const Details = ({ params }) => {
       />
       <DetailStatus data={currentOrder} />
       <DetailsAddress data={currentOrder} />
+      {currentOrder?.invoice && <InvoiceDetailsTable data={currentOrder} />}
       <DetailsTable data={currentOrder} />
       <DetailsConsumer data={currentOrder} />
       {currentOrder.sub_orders?.length > 0 && <SubOrders data={currentOrder} />}

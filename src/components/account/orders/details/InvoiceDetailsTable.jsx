@@ -1,26 +1,17 @@
-'use client';
+"use client";
 import Avatar from "@/components/common/Avatar";
-import { Card, CardBody, Table } from "reactstrap";
-import { placeHolderImage } from "../../../../data/CommonPath";
-import { useContext, useState } from "react";
-import RefundModal from "./RefundModal";
+import { Card, CardBody, Col, Row, Table } from "reactstrap";
+import { useContext } from "react";
 import I18NextContext from "@/helper/i18NextContext";
 import { useTranslation } from "@/app/i18n/client";
 import SettingContext from "@/helper/settingContext";
 import { useRouter } from "next/navigation";
 
-const DetailsTable = ({ data }) => {
+const InvoiceDetailsTable = ({ data }) => {
   const router = useRouter();
   const { i18Lang } = useContext(I18NextContext);
   const { t } = useTranslation(i18Lang, "common");
-  const [modal, setModal] = useState("");
-  const [storeData, setStoreData] = useState("");
   const { convertCurrency } = useContext(SettingContext);
-  
-  const onModalOpen = (product) => {
-    setStoreData(product);
-    setModal(product?.id);
-  };
 
   const handleRowClick = (product) => {
     const productSlug = product?.product_id;
@@ -29,10 +20,9 @@ const DetailsTable = ({ data }) => {
     }
   };
 
-  
   return (
     <>
-    <h3 className="fw-semibold mb-3">{"Your Order"}</h3>
+    <h3 className="fw-semibold mb-3">{"Final Delivery"}</h3>
       <Card>
         <CardBody>
           <div className="tracking-wrapper table-responsive">
@@ -49,20 +39,18 @@ const DetailsTable = ({ data }) => {
                 </tr>
               </thead>
               <tbody>
-                {data?.products?.length > 0
-                  ? data?.products?.map((product, i) => (
-                      <tr 
-                        key={product?.id}
+                {data?.invoice?.items?.length > 0
+                  ? data?.invoice?.items?.map((product, i) => (
+                      <tr
+                        key={product?.item_code}
                         onClick={() => handleRowClick(product)}
-                        style={{ cursor: 'pointer' }}
+                        style={{ cursor: "pointer" }}
                       >
                         <td>{i + 1}</td>
                         <td className="product-image">
                           <Avatar
-                            data={
-                              product?.product_thumbnail || placeHolderImage
-                            }
-                            name={product?.name}
+                            data={{ original_url: product.image }}
+                            name={product?.item_code}
                             customImageClass="img-fluid"
                           />
                         </td>
@@ -72,16 +60,16 @@ const DetailsTable = ({ data }) => {
                             overflow: "hidden",
                           }}
                         >
-                          <h6>{product?.name}</h6>
+                          <h6>{product?.item_name}</h6>
                         </td>
                         <td>
-                          <h6>{convertCurrency(product?.price)}</h6>
+                          <h6>{convertCurrency(product?.rate)}</h6>
                         </td>
                         <td>
-                          <h6>{product?.quantity}</h6>
+                          <h6>{product?.qty}</h6>
                         </td>
                         <td>
-                          <h6>{convertCurrency(product?.sub_total)}</h6>
+                          <h6>{convertCurrency(product?.amount)}</h6>
                         </td>
                       </tr>
                     ))
@@ -91,9 +79,39 @@ const DetailsTable = ({ data }) => {
           </div>
         </CardBody>
       </Card>
-      <RefundModal modal={modal} setModal={setModal} storeData={storeData} />
+      <Row>
+        <Col xxl={8} lg={12} md={7}></Col>
+        <Col xxl={4} lg={12} md={5}>
+          <Card className="h-m30">
+            <CardBody>
+              <h3 className="fw-semibold mb-3">{"summary"}</h3>
+              <div className="tracking-total tracking-wrapper">
+                <ul>
+                  <li>
+                    {t("Subtotal")}{" "}
+                    <span>
+                      {convertCurrency(data?.invoice?.total ? data?.invoice?.total : 0)}
+                    </span>
+                  </li>
+                  {data?.invoice?.discount_amount > 0 &&
+                  <li>
+                    {t('Discount')} <span>{convertCurrency(data?.invoice?.discount_amount ? data?.invoice?.discount_amount : 0)}</span>
+                  </li>
+                  }
+                  <li>
+                    {t("Total")}{" "}
+                    <span>
+                      {convertCurrency(data?.invoice?.grand_total ? data?.invoice?.grand_total : 0)}
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
     </>
   );
 };
 
-export default DetailsTable;
+export default InvoiceDetailsTable;
